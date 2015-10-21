@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	  xmlns:social="http://spring.io/springsocial"
+	  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	  layout:decorator="layout">
+	<head>
+		<title>JobyJob</title>
+        <link rel="stylesheet" type="text/css" href="css/bootstrap-social.css" />
+        <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css" />
+        <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css" />
+        <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" />
+		<link rel="stylesheet" th:href="@{/css/form.css}" type="text/css" media="screen"></link>
+		<link rel="stylesheet" th:href="@{/css/messages/messages.css}" type="text/css" media="screen"></link>
+
+        <style type="text/css">
+            <!--
+            .ml { width: 110px; color: white; text-decoration: none }
+            .ml:hover, a:focus { color: white; text-decoration: none }
+            -->
+        </style>	</head>
+	<body>
+		
+		<main id="content" layout:fragment="content" class="mdl-layout__content mdl-color--grey-100">
+			<h3>Sign Up</h3>
+			
+			<div th:if="${!#strings.isEmpty(message)}"
+				 th:class="${message.type.cssClass}" 
+				 th:text="${message.text}">error message text</div>
+			
+			<form id="signup" th:action="@{/signup}" method="post" th:object="${signupForm}">
+				<input type="hidden" name="_csrf" th:value="${_csrf.token}" />
+				<div class="formInfo">
+					<div class="error" th:if="${#fields.hasErrors('*')}">Unable to sign up. Please fix the errors below and resubmit.</div>
+				</div>
+				
+				<fieldset>
+					<label for="firstName">First Name <span th:if="${#fields.hasErrors('firstName')}" class="error" th:text="${#fields.errors('firstName')[0]}">Error</span></label>
+					<input type="text" th:field="*{firstName}" />
+					<label for="lastName">Last Name <span th:if="${#fields.hasErrors('lastName')}" class="error" th:text="${#fields.errors('lastName')[0]}">Error</span></label>
+					<input type="text" th:field="*{lastName}" />
+					<label for="username">Username <span th:if="${#fields.hasErrors('username')}" class="error" th:text="${#fields.errors('username')[0]}">Error</span></label>
+					<input type="text" th:field="*{username}" />
+					<label for="password">Password (at least 6 characters) <span th:if="${#fields.hasErrors('password')}" class="error" th:text="${#fields.errors('password')[0]}">Error</span></label>
+					<input type="password" th:field="*{password}" />
+				</fieldset>
+				<p><button type="submit">Sign Up</button></p>
+			</form>
+		</main>
+	</body>
+</html>
+

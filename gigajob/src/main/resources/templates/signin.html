@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	  xmlns:social="http://spring.io/springsocial"
+	  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	  layout:decorator="layout">
+<head>
+        <link rel="stylesheet" type="text/css" href="css/bootstrap-social.css" />
+        <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css" />
+        <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css" />
+        <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" />
+
+        <style type="text/css">
+            <!--
+            .ml { width: 110px; color: white; text-decoration: none }
+            .ml:hover, a:focus { color: white; text-decoration: none }
+            -->
+        </style>
+</head>
+	<body>
+
+		
+		<main id="content" layout:fragment="content" class="mdl-layout__content mdl-color--grey-100">
+			<form id="signin" th:action="@{/signin/authenticate}" method="post">
+				<input type="hidden" name="_csrf" th:value="${_csrf.token}"></input>
+				<div class="formInfo">
+			  		<div class="error" th:if="${param.error eq 'bad_credentials'}">
+			  			Your sign in information was incorrect.
+			  			Please try again or <a th:href="@{/signup}">sign up</a>.
+			  		</div>
+			  		<div class="error" th:if="${param.error eq 'multiple_users'}">
+			  			Multiple local accounts are connected to the provider account.
+			  			Try again with a different provider or with your username and password.
+			  		</div>
+				</div>
+				<fieldset>
+					<label for="login">Username</label>
+					<input id="login" name="username" type="text" size="25"></input>
+					<label for="password">Password</label>
+					<input id="password" name="password" type="password" size="25"></input>
+				</fieldset>
+				<button type="submit">Sign In</button>
+				
+				<p>Some test user/password pairs you may use are:</p>
+				<ul>
+					<li>habuma/freebirds</li>
+					<li>kdonald/melbourne</li>
+					<li>rclarkson/atlanta</li>
+				</ul>
+				
+				<p>Or you can <a th:href="@{/signup}">signup</a> with a new account.</p>
+			</form>
+            <p>Sign in with:</p>
+
+            <table style="border-collapse: separate; border-spacing: 2px">
+                <tr>
+                    <td><a th:href="@{/auth/linkedin}" class="ml btn btn-block btn-social btn-sm btn-linkedin"><i class="fa fa-linkedin"></i>LinkedIn</a></td>
+                    <td><a th:href="@{/auth/facebook?scope=public_profile}" class="ml btn btn-block btn-social btn-sm btn-facebook"><i class="fa fa-facebook"></i>Facebook</a></td>
+                </tr>
+                <tr>
+                    <td><a th:href="@{/auth/twitter}" class="ml btn btn-block btn-social btn-sm btn-twitter"><i class="fa fa-twitter"></i>Twitter</a></td>
+                    <td><a th:href="@{/auth/live(scope='wl.signin,wl.basic',redirect_uri='http://localhost:8080/auth/live')}" class="ml btn btn-block btn-social btn-sm btn-microsoft"><i class="fa fa-windows"></i>Microsoft</a></td>
+                </tr>
+                <tr>
+                    <td><a th:href="@{/auth/github}" class="ml btn btn-block btn-social btn-sm btn-github"><i class="fa fa-github"></i>Github</a></td>
+                    <td><a th:href="@{/auth/google(scope='profile')}" class="ml btn btn-block btn-social btn-sm btn-google-plus"><i class="fa fa-google-plus"></i>Google+</a></td>
+                </tr>
+            </table>
+		</main>	
+	
+	</body>
+</html>
