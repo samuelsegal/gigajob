@@ -10,7 +10,7 @@
 		<main layout:fragment="content" class="mdl-layout__content mdl-color--grey-100">
       		
 			
-			<p>Welcome, <span th:text="${account.firstName}">first-name</span>!</p>
+			<p>Welcome, <span th:text="${gigauser.login}">name</span>!</p>
 			 <div id="map" style="size: height: 180px"></div>
 
 			<form method="GET" th:action="@{/table}">

@@ -18,13 +18,29 @@ package com.spazomatic.jobyjob.profile.signin;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 
+import com.spazomatic.jobyjob.profile.config.CustomUserDetailsService;
+import com.spazomatic.jobyjob.profile.model.User;
+
 public class SignInUtils {
-	
+
 	/**
 	 * Programmatically signs in the user with the given the user ID.
 	 */
-	public static void signin(String userId) {
-		SecurityContextHolder.getContext().setAuthentication(new UsernamePasswordAuthenticationToken(userId, null, null));	
+	public static void signin(User user) {
+		SecurityContextHolder.getContext()
+				.setAuthentication(
+						new UsernamePasswordAuthenticationToken(
+								user.getLogin(), 
+								null, 
+								CustomUserDetailsService.
+									getGrantedAuthorities(user.getRoles())));
 	}
-	
+	public static void signin(String userLogin) {
+		SecurityContextHolder.getContext()
+				.setAuthentication(
+						new UsernamePasswordAuthenticationToken(
+								userLogin, 
+								null, 
+								null));
+	}
 }

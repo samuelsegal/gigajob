@@ -44,20 +44,24 @@ import com.spazomatic.jobyjob.profile.security.SimpleSocialUsersDetailService;
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig extends WebSecurityConfigurerAdapter{
-
 	@Autowired
 	private ApplicationContext context;
-	
+
 	@Autowired
 	private DataSource dataSource;
+
+	@Autowired
+	private CustomUserDetailsService customUserDetailsService;
 	
 	@Autowired
 	public void registerAuthentication(AuthenticationManagerBuilder auth) throws Exception {
-		auth.jdbcAuthentication()
+		/*auth.jdbcAuthentication()
 				.dataSource(dataSource)
 				.usersByUsernameQuery("select username, password, true from Account where username = ?")
 				.authoritiesByUsernameQuery("select username, 'ROLE_USER' from Account where username = ?")
 				.passwordEncoder(passwordEncoder());
+				*/
+		auth.userDetailsService(customUserDetailsService);
 	}
 	
 	@Override
@@ -80,8 +84,13 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
 					.deleteCookies("JSESSIONID")
 			.and()
 				.authorizeRequests()
-					.antMatchers("/admin/**", "/favicon.ico", "/static/**","/static/img/**", "/auth/**", "/signin/**", "/signup/**", "/disconnect/facebook").permitAll()
+					.antMatchers("/admin/**", "/favicon.ico", 
+							"/static/**","/static/img/**", 
+							"/auth/**", "/signin/**", 
+							"/signup/**", "/disconnect/facebook").permitAll()
 					.antMatchers("/**").authenticated()
+					.antMatchers("/client/**").access("hasRole('CLIENT')")
+					.antMatchers("/provider/**").access("hasRole('PROVIDER')")
 			.and()
 				.rememberMe()
 			.and()

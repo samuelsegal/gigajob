@@ -41,9 +41,7 @@ import org.springframework.social.facebook.api.Facebook;
 import org.springframework.social.facebook.connect.FacebookConnectionFactory;
 import org.springframework.social.facebook.web.DisconnectController;
 import org.springframework.social.linkedin.api.LinkedIn;
-import org.springframework.social.linkedin.connect.LinkedInConnectionFactory;
 import org.springframework.social.twitter.api.Twitter;
-import org.springframework.social.twitter.connect.TwitterConnectionFactory;
 
 import com.spazomatic.jobyjob.profile.facebook.PostToWallAfterConnectInterceptor;
 import com.spazomatic.jobyjob.profile.twitter.TweetAfterConnectInterceptor;

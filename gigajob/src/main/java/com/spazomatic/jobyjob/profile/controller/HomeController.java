@@ -28,29 +28,27 @@ import org.springframework.social.connect.ConnectionRepository;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.client.RestTemplate;
 
-import com.spazomatic.jobyjob.controllers.WebController;
-import com.spazomatic.jobyjob.entities.IpLoc;
 import com.spazomatic.jobyjob.profile.account.AccountRepository;
+import com.spazomatic.jobyjob.profile.model.repos.UserRepository;
 
 @Controller
 public class HomeController {
 	private static final Logger log = LoggerFactory.getLogger(HomeController.class);
 	private final Provider<ConnectionRepository> connectionRepositoryProvider;	
-	private final AccountRepository accountRepository;
+	private final UserRepository userRepository;
 	@Autowired
 	private HttpServletRequest request;
 	
 	@Inject
-	public HomeController(Provider<ConnectionRepository> connectionRepositoryProvider, AccountRepository accountRepository) {
+	public HomeController(Provider<ConnectionRepository> connectionRepositoryProvider, UserRepository userRepository) {
 		this.connectionRepositoryProvider = connectionRepositoryProvider;
-		this.accountRepository = accountRepository;
+		this.userRepository = userRepository;
 	}
 	@RequestMapping("/homemap")
 	public String homemap(Principal currentUser, Model model) {
 		model.addAttribute("connectionsToProviders", getConnectionRepository().findAllConnections());
-		model.addAttribute(accountRepository.findAccountByUsername(currentUser.getName()));
+		model.addAttribute(userRepository.findUserByLogin(currentUser.getName()));
 		log.debug(model.toString());
 
 		return "home";
@@ -58,15 +56,16 @@ public class HomeController {
 	@RequestMapping("/profile")
 	public String profile(Principal currentUser, Model model) {
 		model.addAttribute("connectionsToProviders", getConnectionRepository().findAllConnections());
-		model.addAttribute(accountRepository.findAccountByUsername(currentUser.getName()));
+		model.addAttribute("gigauser",userRepository.findUserByLogin(currentUser.getName()));
 		log.debug(model.toString());
 
 		return "profile/profile";
 	}	
 	@RequestMapping("/")
 	public String home(Principal currentUser, Model model) {
+		
 		model.addAttribute("connectionsToProviders", getConnectionRepository().findAllConnections());
-		model.addAttribute(accountRepository.findAccountByUsername(currentUser.getName()));
+		model.addAttribute("gigauser",userRepository.findUserByLogin(currentUser.getName()));
 		log.debug(model.toString());
 		return "home";
 	}

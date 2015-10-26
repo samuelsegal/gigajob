@@ -40,7 +40,7 @@ import com.spazomatic.jobyjob.profile.account.JdbcAccountRepository;
  * Main configuration class for the application.
  * Turns on @Component scanning, loads externalized application.properties, and sets up the database.
  * @author Craig Walls
- */
+
 @Configuration
 @ComponentScan(basePackages = "com.spazomatic.jobyjob", excludeFilters = { @Filter(Configuration.class) })
 @PropertySource("classpath:application.properties")
@@ -81,3 +81,4 @@ public class MainConfig {
 		return populator;
 	}
 }
+ */

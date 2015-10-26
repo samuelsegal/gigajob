@@ -10,8 +10,12 @@
 		<main layout:fragment="content" class="mdl-layout__content mdl-color--grey-100">
       		
 			
-			<p>Welcome, <span th:text="${account.firstName}">first-name</span>!</p>
-
+			<p>
+			User Name: <span th:text="${account.username}">username</span><br/>
+			First Name: <span th:text="${account.firstName}">first-name</span><br/>
+			Last Name: <span th:text="${account.lastName}">last-name</span><br/>	
+			</p>
+			
 			<form method="GET" th:action="@{/table}">
 				<input type="hidden" name="_csrf" th:value="${_csrf.token}" />
 				<button>TABLE</button>
