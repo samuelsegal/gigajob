@@ -33,6 +33,9 @@ public class SignupForm {
 
 	@NotEmpty
 	private String lastName;
+	
+	@NotEmpty
+	private String email;	
 
 	public String getUsername() {
 		return username;
@@ -66,11 +69,20 @@ public class SignupForm {
 		this.lastName = lastName;
 	}
 
+	public String getEmail() {
+		return email;
+	}
+
+	public void setEmail(String email) {
+		this.email = email;
+	}
+
 	public static SignupForm fromProviderUser(UserProfile providerUser) {
 		SignupForm form = new SignupForm();
 		form.setFirstName(providerUser.getFirstName());
 		form.setLastName(providerUser.getLastName());
 		form.setUsername(providerUser.getUsername());
+		form.setEmail(providerUser.getEmail());
 		return form;
 	}
 }

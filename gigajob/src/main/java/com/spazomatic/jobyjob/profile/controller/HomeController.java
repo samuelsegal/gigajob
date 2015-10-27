@@ -57,7 +57,7 @@ public class HomeController {
 	public String profile(Principal currentUser, Model model) {
 		model.addAttribute("connectionsToProviders", getConnectionRepository().findAllConnections());
 		model.addAttribute("gigauser",userRepository.findUserByLogin(currentUser.getName()));
-		log.debug(model.toString());
+		log.debug(String.format("MODEL: %s", model.toString()));
 
 		return "profile/profile";
 	}	
@@ -66,7 +66,7 @@ public class HomeController {
 		
 		model.addAttribute("connectionsToProviders", getConnectionRepository().findAllConnections());
 		model.addAttribute("gigauser",userRepository.findUserByLogin(currentUser.getName()));
-		log.debug(model.toString());
+		log.debug(String.format("MODEL: %s", model.toString()));
 		return "home";
 	}
 	

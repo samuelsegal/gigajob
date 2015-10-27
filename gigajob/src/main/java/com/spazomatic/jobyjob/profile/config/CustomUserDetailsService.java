@@ -19,10 +19,6 @@ import com.spazomatic.jobyjob.profile.model.User;
 import com.spazomatic.jobyjob.profile.services.UserService;
 import com.spazomatic.jobyjob.web.config.SecurityUser;
 
-/**
- * @author Siva
- *
- */
 @Component
 public class CustomUserDetailsService implements UserDetailsService{
 
@@ -57,12 +53,16 @@ public class CustomUserDetailsService implements UserDetailsService{
 	}
 
 	public static List getGrantedAuthorities(List<Role> roles) {
-		List authorities = new ArrayList();
-
-		for (Role role : roles) {
-			authorities.add(new SimpleGrantedAuthority(role.getRole()));
+		if(roles != null){
+			List authorities = new ArrayList();
+		
+			for (Role role : roles) {
+				authorities.add(new SimpleGrantedAuthority(role.getRole()));
+			}
+		
+			return authorities;
 		}
-		return authorities;
+		return null;
 	}
 
 }

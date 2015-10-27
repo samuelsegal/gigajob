@@ -35,11 +35,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.context.request.WebRequest;
 
+import com.spazomatic.jobyjob.profile.account.UsernameAlreadyInUseException;
 import com.spazomatic.jobyjob.profile.message.Message;
 import com.spazomatic.jobyjob.profile.message.MessageType;
 import com.spazomatic.jobyjob.profile.model.Role;
 import com.spazomatic.jobyjob.profile.model.User;
 import com.spazomatic.jobyjob.profile.model.repos.UserRepository;
+import com.spazomatic.jobyjob.profile.services.RoleService;
 import com.spazomatic.jobyjob.profile.services.UserService;
 import com.spazomatic.jobyjob.profile.signin.SignInUtils;
 
@@ -50,6 +52,8 @@ public class SignupController {
 	private final ProviderSignInUtils providerSignInUtils;
 	@Autowired
 	private UserService userService;
+	@Autowired
+	private RoleService roleService;
 	@Inject
 	public SignupController(UserRepository userRepository, 
 		                    ConnectionFactoryLocator connectionFactoryLocator,
@@ -94,31 +98,19 @@ public class SignupController {
 	static int id =0;
 	private User createUser(SignupForm form, BindingResult formBinding) {
 		//try {
-		
-			Role userRole = new Role();
-			userRole.setId(1);
-			userRole.setRole("ROLE_USER");
-			List<Role> userRoles = Arrays.asList(userRole);
-			/*
-			 * User userTemp = new User(id++,form.getUsername(),
-					"samuelmosessegal@gmail.com",form.getPassword(),new Date());
-			userTemp.setRoles(userRoles);
-			User user = userService.create(userTemp);
-			*/
-		    //TODO: Factory Services all daT CMON NOW...
 			User user = new User();
 			user.setLogin(form.getUsername());
 			user.setPassword(form.getPassword());
-			user.setEmail("samuelmosessegal@gmail.com");
-			user.setRoles(userRoles);
-			//RoleDAOImpl roleDAo = new RoleDAOImpl();
-			//Role r = roleDAo.getRole(1);
-			//user.setRoles(Arrays.asList(r));
+			user.setEmail(form.getEmail());
+
+			Role userRole = roleService.findRoleById(1);
+			List<Role> roles = Arrays.asList(userRole);
+			user.setRoles(roles);
 			userService.create(user);
 			return user;
 		//} catch (UsernameAlreadyInUseException e) {
-		//	formBinding.rejectValue("username", "user.duplicateUsername", "already in use");
-		//	return null;
+			//formBinding.rejectValue("username", "user.duplicateUsername", "already in use");
+			//return null;
 		//}
 	}
 
