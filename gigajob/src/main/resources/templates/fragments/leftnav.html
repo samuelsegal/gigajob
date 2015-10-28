@@ -1,6 +1,6 @@
       <div sec:authorize="hasRole('ROLE_USER')" th:fragment="leftnav" class="demo-drawer mdl-layout__drawer mdl-color--blue-grey-900 mdl-color-text--blue-grey-50">
         <header class="demo-drawer-header">
-          <img src="images/user.jpg" class="demo-avatar" />
+          <img th:src="${fb_connection.imageUrl}" class="demo-avatar"/>
           <div class="demo-avatar-dropdown">
             <span>hello@example.com</span>
             <div class="mdl-layout-spacer"></div>

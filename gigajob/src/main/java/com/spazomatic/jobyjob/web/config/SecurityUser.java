@@ -5,7 +5,7 @@ package com.spazomatic.jobyjob.web.config;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
+import java.util.Set;
 
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -38,7 +38,7 @@ public class SecurityUser extends User implements UserDetails
 	public Collection<? extends GrantedAuthority> getAuthorities() {
 		
 		Collection<GrantedAuthority> authorities = new ArrayList<>();
-		List<Role> userRoles = this.getRoles();
+		Set<Role> userRoles = this.getRoles();
 		
 		if(userRoles != null)
 		{

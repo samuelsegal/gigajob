@@ -11,9 +11,12 @@
       		
 			
 			<p>
-			<img th:src=""
-			Login User Name: <span th:text="${gigauser.login}">username</span><br/>
+			
+			<img th:src="${fb_connection.imageUrl}" class="demo-avatar"/><br/>
+			User Name: <span th:text="${gigauser.login}">username</span><br/>
 			Email: <span th:text="${gigauser.email}">email</span><br/>	
+			First Name: <span th:text="${gigauser.firstName}">first name</span><br/>
+			Last Name: <span th:text="${gigauser.lastName}">last name</span><br/>
 			</p>
 			
 			<form method="GET" th:action="@{/table}">

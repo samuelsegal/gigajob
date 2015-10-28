@@ -15,12 +15,12 @@
  */
 package com.spazomatic.jobyjob.profile.signup;
 
-import java.util.Arrays;
-import java.util.List;
+import java.util.Set;
 
 import javax.inject.Inject;
 import javax.validation.Valid;
 
+import org.elasticsearch.common.collect.Sets;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,7 +35,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.context.request.WebRequest;
 
-import com.spazomatic.jobyjob.profile.account.UsernameAlreadyInUseException;
 import com.spazomatic.jobyjob.profile.message.Message;
 import com.spazomatic.jobyjob.profile.message.MessageType;
 import com.spazomatic.jobyjob.profile.model.Role;
@@ -94,8 +93,6 @@ public class SignupController {
 		return null;
 	}
 
-	// internal helpers
-	static int id =0;
 	private User createUser(SignupForm form, BindingResult formBinding) {
 		//try {
 			User user = new User();
@@ -104,7 +101,7 @@ public class SignupController {
 			user.setEmail(form.getEmail());
 
 			Role userRole = roleService.findRoleById(1);
-			List<Role> roles = Arrays.asList(userRole);
+			Set<Role> roles = Sets.newHashSet(userRole);
 			user.setRoles(roles);
 			userService.create(user);
 			return user;

@@ -12,10 +12,10 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.spazomatic.jobyjob.profile.model.User;
-/*
+
 @Repository
 @Transactional
-public class JpaUserDaoImpl implements UserDao 
+public class JpaUserDaoImpl implements UserDAO 
 {
 	@PersistenceContext
 	private EntityManager em;
@@ -54,6 +54,12 @@ public class JpaUserDaoImpl implements UserDao
 		}
 		
 	}
+
+	@Override
+	public User getUser(String login) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 	
 }
-*/
+
