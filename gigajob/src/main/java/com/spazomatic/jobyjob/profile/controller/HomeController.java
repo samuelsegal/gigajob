@@ -37,15 +37,16 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.client.RestTemplate;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.spazomatic.jobyjob.entities.IpLoc;
 import com.spazomatic.jobyjob.entities.Post;
-import com.spazomatic.jobyjob.profile.account.AccountRepository;
 import com.spazomatic.jobyjob.profile.model.repos.UserRepository;
 import com.spazomatic.jobyjob.service.PostService;
 
 @Controller
 public class HomeController {
-	private static final Logger log = LoggerFactory.getLogger(HomeController.class);
+	private static final Logger log = LoggerFactory.getLogger("spazomatic.gigajob");
 	
 	private final Provider<ConnectionRepository> connectionRepositoryProvider;	
 	
@@ -97,16 +98,28 @@ public class HomeController {
 		if (ipAddress == null) {
 			ipAddress = request.getRemoteAddr();
 		}
+		
 		log.debug(String.format("Client ip: %s", ipAddress));
 		RestTemplate restTemplate = new RestTemplate();
 		IpLoc ipLoc = restTemplate.getForObject(String.format(
 				"http://www.telize.com/geoip/%s", ipAddress),
 				IpLoc.class);
 		log.debug(String.format("IP lat / lng: %f / %f", ipLoc.getLatitude(), ipLoc.getLongitude()));
+		//Page<Post> posts = postService.findBySpatialDistance(
+		//		distance, new GeoPoint(ipLoc.getLatitude(), ipLoc.getLongitude()), 
+		//		new PageRequest(1,10));
 		Page<Post> posts = postService.findBySpatialDistance(
-				distance, new GeoPoint(45.7806d, 3.0875d), new PageRequest(1,10));
-
-		model.addAttribute("posts", posts);
+				distance, new GeoPoint(32.0957d, -81.2531d), 
+				new PageRequest(1,10));
+		ObjectMapper mapper = new ObjectMapper();
+		try {
+			String postsAsJSON = mapper.writeValueAsString(posts);
+			model.addAttribute("postsAsJSON",postsAsJSON);
+			log.debug("JJJJJSSSSSSSOOOOOOOONNNNN: " + postsAsJSON);
+		} catch (JsonProcessingException e) {
+			log.error(e.getMessage());
+		}
+		model.addAttribute("posts", posts.getContent());
 		return "data/table";
 	}
 	

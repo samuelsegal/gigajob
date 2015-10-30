@@ -4,27 +4,36 @@
 	  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
 	  layout:decorator="layout">
 
-	<body>
-
-			
+	<body>	
 		<main layout:fragment="content" class="mdl-layout__content mdl-color--grey-100">
-      		
-			
-			<p>Welcome, <span th:text="${gigauser.login}">name</span>!</p>
-			 <div id="map" style="size: height: 180px"></div>
-
-			<form method="GET" th:action="@{/table}">
-				<input type="hidden" name="_csrf" th:value="${_csrf.token}" />
-				<button>TABLE</button>
-			</form>			
-			<form method="POST" th:action="@{/signout}">
-				<input type="hidden" name="_csrf" th:value="${_csrf.token}" />
-				<button>Sign Out</button>
-			</form>
-			</main>
-	
-	
-
-	
+			<div id="container">
+				<div class="row">
+					<div class="col-md-2"></div>
+					<div class="col-md-8">
+						<p>Welcome, <span th:text="${gigauser.login}">name</span>!</p>
+					</div>
+					<div class="col-md-2"></div>
+				</div>
+		  		<div class="row">
+					<div class="col-md-2"></div>
+					<div class="col-md-8" id="gigamap" style="height: 200px"></div>
+					<div class="col-md-2"></div>
+				</div>
+				<div class="row">   				
+					<div class="col-md-2"></div>
+					<div class="col-md-8">
+						<form method="GET" th:action="@{/table}">
+							<input type="hidden" name="_csrf" th:value="${_csrf.token}" />
+							<button>TABLE</button>
+						</form>			
+						<form method="POST" th:action="@{/signout}">
+							<input type="hidden" name="_csrf" th:value="${_csrf.token}" />
+							<button>Sign Out</button>
+						</form>
+					</div>
+					<div class="col-md-2"></div>
+				</div> 
+			</div>
+		</main>
 	</body>
 </html>
