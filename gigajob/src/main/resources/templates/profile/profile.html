@@ -3,10 +3,10 @@
 	xmlns:social="http://spring.io/springsocial"
 	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
 	layout:decorator="layout">
-
+<head>
+	<link href='css/form.css' rel='stylesheet' />
+</head>
 <body>
-
-
 	<main layout:fragment="content"
 		class="mdl-layout__content mdl-color--grey-100">
 
@@ -18,25 +18,33 @@
 			<div class="col-md-2"></div>
 			<div class="col-md-6">
 				
-				<img th:src="${fb_connection.imageUrl}" class="demo-avatar" />
 				
-				<span th:text="${gigauser.login}" class="mdl-color-text--blue-grey-400">>username</span>
-			
-				<br />
-				<hr />
-				<div class="mdl-color-text--blue-400">
-				Email: <span th:text="${gigauser.email}" >email</span><br /> 
-				First Name: <span th:text="${gigauser.firstName}" >first name</span><br />
-				Last Name: <span th:text="${gigauser.lastName}">last name</span><br />
-				</div>
-				<hr />
 				<form method="GET" th:action="@{/editProfile}">
 					<input type="hidden" name="_csrf" th:value="${_csrf.token}" />
 					<button type="submit" th:text="#{giga.profile.edit}"></button>
-				</form>
+				</form>	
+				<form method="POST" th:action="@{/assignRole}">
+					<input type="hidden" name="_csrf" th:value="${_csrf.token}" />
+					<button th:text="#{giga.profile.client.signup}" name="roleParam" value="ROLE_CLIENT">Sign UP ClyBy</button>
+					<button th:text="#{giga.profile.provider.signup}" name="roleParam" value="ROLE_PROVIDER">Sign Up And PRo Ride</button>
+				</form>		
+				<br />
+				<hr />
+				<img th:src="${fb_connection} ? ${fb_connection.imageUrl} : @{images/user.jpg}" class="demo-avatar"/>
+				
+				<span th:text="${gigauser.login}" class="mdl-color-text--blue-grey-400">>username</span>
+				
+				<div class="mdl-color-text--blue-400">
+				Email: <span th:text="${gigauser.email}">email</span><br /> 
+				First Name: <span th:text="${gigauser.firstName}">first name</span><br />
+				Last Name: <span th:text="${gigauser.lastName}">last name</span><br />
+				</div>
+				<br/>
+	
+				<hr/>
 				<form method="POST" th:action="@{/signout}">
 					<input type="hidden" name="_csrf" th:value="${_csrf.token}" />
-					<button>Sign Out</button>
+					<button th:text="#{giga.signout}">Sign Ouuut</button>
 				</form>
 			</div>
 			<div class="col-md-4"></div>

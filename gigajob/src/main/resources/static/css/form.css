@@ -1,3 +1,8 @@
+form {
+    float: left;
+    width: auto;
+}
+
 form input, form select {
 	display: block;
 }

@@ -16,33 +16,27 @@
 package com.spazomatic.jobyjob.profile.controller;
 
 import java.security.Principal;
+import java.util.Set;
 
 import javax.inject.Inject;
 import javax.inject.Provider;
-import javax.servlet.http.HttpServletRequest;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.elasticsearch.core.geo.GeoPoint;
 import org.springframework.social.connect.Connection;
 import org.springframework.social.connect.ConnectionRepository;
 import org.springframework.social.facebook.api.Facebook;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.client.RestTemplate;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.spazomatic.jobyjob.entities.IpLoc;
-import com.spazomatic.jobyjob.entities.Post;
+import com.spazomatic.jobyjob.profile.model.Role;
+import com.spazomatic.jobyjob.profile.model.User;
 import com.spazomatic.jobyjob.profile.model.repos.UserRepository;
-import com.spazomatic.jobyjob.service.PostService;
+import com.spazomatic.jobyjob.profile.services.RoleService;
+import com.spazomatic.jobyjob.profile.services.UserService;
 
 @Controller
 public class ProfileController {
@@ -51,9 +45,12 @@ public class ProfileController {
 	private final Provider<ConnectionRepository> connectionRepositoryProvider;	
 	
 	private final UserRepository userRepository;
+
+	@Autowired
+	private UserService userService;
 	
 	@Autowired
-	private HttpServletRequest request;
+	private RoleService roleService;
 	
 	@Inject
 	public ProfileController(Provider<ConnectionRepository> connectionRepositoryProvider, UserRepository userRepository) {
@@ -62,16 +59,40 @@ public class ProfileController {
 	}
 		
 	@RequestMapping("/editProfile")
-	public String profile(Principal currentUser, Model model) {
-		//model.addAttribute("connectionsToProviders", getConnectionRepository().findAllConnections());
+	public String editProfile(Principal currentUser, Model model) {
+		
 		Connection<Facebook> connection = getConnectionRepository().findPrimaryConnection(Facebook.class);
 		model.addAttribute("fb_connection", connection != null ? connection : null);
 		model.addAttribute("gigauser",userRepository.findUserByLogin(currentUser.getName()));
-		log.debug(String.format("MODEL: %s", model.toString()));
 		
 		return "profile/editProfile";
 	}
 	
+	@RequestMapping("/assignRole")
+	public String assignRole(Principal currentUser, Model model,
+			@RequestParam(value = "roleParam") String roleParam) {
+
+		User boozer = userRepository.findUserByLogin(currentUser.getName());
+		Role role = roleService.findRoleByRoleName(roleParam);
+		Set<Role> roles = boozer.getRoles();
+		roles.add(role);
+		boozer.setRoles(roles);
+		userService.update(boozer);
+		
+		model.addAttribute("gigauser", boozer);
+		
+		Connection<Facebook> connection = getConnectionRepository().findPrimaryConnection(Facebook.class);
+		model.addAttribute("fb_connection", connection != null ? connection : null);		
+		
+		if(RoleService.ROLE_CLIENT.equals(roleParam)){
+			return "client/createClientProfile";
+		}else if(RoleService.ROLE_PROVIDER.equals(roleParam)){
+			return "provider/createProviderProfile";
+		}else{
+			return "error";
+		}
+		
+	}
 	
 	private ConnectionRepository getConnectionRepository() {
 		return connectionRepositoryProvider.get();
