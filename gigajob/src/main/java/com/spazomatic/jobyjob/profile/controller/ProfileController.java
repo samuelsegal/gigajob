@@ -16,14 +16,24 @@
 package com.spazomatic.jobyjob.profile.controller;
 
 import java.security.Principal;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 
 import javax.inject.Inject;
 import javax.inject.Provider;
+import javax.servlet.http.HttpServletRequest;
 
+import org.hibernate.service.spi.ServiceException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.web.context.HttpSessionSecurityContextRepository;
 import org.springframework.social.connect.Connection;
 import org.springframework.social.connect.ConnectionRepository;
 import org.springframework.social.facebook.api.Facebook;
@@ -38,6 +48,7 @@ import com.spazomatic.jobyjob.profile.model.repos.UserRepository;
 import com.spazomatic.jobyjob.profile.services.RoleService;
 import com.spazomatic.jobyjob.profile.services.UserService;
 
+
 @Controller
 public class ProfileController {
 	private static final Logger log = LoggerFactory.getLogger("spazomatic.gigajob");
@@ -46,6 +57,9 @@ public class ProfileController {
 	
 	private final UserRepository userRepository;
 
+	@Autowired
+	private HttpServletRequest request;
+	
 	@Autowired
 	private UserService userService;
 	
@@ -78,9 +92,11 @@ public class ProfileController {
 		roles.add(role);
 		boozer.setRoles(roles);
 		userService.update(boozer);
-		
+	
+		userService.updateSessionAuthorities(boozer, request, roleParam);
+
 		model.addAttribute("gigauser", boozer);
-		
+
 		Connection<Facebook> connection = getConnectionRepository().findPrimaryConnection(Facebook.class);
 		model.addAttribute("fb_connection", connection != null ? connection : null);		
 		

@@ -14,10 +14,6 @@ import org.springframework.security.core.userdetails.UserDetails;
 import com.spazomatic.jobyjob.profile.model.Role;
 import com.spazomatic.jobyjob.profile.model.User;
 
-/**
- * @author Siva
- *
- */
 public class SecurityUser extends User implements UserDetails
 {
 
@@ -29,7 +25,9 @@ public class SecurityUser extends User implements UserDetails
 			this.setLogin(user.getLogin());
 			this.setEmail(user.getEmail());
 			this.setPassword(user.getPassword());
-			//this.setDob(user.getDob());
+			this.setDob(user.getDob());
+			this.setFirstName(user.getFirstName());
+			this.setLastName(user.getLastName());
 			this.setRoles(user.getRoles());
 		}		
 	}

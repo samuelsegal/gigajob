@@ -3,9 +3,18 @@
  */
 package com.spazomatic.jobyjob.profile.services;
 
+import java.util.ArrayList;
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.web.context.HttpSessionSecurityContextRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -59,5 +68,15 @@ public class UserService
 	public User findUserByLogin(String login) {
 		return userRepository.findUserByLogin(login);
 	}	
+	
+	public void updateSessionAuthorities(User user, HttpServletRequest request, String ... roles){		
+		userRepository.save(user);
+		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		List<GrantedAuthority> authorities = new ArrayList<GrantedAuthority>(auth.getAuthorities());
+		authorities.add(new SimpleGrantedAuthority(roles[0]));
+		Authentication newAuth = new UsernamePasswordAuthenticationToken(auth.getPrincipal(),auth.getCredentials(),authorities);
+		SecurityContextHolder.getContext().setAuthentication(newAuth);
+		request.getSession().setAttribute(HttpSessionSecurityContextRepository.SPRING_SECURITY_CONTEXT_KEY, SecurityContextHolder.getContext());
+	}
 }
 

@@ -41,6 +41,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.spazomatic.jobyjob.entities.IpLoc;
 import com.spazomatic.jobyjob.entities.Post;
+import com.spazomatic.jobyjob.profile.model.User;
 import com.spazomatic.jobyjob.profile.model.repos.UserRepository;
 import com.spazomatic.jobyjob.service.PostService;
 
@@ -65,7 +66,7 @@ public class HomeController {
 	}
 	@RequestMapping("/homemap")
 	public String homemap(Principal currentUser, Model model) {
-		//model.addAttribute("connectionsToProviders", getConnectionRepository().findAllConnections());
+		
 		Connection<Facebook> connection = getConnectionRepository().findPrimaryConnection(Facebook.class);
 		model.addAttribute("fb_connection", connection != null ? connection : null);
 		model.addAttribute("gigauser",userRepository.findUserByLogin(currentUser.getName()));
@@ -75,12 +76,12 @@ public class HomeController {
 	}		
 	@RequestMapping("/profile")
 	public String profile(Principal currentUser, Model model) {
-		//model.addAttribute("connectionsToProviders", getConnectionRepository().findAllConnections());
+		
 		Connection<Facebook> connection = getConnectionRepository().findPrimaryConnection(Facebook.class);
 		model.addAttribute("fb_connection", connection != null ? connection : null);
 		model.addAttribute("gigauser",userRepository.findUserByLogin(currentUser.getName()));
-		log.debug(String.format("MODEL: %s", model.toString()));
-		
+		User loser = userRepository.findUserByLogin(currentUser.getName());
+		log.debug("gigauser" + loser.getRoles());
 		return "profile/profile";
 	}
 	

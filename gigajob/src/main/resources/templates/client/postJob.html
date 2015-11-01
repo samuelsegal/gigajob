@@ -2,7 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org"
 	  xmlns:social="http://spring.io/springsocial"
 	  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-	  layout:decorator="layout">
+	  layout:decorator="layout/layout">
 
 	<body>
 
@@ -13,20 +13,21 @@
 					<div class="col-md-8">			
 						<h3 th:text="#{giga.Post}"></h3>
 						<hr />			
-						<form method="POST" th:object="${post}" th:action="@{/submitJob}">
+						<form method="POST" th:object="${post}" th:action="@{/submitJob}" id="postForm">
 							<fieldset>
 								<input type="hidden" name="_csrf" th:value="${_csrf.token}" />
 								<div>
-								  <label for="title" th:text="#{giga.Title}" />
-								  <input type="text" th:field="*{title}" />
-								</div>
-								
-								<p id="displayLocation"></p>
-								<div id="postLocationMap" style="height: 100px"></div>
-								<br/>
-								<button type="button" onclick="getLocation()" th:text="#{giga.UseCurrentLocation}" />
+								  <label for="title" th:text="#{giga.Title}"></label>
+								  <input type="text" th:field="*{title}" id="title" name="title"/>
+								<button type="button" onclick="getLocation()" th:text="#{giga.UseCurrentLocation}"></button>
 								<input type="hidden" th:field="${loc.latitude}" id="loclat"/>
-								<input type="hidden" th:field="${loc.longitude}" id="loclon"/>
+								<input type="hidden" th:field="${loc.longitude}" id="loclon"/>	
+								</div>
+							
+								<p id="displayLocation"></p>
+								<div id="postLocationMap" style="height: 180px"></div>
+								<br/>
+
 								<script th:inline="javascript">
 			
 									 console.log("LATITUDE LONGITUDE");
