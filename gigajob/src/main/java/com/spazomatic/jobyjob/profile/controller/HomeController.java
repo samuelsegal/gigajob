@@ -26,7 +26,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.elasticsearch.core.geo.GeoPoint;
+import org.springframework.data.geo.Point;
 import org.springframework.social.connect.Connection;
 import org.springframework.social.connect.ConnectionRepository;
 import org.springframework.social.facebook.api.Facebook;
@@ -109,9 +109,8 @@ public class HomeController {
 		//Page<Post> posts = postService.findBySpatialDistance(
 		//		distance, new GeoPoint(ipLoc.getLatitude(), ipLoc.getLongitude()), 
 		//		new PageRequest(1,10));
-		Page<Post> posts = postService.findBySpatialDistance(
-				distance, new GeoPoint(32.0957d, -81.2531d), 
-				new PageRequest(1,10));
+		Page<Post> posts = postService.findByLocationNear(new Point(32.0957d, -81.2531),
+				distance, new PageRequest(1,10));
 		ObjectMapper mapper = new ObjectMapper();
 		try {
 			String postsAsJSON = mapper.writeValueAsString(posts);

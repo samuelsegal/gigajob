@@ -12,9 +12,10 @@
 	<autoconfigs>
 		<config>java:com.spazomatic.jobyjob.profile.config.SecurityConfig</config>
 		<config>java:com.spazomatic.jobyjob.conf.WebConfiguration</config>
-		<config>java:com.spazomatic.jobyjob.conf.ElasticsearchConfiguration</config>
+		<config>java:com.spazomatic.jobyjob.profile.config.CustomUserDetailsService</config>
+		<config>java:com.spazomatic.jobyjob.profile.config.PersistenceConfig</config>
+		<config>java:com.spazomatic.jobyjob.conf.AppConfig</config>
 		<config>java:com.spazomatic.jobyjob.profile.config.SocialConfig</config>
-		<config>java:com.spazomatic.jobyjob.profile.config.MainConfig</config>
 	</autoconfigs>
 	<configSets>
 	</configSets>

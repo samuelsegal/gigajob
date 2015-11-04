@@ -9,7 +9,7 @@ import javax.servlet.http.HttpServletRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.elasticsearch.core.geo.GeoPoint;
+import org.springframework.data.geo.Point;
 import org.springframework.social.connect.Connection;
 import org.springframework.social.connect.ConnectionRepository;
 import org.springframework.social.facebook.api.Facebook;
@@ -77,7 +77,7 @@ public class ClientController {
 		log.debug(String.format("IP lat / lng: %f / %f", ipLoc.getLatitude(), ipLoc.getLongitude()));
 		log.debug(String.format("%s posting %s with at lat / lon: %f / %f", currentUser.getName(), 
 				post.getTitle(), loc.getLatitude(), loc.getLongitude()));
-		post.setLocation(new GeoPoint(loc.getLatitude(), loc.getLongitude()));
+		post.setLocation(new double[]{loc.getLatitude(), loc.getLongitude()});
 		postService.save(post);	
 		return "client/userPosts";
 	}

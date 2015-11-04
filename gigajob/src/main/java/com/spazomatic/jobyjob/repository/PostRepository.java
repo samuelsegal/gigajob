@@ -2,13 +2,16 @@ package com.spazomatic.jobyjob.repository;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.elasticsearch.core.geo.GeoPoint;
-import org.springframework.data.elasticsearch.repository.ElasticsearchRepository;
+import org.springframework.data.geo.Distance;
+import org.springframework.data.geo.GeoResults;
+import org.springframework.data.geo.Point;
+import org.springframework.data.mongodb.repository.MongoRepository;
 
 import com.spazomatic.jobyjob.entities.Post;
 
-public interface PostRepository extends ElasticsearchRepository<Post, String>{
+public interface PostRepository extends MongoRepository<Post, String>{
 
     Page<Post> findByTagsName(String name, Pageable pageable);
-    Page<Post> findByLocation(GeoPoint location, Pageable pageable);
+    Page<Post> findByLocation(Point location, Pageable pageable);
+    Page<Post> findByLocationNear(Point location, Distance distance, Pageable pageable);
 }

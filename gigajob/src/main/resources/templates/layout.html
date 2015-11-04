@@ -7,7 +7,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="description" content="A front-end template that helps you build fast, modern mobile web apps." />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>GigAJob</title>
+    <title th:text="#{giga.appname}">App Name</title>
 
     <!-- Add to homescreen for Chrome on Android -->
     <meta name="mobile-web-app-capable" content="yes" />
@@ -44,18 +44,7 @@
 	<link href='https://api.mapbox.com/mapbox.js/plugins/leaflet-locatecontrol/v0.43.0/L.Control.Locate.ie.css' rel='stylesheet' />
 	<![endif]-->
 	<link href='https://api.mapbox.com/mapbox.js/plugins/leaflet-locatecontrol/v0.43.0/css/font-awesome.min.css' rel='stylesheet' />
-    
-    <style>
-    #view-source {
-      position: fixed;
-      display: block;
-      right: 0;
-      bottom: 0;
-      margin-right: 40px;
-      margin-bottom: 40px;
-      z-index: 900;
-    }
-    </style>
+
    	<script src='https://api.mapbox.com/mapbox.js/v2.2.2/mapbox.js'></script>
 	<link href='https://api.mapbox.com/mapbox.js/v2.2.2/mapbox.css' rel='stylesheet' />
 	<link rel="stylesheet" th:href="@{/css/jobyjobmap.css}" type="text/css" media="screen"></link>
@@ -98,14 +87,12 @@
 				for(var i = 0; i < jsonContent.length; i++){
 					L.marker([jsonContent[i].location.lat,jsonContent[i].location.lon])
 					 .addTo(map)
-					 .bindPopup("<b>Debug</b><br />" +
-							 jsonContent[i].title + "<br />" +
+					 .bindPopup("<b>"+jsonContent[i].title + "</b><br/>" +
 							 "Location (lat / lon): " + 
 							 jsonContent[i].location.lat + " / " +
 							 jsonContent[i].location.lon)
 							 .openPopup();
-				}
-			    
+				}			    
 			    
 		    /*]]>*/
 		}
@@ -116,6 +103,7 @@
 			L.mapbox.accessToken = 'pk.eyJ1Ijoic2FtdWVsc2VnYWwiLCJhIjoiY2lmenN0dGJkNjNnNXV3a3I3cjB4ODhuYSJ9.VK6fL73lai0a3oTJ4ndu-w';
 			var map = L.mapbox.map('postLocationMap', 
 					'samuelsegal.cifzsts6p62detglytdi46jvc');
+			L.control.locate().addTo(map);
 			map.setZoom(10);
 			//L.control.locate().addTo(map);
 			//Initialize the geocoder control and add it to the map.
@@ -127,7 +115,22 @@
 			// https://www.mapbox.com/mapbox.js/api/v2.2.2/l-mapbox-geocodercontrol/#section-geocodercontrol-on
 			var output = document.getElementById('displayLocation');
 			geocoderControl.on('found', function(res) {
-			    output.innerHTML = JSON.stringify(res.results.features[0]);
+			    output.innerHTML = JSON.stringify(res.results.features[0].geometry.coordinates);
+			});
+			geocoderControl.on('select', function(res) {
+				console.dir("res: " + res.feature);
+			    output.innerHTML = res.feature.place_name;
+			    var lat = res.feature.geometry.coordinates[1];
+			    var lon = res.feature.geometry.coordinates[0];
+				document.getElementById("loclat").value = lat;
+				document.getElementById("loclon").value = lon;
+				var postTitle = $('#postForm #title');
+				console.dir(postTitle.val());
+				L.marker([lat,lon]).addTo(map).bindPopup(
+						"<b>" + postTitle.val() + "</b><br/>" +
+						 "Location (lat / lon): " + 
+						 lat + " / " + lon)
+						 .openPopup();;
 			});
 		}
 		</script>	

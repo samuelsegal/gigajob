@@ -18,10 +18,6 @@ import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
 import org.springframework.core.env.Environment;
 import org.springframework.scheduling.annotation.EnableScheduling;
 
-/**
- * @author Siva
- *
- */
 @Configuration
 @ComponentScan(basePackages={"com.spazomatic.jobyjob"})
 @PropertySource(value = { "classpath:application.properties" })

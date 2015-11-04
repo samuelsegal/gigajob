@@ -19,10 +19,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.spazomatic.jobyjob.profile.model.User;
 import com.spazomatic.jobyjob.profile.services.UserService;
 
-/**
- * @author Siva
- *
- */
 @Controller
 @RequestMapping("/rest/users/")
 public class UserResource {

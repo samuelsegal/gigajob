@@ -3,9 +3,6 @@ package com.spazomatic.jobyjob.validation;
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
 
-/**
- * @author Petri Kainulainen
- */
 public class PasswordsNotEmptyValidator implements ConstraintValidator<PasswordsNotEmpty, Object> {
 
     private String validationTriggerFieldName;

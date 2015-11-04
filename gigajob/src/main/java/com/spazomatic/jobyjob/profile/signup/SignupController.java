@@ -15,12 +15,12 @@
  */
 package com.spazomatic.jobyjob.profile.signup;
 
+import java.util.HashSet;
 import java.util.Set;
 
 import javax.inject.Inject;
 import javax.validation.Valid;
 
-import org.elasticsearch.common.collect.Sets;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,6 +34,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.context.request.WebRequest;
+import org.thymeleaf.expression.Sets;
 
 import com.spazomatic.jobyjob.profile.message.Message;
 import com.spazomatic.jobyjob.profile.message.MessageType;
@@ -101,7 +102,8 @@ public class SignupController {
 			user.setEmail(form.getEmail());
 
 			Role userRole = roleService.findRoleById(1);
-			Set<Role> roles = Sets.newHashSet(userRole);
+			Set<Role> roles = new HashSet<>();
+			roles.add(userRole);
 			user.setRoles(roles);
 			userService.create(user);
 			return user;

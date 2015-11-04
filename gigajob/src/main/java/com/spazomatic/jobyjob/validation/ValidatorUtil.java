@@ -4,9 +4,6 @@ import java.lang.reflect.Field;
 
 import javax.validation.ConstraintValidatorContext;
 
-/**
- * @author Petri Kainulainen
- */
 public class ValidatorUtil {
 
     public static void addValidationError(String field, ConstraintValidatorContext context) {

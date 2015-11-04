@@ -3,15 +3,16 @@ package com.spazomatic.jobyjob.entities;
 import java.util.List;
 
 import org.springframework.data.annotation.Id;
-import org.springframework.data.elasticsearch.annotations.Document;
-import org.springframework.data.elasticsearch.core.geo.GeoPoint;
+import org.springframework.data.mongodb.core.index.GeoSpatialIndexed;
 
-@Document(indexName = "jobyjob", type = "geo-class-point-type", shards = 1, replicas = 0)
+//@Document(indexName = "jobyjob", type = "geo-class-point-type", shards = 1, replicas = 0)
 public class Post {
     @Id
     private String id;
     private String title;
-    private GeoPoint location;
+    
+    @GeoSpatialIndexed
+    private double[] location;
 
 	// @Field(type= FieldType.Nested)
     private List<Tag> tags;
@@ -19,8 +20,11 @@ public class Post {
     public Post(){
     }
 
-    public Post(String id){
-        this.id = id;
+    public Post(String title, double latitude, double longitude){
+        this.title = title;
+        this.location = new double[2];
+        this.location[0] = latitude;
+        this.location[1] = longitude;
     }
 
     public String getId() {
@@ -39,11 +43,11 @@ public class Post {
         this.title = title;
     }
     
-    public GeoPoint getLocation() {
+    public double[] getLocation() {
 		return location;
 	}
 
-	public void setLocation(GeoPoint location) {
+	public void setLocation(double[] location) {
 		this.location = location;
 	}
 	

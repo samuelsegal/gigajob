@@ -3,9 +3,7 @@ package com.spazomatic.jobyjob.validation;
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
 
-/**
- * @author Petri Kainulainen
- */
+
 public class PasswordsNotEqualValidator implements ConstraintValidator<PasswordsNotEqual, Object> {
 
     private String passwordFieldName;

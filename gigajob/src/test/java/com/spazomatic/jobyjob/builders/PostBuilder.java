@@ -1,8 +1,7 @@
 package com.spazomatic.jobyjob.builders;
 
 
-import org.springframework.data.elasticsearch.core.geo.GeoPoint;
-import org.springframework.data.elasticsearch.core.query.IndexQuery;
+import org.springframework.data.geo.Point;
 
 import com.spazomatic.jobyjob.entities.Post;
 
@@ -12,8 +11,8 @@ public class PostBuilder {
 
 	private Post result;
 
-	public PostBuilder(String id) {
-		result = new Post(id);
+	public PostBuilder(String id, double lat, double lon) {
+		result = new Post(id,1,1);
 	}
 
 	public PostBuilder title(String title) {
@@ -22,7 +21,7 @@ public class PostBuilder {
 	}
 
 	public PostBuilder location(double latitude, double longitude) {
-		result.setLocation(new GeoPoint(latitude, longitude));
+		//result.setLocation(new Point(latitude, longitude));
 		return this;
 	}
 
@@ -30,10 +29,5 @@ public class PostBuilder {
 		return result;
 	}
 
-	public IndexQuery buildIndex() {
-		IndexQuery indexQuery = new IndexQuery();
-		indexQuery.setId(result.getId());
-		indexQuery.setObject(result);
-		return indexQuery;
-	}
+
 }

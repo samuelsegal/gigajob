@@ -7,7 +7,6 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 
-import org.elasticsearch.common.collect.Sets;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -46,8 +45,8 @@ public class CustomUserDetailsService implements UserDetailsService{
 
 	public Set getRoles(Integer role) {
 
-		Set<Role> roles = Sets.newHashSet(roleService.findRoleById(role));
-		
+		Set<Role> roles = new HashSet();//Sets.newHashSet(roleService.findRoleById(role));
+		roles.add(roleService.findRoleById(role));
 /*
 		if (role.intValue() == 1) {
 			roles.add("ROLE_USER");

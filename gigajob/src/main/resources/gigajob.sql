@@ -35,7 +35,7 @@ CREATE TABLE `database`.`users` (
 	PRIMARY KEY (`id`)
 ) ENGINE=InnoDB;
 
-CREATE TABLE `database`.`UserConnection` (
+CREATE TABLE `gigajob`.`UserConnection` (
 	`userId` VARCHAR(255) NOT NULL,
 	`providerId` VARCHAR(255) NOT NULL,
 	`providerUserId` VARCHAR(255) NOT NULL,
