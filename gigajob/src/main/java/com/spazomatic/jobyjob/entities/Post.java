@@ -3,6 +3,7 @@ package com.spazomatic.jobyjob.entities;
 import java.util.List;
 
 import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.index.GeoSpatialIndexType;
 import org.springframework.data.mongodb.core.index.GeoSpatialIndexed;
 
 //@Document(indexName = "jobyjob", type = "geo-class-point-type", shards = 1, replicas = 0)
@@ -11,7 +12,7 @@ public class Post {
     private String id;
     private String title;
     
-    @GeoSpatialIndexed
+    @GeoSpatialIndexed(type = GeoSpatialIndexType.GEO_2DSPHERE)
     private double[] location;
 
 	// @Field(type= FieldType.Nested)

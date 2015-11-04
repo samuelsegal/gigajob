@@ -3,7 +3,7 @@
 	xmlns:dt="http://www.thymeleaf.org/dandelion/datatables"
 	xmlns:social="http://spring.io/springsocial"
 	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-	layout:decorator="layout">
+	layout:decorator="layout/layout">
 <head>
 <!-- Latest compiled and minified CSS -->
 <link rel="stylesheet"
@@ -32,13 +32,12 @@
 					<thead>
 						<tr>
 							<th>Title</th>
-							<th>Latitude / Longitude</th>
+
 						</tr>
 					</thead>
 					<tbody>
 						<tr th:each="post : ${posts}">
 							<td th:text="${post?.title}"></td>
-							<td th:text="${post.location?.lat + '  /  ' + post.location?.lon}"></td>
 						</tr>
 					</tbody>
 				</table>

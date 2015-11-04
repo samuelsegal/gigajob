@@ -85,12 +85,12 @@
 				console.log("JSON" + JSON.stringify(json));
 				console.log("content length: " + jsonContent.length);
 				for(var i = 0; i < jsonContent.length; i++){
-					L.marker([jsonContent[i].location.lat,jsonContent[i].location.lon])
+					L.marker([jsonContent[i].location[0],jsonContent[i].location[1]])
 					 .addTo(map)
 					 .bindPopup("<b>"+jsonContent[i].title + "</b><br/>" +
 							 "Location (lat / lon): " + 
-							 jsonContent[i].location.lat + " / " +
-							 jsonContent[i].location.lon)
+							 jsonContent[i].location[0] + " / " +
+							 jsonContent[i].location[1])
 							 .openPopup();
 				}			    
 			    

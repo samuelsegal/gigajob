@@ -7,6 +7,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.geo.Distance;
+import org.springframework.data.geo.Metrics;
 import org.springframework.data.geo.Point;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
@@ -62,6 +63,8 @@ public class PostServiceImpl implements PostService{
     	//List<Post> postList = 
     	//		mongoTemplate.find(new Query(Criteria.where("location").nearSphere(location).maxDistance(30.0d)), Post.class);
     	//Page<Post> pagedResult = new PageImpl<>(postList,pageRequest,postList.size());
-    	return postRepository.findByLocationNear(location, new Distance(Double.valueOf(distance)), pageRequest);
+		List<Post> postList = postRepository.findByLocationNear(location, new Distance(Double.valueOf(distance), Metrics.MILES));
+		Page<Post> postPage = postRepository.findByLocationNear(location, new Distance(Double.valueOf(distance), Metrics.MILES), pageRequest);
+		return postPage;
 	}
 }

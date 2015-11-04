@@ -89,7 +89,7 @@ public class HomeController {
 	public String table(Principal currentUser, Model model,
 			@RequestParam(value = "distance", 
 							required = false, 
-							defaultValue = "20km") 
+							defaultValue = "30") 
 							String distance) {
 		Connection<Facebook> connection = getConnectionRepository().findPrimaryConnection(Facebook.class);
 		model.addAttribute("fb_connection", connection != null ? connection : null);
@@ -101,16 +101,9 @@ public class HomeController {
 		}
 		
 		log.debug(String.format("Client ip: %s", ipAddress));
-		RestTemplate restTemplate = new RestTemplate();
-		IpLoc ipLoc = restTemplate.getForObject(String.format(
-				"http://www.telize.com/geoip/%s", ipAddress),
-				IpLoc.class);
-		log.debug(String.format("IP lat / lng: %f / %f", ipLoc.getLatitude(), ipLoc.getLongitude()));
-		//Page<Post> posts = postService.findBySpatialDistance(
-		//		distance, new GeoPoint(ipLoc.getLatitude(), ipLoc.getLongitude()), 
-		//		new PageRequest(1,10));
+
 		Page<Post> posts = postService.findByLocationNear(new Point(32.0957d, -81.2531),
-				distance, new PageRequest(1,10));
+				distance, new PageRequest(0,10));
 		ObjectMapper mapper = new ObjectMapper();
 		try {
 			String postsAsJSON = mapper.writeValueAsString(posts);
