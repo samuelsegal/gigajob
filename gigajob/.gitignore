@@ -11,6 +11,9 @@ target/
 .settings/
 bin/
 .metadata
+.externalToolBuilders/
+.gradle/2.7/
+.springBeans
 
 # JRebel
 rebel.xml
