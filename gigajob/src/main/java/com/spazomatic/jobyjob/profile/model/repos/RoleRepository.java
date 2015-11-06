@@ -6,7 +6,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
 import com.spazomatic.jobyjob.profile.model.Role;
-import com.spazomatic.jobyjob.profile.model.User;
 
 public interface RoleRepository extends JpaRepository<Role, Serializable>
 {

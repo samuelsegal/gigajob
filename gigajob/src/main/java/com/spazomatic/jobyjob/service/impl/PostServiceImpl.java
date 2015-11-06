@@ -60,11 +60,9 @@ public class PostServiceImpl implements PostService{
 	@Override
 	public Page<Post> findByLocationNear( Point location, String distance, PageRequest pageRequest) {
 
-    	//List<Post> postList = 
-    	//		mongoTemplate.find(new Query(Criteria.where("location").nearSphere(location).maxDistance(30.0d)), Post.class);
-    	//Page<Post> pagedResult = new PageImpl<>(postList,pageRequest,postList.size());
-		List<Post> postList = postRepository.findByLocationNear(location, new Distance(Double.valueOf(distance), Metrics.MILES));
-		Page<Post> postPage = postRepository.findByLocationNear(location, new Distance(Double.valueOf(distance), Metrics.MILES), pageRequest);
+		Page<Post> postPage = postRepository.findByLocationNear(
+				location, new Distance(Double.valueOf(distance), Metrics.MILES), 
+				pageRequest);
 		return postPage;
 	}
 }

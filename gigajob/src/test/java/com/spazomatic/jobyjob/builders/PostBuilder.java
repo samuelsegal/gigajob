@@ -1,8 +1,6 @@
 package com.spazomatic.jobyjob.builders;
 
 
-import org.springframework.data.geo.Point;
-
 import com.spazomatic.jobyjob.entities.Post;
 
 

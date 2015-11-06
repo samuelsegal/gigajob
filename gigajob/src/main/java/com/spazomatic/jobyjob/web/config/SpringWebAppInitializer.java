@@ -3,14 +3,6 @@
  */
 package com.spazomatic.jobyjob.web.config;
 
-import javax.servlet.Filter;
-
-import org.springframework.orm.jpa.support.OpenEntityManagerInViewFilter;
-import org.springframework.web.filter.DelegatingFilterProxy;
-import org.springframework.web.servlet.support.AbstractAnnotationConfigDispatcherServletInitializer;
-
-import com.spazomatic.jobyjob.conf.AppConfig;
-
 /**
  * @author Siva
  *

@@ -15,6 +15,7 @@
  */
 package com.spazomatic.jobyjob.profile.controller;
 
+import java.io.IOException;
 import java.security.Principal;
 
 import javax.inject.Inject;
@@ -37,10 +38,12 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.client.RestTemplate;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.maxmind.geoip2.exception.GeoIp2Exception;
 import com.spazomatic.jobyjob.entities.IpLoc;
 import com.spazomatic.jobyjob.entities.Post;
+import com.spazomatic.jobyjob.location.ServerLocation;
+import com.spazomatic.jobyjob.location.ServerLocationBo;
 import com.spazomatic.jobyjob.profile.model.User;
 import com.spazomatic.jobyjob.profile.model.repos.UserRepository;
 import com.spazomatic.jobyjob.service.PostService;
@@ -55,6 +58,9 @@ public class HomeController {
 	
 	@Autowired
 	private PostService postService;
+	
+	@Autowired
+	private ServerLocationBo serverLocationBo;
 	
 	@Autowired
 	private HttpServletRequest request;
@@ -94,26 +100,56 @@ public class HomeController {
 		Connection<Facebook> connection = getConnectionRepository().findPrimaryConnection(Facebook.class);
 		model.addAttribute("fb_connection", connection != null ? connection : null);
 		model.addAttribute("gigauser",userRepository.findUserByLogin(currentUser.getName()));
+		try {		
+			String ipAddress = request.getHeader("X-FORWARDED-FOR");
+			if (ipAddress == null) {
+				ipAddress = request.getRemoteAddr();		
+			}
 		
-		String ipAddress = request.getHeader("X-FORWARDED-FOR");
-		if (ipAddress == null) {
-			ipAddress = request.getRemoteAddr();
-		}
-		
-		log.debug(String.format("Client ip: %s", ipAddress));
-
-		Page<Post> posts = postService.findByLocationNear(new Point(32.0957d, -81.2531),
-				distance, new PageRequest(0,10));
-		ObjectMapper mapper = new ObjectMapper();
-		try {
+			ServerLocation location = getLocation(ipAddress);
+			log.debug(String.format("Client IP Addy: %s", ipAddress));
+			log.debug(String.format("Client Loaked the Cloak: %s", location.toString()));
+			
+			IpLoc ipLoc = new IpLoc();
+			ipLoc.setLatitude(Double.valueOf(location.getLatitude()));
+			ipLoc.setLongitude(Double.valueOf(location.getLongitude()));
+			Page<Post> posts = postService.findByLocationNear(
+					new Point(ipLoc.getLatitude(), ipLoc.getLongitude()),
+					distance, new PageRequest(0,20));
+			model.addAttribute("posts", posts.getContent());
+			
+			ObjectMapper mapper = new ObjectMapper();
 			String postsAsJSON = mapper.writeValueAsString(posts);
 			model.addAttribute("postsAsJSON",postsAsJSON);
-			log.debug("JJJJJSSSSSSSOOOOOOOONNNNN: " + postsAsJSON);
-		} catch (JsonProcessingException e) {
+			log.debug("PostsAsJSON: " + postsAsJSON);
+		} catch (Exception e) {
 			log.error(e.getMessage());
+			model.addAttribute("message",e.getMessage());
+			return "error";
 		}
-		model.addAttribute("posts", posts.getContent());
+		
 		return "data/table";
+	}
+	
+	private ServerLocation getLocation(String ipAddress) throws Exception{
+		ServerLocation location = null;
+		try {
+			location = serverLocationBo.getLocation(ipAddress);
+		} catch (IOException | GeoIp2Exception e1) {
+			if(e1 instanceof GeoIp2Exception){
+				RestTemplate restTemplate = new RestTemplate();
+				ipAddress = restTemplate.getForObject(
+						"http://checkip.amazonaws.com",
+						String.class);
+				try {
+					location = serverLocationBo.getLocation(ipAddress);
+				} catch (IOException | GeoIp2Exception e) {
+					log.error(e.getMessage());
+					throw new Exception(e.getMessage());
+				}
+			}
+		}
+		return location;
 	}
 	
 	@RequestMapping("/")
