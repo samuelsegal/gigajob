@@ -1,7 +1,8 @@
-      <div sec:authorize="hasRole('ROLE_USER')" th:fragment="leftnav" class="demo-drawer mdl-layout__drawer mdl-color--blue-grey-900 mdl-color-text--blue-grey-50">
+<div>
+      <div th:if="${gigauser.roles.contains('USER')} == true" th:fragment="leftnav" class="demo-drawer mdl-layout__drawer mdl-color--blue-grey-900 mdl-color-text--blue-grey-50">
         <header class="demo-drawer-header">
           
-          <img th:src="${fb_connection} ? ${fb_connection.imageUrl} : @{images/user.jpg}" class="demo-avatar"/>
+          <img th:src="${gigauserconnection} ? ${gigauserconnection.imageUrl} : @{images/user.jpg}" class="demo-avatar"/>
           <div class="demo-avatar-dropdown">
             <span th:text="${gigauser.email}"></span>
             <div class="mdl-layout-spacer"></div>
@@ -29,4 +30,5 @@
           <div class="mdl-layout-spacer"></div>
           <a class="mdl-navigation__link" href=""><i class="mdl-color-text--blue-grey-400 material-icons" role="presentation">help_outline</i><span class="visuallyhidden">Help</span></a>
         </nav>
+        </div>
 </div>

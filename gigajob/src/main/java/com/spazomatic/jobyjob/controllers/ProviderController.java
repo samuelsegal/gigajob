@@ -10,7 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.social.connect.ConnectionRepository;
 import org.springframework.stereotype.Controller;
 
-import com.spazomatic.jobyjob.profile.model.repos.UserRepository;
+import com.spazomatic.jobyjob.dao.UsersDao;
 import com.spazomatic.jobyjob.service.PostService;
 
 @Controller
@@ -19,7 +19,7 @@ public class ProviderController {
 	
 	private final Provider<ConnectionRepository> connectionRepositoryProvider;	
 	
-	private final UserRepository userRepository;
+	private final UsersDao userRepository;
 	
 	@Autowired
 	private PostService postService;
@@ -29,7 +29,7 @@ public class ProviderController {
 	
 	
 	@Inject
-	public ProviderController(Provider<ConnectionRepository> connectionRepositoryProvider, UserRepository userRepository) {
+	public ProviderController(Provider<ConnectionRepository> connectionRepositoryProvider, UsersDao userRepository) {
 		this.connectionRepositoryProvider = connectionRepositoryProvider;
 		this.userRepository = userRepository;
 	}

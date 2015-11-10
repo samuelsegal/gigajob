@@ -18,12 +18,12 @@ apply plugin: 'eclipse'
 apply plugin: 'idea'
 apply plugin: 'spring-boot' 
 apply plugin: 'io.spring.dependency-management' 
-apply plugin: 'war'
+//apply plugin: 'war'
 
-war {
-    baseName = 'jobyjob'
-    version = '0.0.5'
-}
+//war {
+//    baseName = 'jobyjob'
+//    version = '0.0.5'
+//}
 jar {
     baseName = 'jobyjob'
     version = '0.0.1-SNAPSHOT'
@@ -41,7 +41,7 @@ repositories {
 
 dependencies {
     compile("org.springframework.boot:spring-boot-starter-web")
-    providedRuntime("org.springframework.boot:spring-boot-starter-tomcat")
+    //providedRuntime("org.springframework.boot:spring-boot-starter-tomcat")
 
     //compile("org.springframework.boot:spring-boot-devtools")
     compile('org.springframework.boot:spring-boot-starter-actuator')
@@ -67,7 +67,7 @@ dependencies {
     compile("org.springframework.social:spring-social-facebook-web")
     compile("org.springframework.social:spring-social-twitter")
     compile("org.springframework.social:spring-social-linkedin")
-    //compile("org.springframework.social:spring-social-github:1.0.0.M4")
+    compile("org.springframework.social:spring-social-github:1.0.0.M4")
     //compile("org.springframework.social:spring-social-google:1.0.0.RELEASE")
     //compile("org.springframework.social:spring-social-live:1.0.0-SNAPSHOT") {
    //     exclude group: 'javax.servlet', module: 'servlet-api'

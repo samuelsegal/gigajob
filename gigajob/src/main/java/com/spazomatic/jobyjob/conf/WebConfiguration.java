@@ -11,9 +11,6 @@ import com.github.dandelion.core.web.DandelionServlet;
 import com.github.dandelion.datatables.thymeleaf.dialect.DataTablesDialect;
 import com.github.dandelion.thymeleaf.dialect.DandelionDialect;
 
-/**
- * Web MVC Configuration
- */
 @Configuration
 public class WebConfiguration extends WebMvcConfigurerAdapter {
 

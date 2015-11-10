@@ -1,3 +1,18 @@
+/*
+ * Copyright 2014 the original author or authors.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package com.spazomatic.jobyjob.controllers;
 
 import java.io.IOException;
@@ -16,11 +31,12 @@ import org.springframework.data.geo.Point;
 import org.springframework.social.connect.Connection;
 import org.springframework.social.connect.ConnectionRepository;
 import org.springframework.social.facebook.api.Facebook;
+import org.springframework.social.github.api.GitHub;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.client.RestTemplate;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -30,11 +46,11 @@ import com.spazomatic.jobyjob.entities.IpLoc;
 import com.spazomatic.jobyjob.entities.Post;
 import com.spazomatic.jobyjob.location.ServerLocation;
 import com.spazomatic.jobyjob.location.ServerLocationBo;
+import com.spazomatic.jobyjob.model.UserProfile;
 import com.spazomatic.jobyjob.service.PostService;
 
 @Controller
-public class ClientController {
-	
+public class HomeController {
 	private static final Logger log = LoggerFactory.getLogger("spazomatic.gigajob");
 	
 	private final Provider<ConnectionRepository> connectionRepositoryProvider;	
@@ -45,73 +61,75 @@ public class ClientController {
 	private PostService postService;
 	
 	@Autowired
-	private ServerLocationBo serverLocationBo;	
+	private ServerLocationBo serverLocationBo;
 	
 	@Autowired
 	private HttpServletRequest request;
-		
+	
 	@Inject
-	public ClientController(Provider<ConnectionRepository> connectionRepositoryProvider, 
-			UsersDao userRepository) {
+	public HomeController(Provider<ConnectionRepository> connectionRepositoryProvider, UsersDao userRepository) {
 		this.connectionRepositoryProvider = connectionRepositoryProvider;
 		this.userRepository = userRepository;
 	}
-	@RequestMapping(value = { "/postJob" }, method = RequestMethod.GET)
-	public String postJob(Principal currentUser, Model model) {
-		Connection<Facebook> connection = getConnectionRepository().findPrimaryConnection(Facebook.class);
-		model.addAttribute("fb_connection", connection != null ? connection : null);
-		model.addAttribute("gigauser",userRepository.getUserProfile(currentUser.getName()));
-		Post post = new Post();
-		IpLoc ipLoc = new IpLoc();
-		model.addAttribute("post",post);
-		model.addAttribute("loc", ipLoc);
-		return "client/postJob";
-	}
-	@RequestMapping(value = { "/submitJob" }, method = RequestMethod.POST)
-	public String submitJob(Principal currentUser, Model model,
-			@ModelAttribute Post post, @ModelAttribute IpLoc loc) {
-		Connection<Facebook> connection = getConnectionRepository().findPrimaryConnection(Facebook.class);
-		model.addAttribute("fb_connection", connection != null ? connection : null);
-		model.addAttribute("gigauser",userRepository.getUserProfile(currentUser.getName()));
-
-		post.setLocation(new double[]{loc.getLatitude(), loc.getLongitude()});
-		postService.save(post);	
+	@RequestMapping("/homemap")
+	public String homemap(Principal currentUser, Model model) {
 		
-		String ipAddress = request.getHeader("X-FORWARDED-FOR");
-		if (ipAddress == null) {
-			ipAddress = request.getRemoteAddr();		
-		}
-	
-		ServerLocation location;
-		try {
-			location = getLocation(ipAddress);
+		Connection<GitHub> connection = getConnectionRepository().findPrimaryConnection(GitHub.class);
+		model.addAttribute("fb_connection", connection != null ? connection : null);
+		model.addAttribute("gigauser",userRepository.getUserProfile(currentUser.getName()));
+		log.debug(String.format("MODEL: %s", model.toString()));
 
+		return "home";
+	}		
+	@RequestMapping("/profile")
+	public String profile(Principal currentUser, Model model) {
+		
+		Connection<GitHub> connection = getConnectionRepository().findPrimaryConnection(GitHub.class);
+		model.addAttribute("fb_connection", connection != null ? connection : null);
+		model.addAttribute("gigauser",userRepository.getUserProfile(currentUser.getName()));
+		UserProfile loser = userRepository.getUserProfile(currentUser.getName());
+		//log.debug("gigauser" + loser.getRoles());
+		return "profile/profile";
+	}
+	
+	@RequestMapping(value = { "/table" }, method = RequestMethod.GET)
+	public String table(Principal currentUser, Model model,
+			@RequestParam(value = "distance", 
+							required = false, 
+							defaultValue = "30") 
+							String distance) {
+		Connection<GitHub> connection = getConnectionRepository().findPrimaryConnection(GitHub.class);
+		model.addAttribute("fb_connection", connection != null ? connection : null);
+		model.addAttribute("gigauser",userRepository.getUserProfile(currentUser.getName()));
+		try {		
+			String ipAddress = request.getHeader("X-FORWARDED-FOR");
+			if (ipAddress == null) {
+				ipAddress = request.getRemoteAddr();		
+			}
+		
+			ServerLocation location = getLocation(ipAddress);
 			log.debug(String.format("Client IP Addy: %s", ipAddress));
 			log.debug(String.format("Client Loaked the Cloak: %s", location.toString()));
 			
 			IpLoc ipLoc = new IpLoc();
 			ipLoc.setLatitude(Double.valueOf(location.getLatitude()));
 			ipLoc.setLongitude(Double.valueOf(location.getLongitude()));
-			
 			Page<Post> posts = postService.findByLocationNear(
 					new Point(ipLoc.getLatitude(), ipLoc.getLongitude()),
-					"30", new PageRequest(0,20));
+					distance, new PageRequest(0,20));
 			model.addAttribute("posts", posts.getContent());
 			
 			ObjectMapper mapper = new ObjectMapper();
-
-				String postsAsJSON = mapper.writeValueAsString(posts);
-				model.addAttribute("postsAsJSON",postsAsJSON);
-				log.debug("postsAsJSON: " + postsAsJSON);
-
-			model.addAttribute("posts", posts.getContent());		
+			String postsAsJSON = mapper.writeValueAsString(posts);
+			model.addAttribute("postsAsJSON",postsAsJSON);
+			log.debug("PostsAsJSON: " + postsAsJSON);
 		} catch (Exception e) {
 			log.error(e.getMessage());
 			model.addAttribute("message",e.getMessage());
 			return "error";
 		}
-
-		return "client/userPosts";
+		
+		return "data/table";
 	}
 	
 	private ServerLocation getLocation(String ipAddress) throws Exception{
@@ -133,6 +151,15 @@ public class ClientController {
 			}
 		}
 		return location;
+	}
+	
+	@RequestMapping("/dsfsdf")
+	public String home(Principal currentUser, Model model) {
+		Connection<Facebook> connection = getConnectionRepository().findPrimaryConnection(Facebook.class);
+		model.addAttribute("fb_connection", connection != null ? connection : null);
+		model.addAttribute("gigauser",userRepository.getUserProfile(currentUser.getName()));
+		log.debug(String.format("MODEL: %s", model.toString()));
+		return "home";
 	}
 	
 	private ConnectionRepository getConnectionRepository() {

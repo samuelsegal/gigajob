@@ -13,12 +13,12 @@ import org.springframework.context.annotation.Configuration;
 @ComponentScan(basePackages = "com.spazomatic.jobyjob")
 
 //public class JobyjobApplication  {
-public class JobyjobApplication  extends SpringBootServletInitializer{
+public class JobyjobApplication {
 
-    @Override
-    protected SpringApplicationBuilder configure(SpringApplicationBuilder application) {
-        return application.sources(JobyjobApplication.class);
-    }
+   // @Override
+   // protected SpringApplicationBuilder configure(SpringApplicationBuilder application) {
+   //     return application.sources(JobyjobApplication.class);
+   // }
     
     public static void main(String[] args) {
         SpringApplication.run(JobyjobApplication.class, args);
