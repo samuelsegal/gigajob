@@ -1,4 +1,4 @@
-package com.spazomatic.jobyjob.model;
+package com.spazomatic.jobyjob.db.model;
 
 import java.io.Serializable;
 import javax.persistence.*;

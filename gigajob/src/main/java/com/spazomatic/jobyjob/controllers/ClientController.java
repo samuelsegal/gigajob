@@ -25,11 +25,11 @@ import org.springframework.web.client.RestTemplate;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.maxmind.geoip2.exception.GeoIp2Exception;
-import com.spazomatic.jobyjob.dao.UsersDao;
-import com.spazomatic.jobyjob.entities.IpLoc;
-import com.spazomatic.jobyjob.entities.Post;
+import com.spazomatic.jobyjob.db.dao.UsersDao;
 import com.spazomatic.jobyjob.location.ServerLocation;
 import com.spazomatic.jobyjob.location.ServerLocationBo;
+import com.spazomatic.jobyjob.nosql.entities.IpLoc;
+import com.spazomatic.jobyjob.nosql.entities.Post;
 import com.spazomatic.jobyjob.service.PostService;
 
 @Controller

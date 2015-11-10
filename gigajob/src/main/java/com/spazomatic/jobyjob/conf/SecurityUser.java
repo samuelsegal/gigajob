@@ -8,8 +8,8 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import com.spazomatic.jobyjob.model.Authority;
-import com.spazomatic.jobyjob.model.User;
+import com.spazomatic.jobyjob.db.model.Authority;
+import com.spazomatic.jobyjob.db.model.User;
 
 public class SecurityUser extends User implements UserDetails
 {

@@ -1,4 +1,4 @@
-package com.spazomatic.jobyjob.utility;
+package com.spazomatic.jobyjob.util;
 
 import java.security.Principal;
 import java.sql.Connection;
@@ -23,12 +23,12 @@ import org.springframework.security.web.WebAttributes;
 import org.springframework.stereotype.Component;
 import org.springframework.ui.Model;
 
-import com.spazomatic.jobyjob.dao.DataDao;
-import com.spazomatic.jobyjob.dao.UsersDao;
-import com.spazomatic.jobyjob.model.Authority;
-import com.spazomatic.jobyjob.model.User;
-import com.spazomatic.jobyjob.model.UserConnection;
-import com.spazomatic.jobyjob.model.UserProfile;
+import com.spazomatic.jobyjob.db.dao.DataDao;
+import com.spazomatic.jobyjob.db.dao.UsersDao;
+import com.spazomatic.jobyjob.db.model.Authority;
+import com.spazomatic.jobyjob.db.model.User;
+import com.spazomatic.jobyjob.db.model.UserConnection;
+import com.spazomatic.jobyjob.db.model.UserProfile;
 
 @Component
 public class SocialControllerUtil {

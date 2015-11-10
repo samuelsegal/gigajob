@@ -8,8 +8,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.social.connect.ConnectionRepository;
 import org.springframework.stereotype.Controller;
 
-import com.spazomatic.jobyjob.dao.UsersDao;
-import com.spazomatic.jobyjob.utility.Util;
+import com.spazomatic.jobyjob.db.dao.UsersDao;
+import com.spazomatic.jobyjob.util.Util;
 
 @Controller
 public class AdminController {

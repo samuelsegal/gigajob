@@ -13,9 +13,9 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Component;
 
-import com.spazomatic.jobyjob.dao.UsersDao;
-import com.spazomatic.jobyjob.model.Authority;
-import com.spazomatic.jobyjob.model.User;
+import com.spazomatic.jobyjob.db.dao.UsersDao;
+import com.spazomatic.jobyjob.db.model.Authority;
+import com.spazomatic.jobyjob.db.model.User;
 
 
 @Component

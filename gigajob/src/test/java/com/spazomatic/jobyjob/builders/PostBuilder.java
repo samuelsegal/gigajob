@@ -1,7 +1,7 @@
 package com.spazomatic.jobyjob.builders;
 
 
-import com.spazomatic.jobyjob.entities.Post;
+import com.spazomatic.jobyjob.nosql.entities.Post;
 
 
 

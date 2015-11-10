@@ -1,4 +1,4 @@
-package com.spazomatic.jobyjob.utility;
+package com.spazomatic.jobyjob.util;
 
 public interface Util {
 	

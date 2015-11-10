@@ -4,7 +4,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.geo.Point;
 
-import com.spazomatic.jobyjob.entities.Post;
+import com.spazomatic.jobyjob.nosql.entities.Post;
 
 public interface PostService {
     Post save(Post post);

@@ -14,8 +14,8 @@ import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Service;
 
-import com.spazomatic.jobyjob.entities.Post;
-import com.spazomatic.jobyjob.repository.PostRepository;
+import com.spazomatic.jobyjob.nosql.entities.Post;
+import com.spazomatic.jobyjob.nosql.repo.PostRepository;
 import com.spazomatic.jobyjob.service.PostService;
 
 @Service

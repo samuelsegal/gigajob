@@ -1,4 +1,4 @@
-package com.spazomatic.jobyjob.dao;
+package com.spazomatic.jobyjob.db.dao;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

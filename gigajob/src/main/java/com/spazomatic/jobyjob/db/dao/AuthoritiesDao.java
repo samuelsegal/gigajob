@@ -1,4 +1,4 @@
-package com.spazomatic.jobyjob.dao;
+package com.spazomatic.jobyjob.db.dao;
 
 import javax.sql.DataSource;
 

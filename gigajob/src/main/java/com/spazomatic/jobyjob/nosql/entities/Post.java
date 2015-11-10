@@ -1,4 +1,4 @@
-package com.spazomatic.jobyjob.entities;
+package com.spazomatic.jobyjob.nosql.entities;
 
 import java.util.List;
 

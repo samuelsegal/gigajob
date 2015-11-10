@@ -17,7 +17,7 @@ import com.maxmind.geoip2.record.Country;
 import com.maxmind.geoip2.record.Location;
 import com.maxmind.geoip2.record.Postal;
 import com.maxmind.geoip2.record.Subdivision;
-import com.spazomatic.jobyjob.utility.Util;
+import com.spazomatic.jobyjob.util.Util;
 
 
 @Component

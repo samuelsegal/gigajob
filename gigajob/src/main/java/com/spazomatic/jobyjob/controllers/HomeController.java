@@ -41,22 +41,34 @@ import org.springframework.web.client.RestTemplate;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.maxmind.geoip2.exception.GeoIp2Exception;
-import com.spazomatic.jobyjob.dao.UsersDao;
-import com.spazomatic.jobyjob.entities.IpLoc;
-import com.spazomatic.jobyjob.entities.Post;
+import com.spazomatic.jobyjob.db.dao.DataDao;
+import com.spazomatic.jobyjob.db.dao.UsersDao;
+import com.spazomatic.jobyjob.db.model.UserProfile;
 import com.spazomatic.jobyjob.location.ServerLocation;
 import com.spazomatic.jobyjob.location.ServerLocationBo;
-import com.spazomatic.jobyjob.model.UserProfile;
+import com.spazomatic.jobyjob.nosql.entities.IpLoc;
+import com.spazomatic.jobyjob.nosql.entities.Post;
 import com.spazomatic.jobyjob.service.PostService;
+import com.spazomatic.jobyjob.util.SocialControllerUtil;
+import com.spazomatic.jobyjob.util.Util;
 
 @Controller
 public class HomeController {
-	private static final Logger log = LoggerFactory.getLogger("spazomatic.gigajob");
 	
-	private final Provider<ConnectionRepository> connectionRepositoryProvider;	
+	private static final Logger LOG = LoggerFactory.getLogger("spazomatic.gigajob");
 	
-	private final UsersDao userRepository;
-	
+	private final Provider<ConnectionRepository> connectionRepositoryProvider;		
+	private final UsersDao usersDao;
+
+    @Autowired
+    private ConnectionRepository connectionRepository;
+
+    @Autowired
+    private DataDao dataDao;
+
+    @Autowired
+    private SocialControllerUtil util;
+    
 	@Autowired
 	private PostService postService;
 	
@@ -69,27 +81,21 @@ public class HomeController {
 	@Inject
 	public HomeController(Provider<ConnectionRepository> connectionRepositoryProvider, UsersDao userRepository) {
 		this.connectionRepositoryProvider = connectionRepositoryProvider;
-		this.userRepository = userRepository;
+		this.usersDao = userRepository;
 	}
 	@RequestMapping("/homemap")
 	public String homemap(Principal currentUser, Model model) {
 		
-		Connection<GitHub> connection = getConnectionRepository().findPrimaryConnection(GitHub.class);
-		model.addAttribute("fb_connection", connection != null ? connection : null);
-		model.addAttribute("gigauser",userRepository.getUserProfile(currentUser.getName()));
-		log.debug(String.format("MODEL: %s", model.toString()));
-
+		util.setModel(request, currentUser, model);		
 		return "home";
+		
 	}		
 	@RequestMapping("/profile")
 	public String profile(Principal currentUser, Model model) {
 		
-		Connection<GitHub> connection = getConnectionRepository().findPrimaryConnection(GitHub.class);
-		model.addAttribute("fb_connection", connection != null ? connection : null);
-		model.addAttribute("gigauser",userRepository.getUserProfile(currentUser.getName()));
-		UserProfile loser = userRepository.getUserProfile(currentUser.getName());
-		//log.debug("gigauser" + loser.getRoles());
+		util.setModel(request, currentUser, model);		
 		return "profile/profile";
+		
 	}
 	
 	@RequestMapping(value = { "/table" }, method = RequestMethod.GET)
@@ -98,9 +104,7 @@ public class HomeController {
 							required = false, 
 							defaultValue = "30") 
 							String distance) {
-		Connection<GitHub> connection = getConnectionRepository().findPrimaryConnection(GitHub.class);
-		model.addAttribute("fb_connection", connection != null ? connection : null);
-		model.addAttribute("gigauser",userRepository.getUserProfile(currentUser.getName()));
+		util.setModel(request, currentUser, model);
 		try {		
 			String ipAddress = request.getHeader("X-FORWARDED-FOR");
 			if (ipAddress == null) {
@@ -108,8 +112,8 @@ public class HomeController {
 			}
 		
 			ServerLocation location = getLocation(ipAddress);
-			log.debug(String.format("Client IP Addy: %s", ipAddress));
-			log.debug(String.format("Client Loaked the Cloak: %s", location.toString()));
+			LOG.debug(String.format("Client IP Addy: %s", ipAddress));
+			LOG.debug(String.format("Client Loaked the Cloak: %s", location.toString()));
 			
 			IpLoc ipLoc = new IpLoc();
 			ipLoc.setLatitude(Double.valueOf(location.getLatitude()));
@@ -122,9 +126,9 @@ public class HomeController {
 			ObjectMapper mapper = new ObjectMapper();
 			String postsAsJSON = mapper.writeValueAsString(posts);
 			model.addAttribute("postsAsJSON",postsAsJSON);
-			log.debug("PostsAsJSON: " + postsAsJSON);
+			LOG.debug("PostsAsJSON: " + postsAsJSON);
 		} catch (Exception e) {
-			log.error(e.getMessage());
+			LOG.error(e.getMessage());
 			model.addAttribute("message",e.getMessage());
 			return "error";
 		}
@@ -145,21 +149,12 @@ public class HomeController {
 				try {
 					location = serverLocationBo.getLocation(ipAddress);
 				} catch (IOException | GeoIp2Exception e) {
-					log.error(e.getMessage());
+					LOG.error(e.getMessage());
 					throw new Exception(e.getMessage());
 				}
 			}
 		}
 		return location;
-	}
-	
-	@RequestMapping("/dsfsdf")
-	public String home(Principal currentUser, Model model) {
-		Connection<Facebook> connection = getConnectionRepository().findPrimaryConnection(Facebook.class);
-		model.addAttribute("fb_connection", connection != null ? connection : null);
-		model.addAttribute("gigauser",userRepository.getUserProfile(currentUser.getName()));
-		log.debug(String.format("MODEL: %s", model.toString()));
-		return "home";
 	}
 	
 	private ConnectionRepository getConnectionRepository() {

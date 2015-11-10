@@ -7,8 +7,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.social.connect.Connection;
 import org.springframework.social.connect.ConnectionSignUp;
 
-import com.spazomatic.jobyjob.dao.UsersDao;
-import com.spazomatic.jobyjob.model.UserProfile;
+import com.spazomatic.jobyjob.db.dao.UsersDao;
+import com.spazomatic.jobyjob.db.model.UserProfile;
 
 public class AccountConnectionSignUpService implements ConnectionSignUp {
 

@@ -21,13 +21,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.context.request.WebRequest;
 
-import com.spazomatic.jobyjob.dao.DataDao;
-import com.spazomatic.jobyjob.utility.SocialControllerUtil;
+import com.spazomatic.jobyjob.db.dao.DataDao;
+import com.spazomatic.jobyjob.util.SocialControllerUtil;
+import com.spazomatic.jobyjob.util.Util;
 
 @Controller
 public class MainController {
 
-    private static final Logger LOG = LoggerFactory.getLogger(MainController.class);
+    private static final Logger LOG = LoggerFactory.getLogger(Util.LOG_TAG);
 
     @Autowired
     private ConnectionRepository connectionRepository;

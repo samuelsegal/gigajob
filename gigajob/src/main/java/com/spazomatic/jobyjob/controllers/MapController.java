@@ -17,7 +17,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.maxmind.geoip2.exception.GeoIp2Exception;
 import com.spazomatic.jobyjob.location.ServerLocation;
 import com.spazomatic.jobyjob.location.ServerLocationBo;
-import com.spazomatic.jobyjob.utility.Util;
+import com.spazomatic.jobyjob.util.Util;
 
 
 @Controller

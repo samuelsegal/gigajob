@@ -17,7 +17,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import com.spazomatic.jobyjob.dao.UsersDao;
+import com.spazomatic.jobyjob.db.dao.UsersDao;
 
 
 @Controller

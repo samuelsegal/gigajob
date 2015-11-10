@@ -1,4 +1,4 @@
-package com.spazomatic.jobyjob.dao;
+package com.spazomatic.jobyjob.db.dao;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -17,11 +17,11 @@ import org.springframework.jdbc.core.ResultSetExtractor;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
 
-import com.spazomatic.jobyjob.model.Authority;
-import com.spazomatic.jobyjob.model.User;
-import com.spazomatic.jobyjob.model.UserConnection;
-import com.spazomatic.jobyjob.model.UserProfile;
-import com.spazomatic.jobyjob.utility.Util;
+import com.spazomatic.jobyjob.db.model.Authority;
+import com.spazomatic.jobyjob.db.model.User;
+import com.spazomatic.jobyjob.db.model.UserConnection;
+import com.spazomatic.jobyjob.db.model.UserProfile;
+import com.spazomatic.jobyjob.util.Util;
 
 @Repository
 public class UsersDao {

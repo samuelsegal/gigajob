@@ -16,7 +16,7 @@ import org.springframework.social.connect.jdbc.JdbcUsersConnectionRepository;
 import org.springframework.social.github.connect.GitHubConnectionFactory;
 import org.springframework.social.security.AuthenticationNameUserIdSource;
 
-import com.spazomatic.jobyjob.dao.UsersDao;
+import com.spazomatic.jobyjob.db.dao.UsersDao;
 import com.spazomatic.jobyjob.service.AccountConnectionSignUpService;
 
 @Configuration

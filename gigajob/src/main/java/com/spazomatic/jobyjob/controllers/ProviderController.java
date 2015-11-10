@@ -10,7 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.social.connect.ConnectionRepository;
 import org.springframework.stereotype.Controller;
 
-import com.spazomatic.jobyjob.dao.UsersDao;
+import com.spazomatic.jobyjob.db.dao.UsersDao;
 import com.spazomatic.jobyjob.service.PostService;
 
 @Controller

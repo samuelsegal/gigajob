@@ -1,4 +1,4 @@
-package com.spazomatic.jobyjob.entities;
+package com.spazomatic.jobyjob.nosql.entities;
 
 public class Tag {
     private String id;
