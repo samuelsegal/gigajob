@@ -45,7 +45,7 @@ public class MainController {
         return "home";
     }
 
-    @RequestMapping("/login")
+    @RequestMapping("/signin")
     public String login(HttpServletRequest request, Principal currentUser, Model model) {
         util.setModel(request, currentUser, model);
         return "login";

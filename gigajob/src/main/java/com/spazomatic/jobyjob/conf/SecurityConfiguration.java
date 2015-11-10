@@ -40,9 +40,9 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 	}
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-/*
+
     	http
-		.formLogin()
+    	.formLogin()
 			.loginPage("/signin")
 			.loginProcessingUrl("/signin/authenticate")
 			.failureUrl("/signin?param.error=bad_credentials")
@@ -66,7 +66,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 					new SpringSocialConfigurer()
 	                .postLoginUrl("/")
 	                .alwaysUsePostLoginUrl(true));
- */
+/*
     	http
             .formLogin()
                 .loginPage("/login")
@@ -85,7 +85,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
             .rememberMe()
         .and()
             .apply(new SpringSocialConfigurer());
-                
+    */            
     }
 
     @Bean

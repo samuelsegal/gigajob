@@ -14,25 +14,21 @@
         <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css" />
         <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" />
 
-        <style type="text/css">
-            <!--
-            .ml { width: 110px; color: white; text-decoration: none }
-            .ml:hover, a:focus { color: white; text-decoration: none }
-            -->
-        </style>
-
+    <!-- Custom styles for this template -->
+    <link href="css/signin.css" rel="stylesheet" />
     </head>
 
     <body>
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js" />
-        <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js" />
+ 
 
-        <div th:replace="fragments/header :: userInfo"/>
 
         <div class="container">
-            <h2>Login page</h2>
-			<form id="signin" th:action="@{/signin/authenticate}" method="post">
+
+			<form  class="form-signin" id="signin" th:action="@{/signin/authenticate}" method="post">
+
 				<input type="hidden" name="_csrf" th:value="${_csrf.token}"></input>
+
+				<h2 class="form-signin-heading">Please sign in</h2>
 				<div class="formInfo">
 			  		<div class="error" th:if="${param.error eq 'bad_credentials'}">
 			  			Your sign in information was incorrect.
@@ -44,15 +40,15 @@
 			  		</div>
 				</div>
 				<fieldset>
-					<label for="login">Username</label>
-					<input id="login" name="username" type="text" size="25"></input><br/>
-					<label for="password">Password</label>
-					<input id="password" name="password" type="password" size="25"></input>
+					<label for="login" class="sr-only">Username</label>
+					<input id="login" name="username" type="text" class="form-control" placeholder="User Name" required="required" autofocus="autofocus"></input><br/>
+					<label for="password" class="sr-only">Password</label>
+					<input id="password" name="password" type="password" class="form-control" placeholder="Password" required="required"></input>
 				</fieldset>
-				<button type="submit">Sign In</button>
+				<button class="btn btn-lg btn-primary btn-block" type="submit" th:text="#{giga.signin}"></button>
 				
 				<p>Or you can <a th:href="@{/signup}">signup</a> with a new account.</p>
-			</form>
+
             <p>Sign in with:</p>
             <table style="border-collapse: separate; border-spacing: 2px">
                 <tr>
@@ -68,9 +64,12 @@
                     <td><a th:href="@{/auth/google(scope='profile')}" class="ml btn btn-block btn-social btn-sm btn-google-plus"><i class="fa fa-google-plus"></i>Google+</a></td>
                 </tr>
             </table>
-
+			</form>
             <div th:include="fragments/exception :: errorInfo"/>
 
         </div><!-- /.container -->
+       <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js" />
+        <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js" />
+
     </body>
 </html>

@@ -31,15 +31,15 @@ import com.spazomatic.jobyjob.location.ServerLocationBo;
 import com.spazomatic.jobyjob.nosql.entities.IpLoc;
 import com.spazomatic.jobyjob.nosql.entities.Post;
 import com.spazomatic.jobyjob.service.PostService;
+import com.spazomatic.jobyjob.util.SocialControllerUtil;
+import com.spazomatic.jobyjob.util.Util;
 
 @Controller
 public class ClientController {
 	
-	private static final Logger log = LoggerFactory.getLogger("spazomatic.gigajob");
+	private static final Logger LOG = LoggerFactory.getLogger(Util.LOG_TAG);
 	
-	private final Provider<ConnectionRepository> connectionRepositoryProvider;	
-	
-	private final UsersDao userRepository;
+	private final UsersDao usersDao;
 	
 	@Autowired
 	private PostService postService;
@@ -49,31 +49,31 @@ public class ClientController {
 	
 	@Autowired
 	private HttpServletRequest request;
-		
+
+    @Autowired
+    private SocialControllerUtil util;
+    
 	@Inject
-	public ClientController(Provider<ConnectionRepository> connectionRepositoryProvider, 
-			UsersDao userRepository) {
-		this.connectionRepositoryProvider = connectionRepositoryProvider;
-		this.userRepository = userRepository;
+	public ClientController(UsersDao usersDao) {
+		this.usersDao = usersDao;
 	}
+	
 	@RequestMapping(value = { "/postJob" }, method = RequestMethod.GET)
 	public String postJob(Principal currentUser, Model model) {
-		Connection<Facebook> connection = getConnectionRepository().findPrimaryConnection(Facebook.class);
-		model.addAttribute("fb_connection", connection != null ? connection : null);
-		model.addAttribute("gigauser",userRepository.getUserProfile(currentUser.getName()));
+		
+		util.setModel(request, currentUser, model);
 		Post post = new Post();
 		IpLoc ipLoc = new IpLoc();
 		model.addAttribute("post",post);
 		model.addAttribute("loc", ipLoc);
 		return "client/postJob";
+		
 	}
 	@RequestMapping(value = { "/submitJob" }, method = RequestMethod.POST)
 	public String submitJob(Principal currentUser, Model model,
 			@ModelAttribute Post post, @ModelAttribute IpLoc loc) {
-		Connection<Facebook> connection = getConnectionRepository().findPrimaryConnection(Facebook.class);
-		model.addAttribute("fb_connection", connection != null ? connection : null);
-		model.addAttribute("gigauser",userRepository.getUserProfile(currentUser.getName()));
-
+		
+		util.setModel(request, currentUser, model);
 		post.setLocation(new double[]{loc.getLatitude(), loc.getLongitude()});
 		postService.save(post);	
 		
@@ -86,8 +86,8 @@ public class ClientController {
 		try {
 			location = getLocation(ipAddress);
 
-			log.debug(String.format("Client IP Addy: %s", ipAddress));
-			log.debug(String.format("Client Loaked the Cloak: %s", location.toString()));
+			LOG.debug(String.format("Client IP Addy: %s", ipAddress));
+			LOG.debug(String.format("Client Loaked the Cloak: %s", location.toString()));
 			
 			IpLoc ipLoc = new IpLoc();
 			ipLoc.setLatitude(Double.valueOf(location.getLatitude()));
@@ -95,18 +95,18 @@ public class ClientController {
 			
 			Page<Post> posts = postService.findByLocationNear(
 					new Point(ipLoc.getLatitude(), ipLoc.getLongitude()),
-					"30", new PageRequest(0,20));
+					"30", new PageRequest(0,100));
 			model.addAttribute("posts", posts.getContent());
 			
 			ObjectMapper mapper = new ObjectMapper();
 
 				String postsAsJSON = mapper.writeValueAsString(posts);
 				model.addAttribute("postsAsJSON",postsAsJSON);
-				log.debug("postsAsJSON: " + postsAsJSON);
+				LOG.debug("postsAsJSON: " + postsAsJSON);
 
 			model.addAttribute("posts", posts.getContent());		
 		} catch (Exception e) {
-			log.error(e.getMessage());
+			LOG.error(e.getMessage());
 			model.addAttribute("message",e.getMessage());
 			return "error";
 		}
@@ -127,15 +127,12 @@ public class ClientController {
 				try {
 					location = serverLocationBo.getLocation(ipAddress);
 				} catch (IOException | GeoIp2Exception e) {
-					log.error(e.getMessage());
+					LOG.error(e.getMessage());
 					throw new Exception(e.getMessage());
 				}
 			}
 		}
 		return location;
 	}
-	
-	private ConnectionRepository getConnectionRepository() {
-		return connectionRepositoryProvider.get();
-	}
+
 }

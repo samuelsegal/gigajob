@@ -13,6 +13,7 @@ import org.springframework.social.config.annotation.SocialConfigurer;
 import org.springframework.social.connect.ConnectionFactoryLocator;
 import org.springframework.social.connect.UsersConnectionRepository;
 import org.springframework.social.connect.jdbc.JdbcUsersConnectionRepository;
+import org.springframework.social.facebook.connect.FacebookConnectionFactory;
 import org.springframework.social.github.connect.GitHubConnectionFactory;
 import org.springframework.social.security.AuthenticationNameUserIdSource;
 
@@ -31,9 +32,9 @@ public class SocialConfig implements SocialConfigurer {
 
     @Override
     public void addConnectionFactories(ConnectionFactoryConfigurer connectionFactoryConfigurer, Environment environment) {
-       // connectionFactoryConfigurer.addConnectionFactory(new FacebookConnectionFactory(
-       //     environment.getProperty("spring.social.facebook.appId"),
-       //     environment.getProperty("spring.social.facebook.appSecret")));
+        connectionFactoryConfigurer.addConnectionFactory(new FacebookConnectionFactory(
+            environment.getProperty("facebook.appKey"),
+            environment.getProperty("facebook.appSecret")));
       //  connectionFactoryConfigurer.addConnectionFactory(new TwitterConnectionFactory(
        //     environment.getProperty("twitter.consumerKey"),
        //     environment.getProperty("twitter.consumerSecret")));

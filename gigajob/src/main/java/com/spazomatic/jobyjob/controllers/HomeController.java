@@ -55,13 +55,9 @@ import com.spazomatic.jobyjob.util.Util;
 @Controller
 public class HomeController {
 	
-	private static final Logger LOG = LoggerFactory.getLogger("spazomatic.gigajob");
+	private static final Logger LOG = LoggerFactory.getLogger(Util.LOG_TAG);	
 	
-	private final Provider<ConnectionRepository> connectionRepositoryProvider;		
 	private final UsersDao usersDao;
-
-    @Autowired
-    private ConnectionRepository connectionRepository;
 
     @Autowired
     private DataDao dataDao;
@@ -79,10 +75,10 @@ public class HomeController {
 	private HttpServletRequest request;
 	
 	@Inject
-	public HomeController(Provider<ConnectionRepository> connectionRepositoryProvider, UsersDao userRepository) {
-		this.connectionRepositoryProvider = connectionRepositoryProvider;
+	public HomeController(UsersDao userRepository) {
 		this.usersDao = userRepository;
 	}
+	
 	@RequestMapping("/homemap")
 	public String homemap(Principal currentUser, Model model) {
 		
@@ -104,6 +100,7 @@ public class HomeController {
 							required = false, 
 							defaultValue = "30") 
 							String distance) {
+		
 		util.setModel(request, currentUser, model);
 		try {		
 			String ipAddress = request.getHeader("X-FORWARDED-FOR");
@@ -156,8 +153,5 @@ public class HomeController {
 		}
 		return location;
 	}
-	
-	private ConnectionRepository getConnectionRepository() {
-		return connectionRepositoryProvider.get();
-	}
+
 }

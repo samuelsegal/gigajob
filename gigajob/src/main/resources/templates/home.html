@@ -3,44 +3,37 @@
 	  xmlns:social="http://spring.io/springsocial"
 	  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
 	  layout:decorator="layout/layout">
-
+<head>
+    <!-- Custom styles for this template -->
+    <link href="css/jumbotron-narrow.css" rel="stylesheet" />
+    <style type="text/css">
+	    .custom {
+	    	width: 278px !important;
+		}
+    </style>
+</head>
 	<body>	
 		<main layout:fragment="content" class="mdl-layout__content mdl-color--grey-100">
 			<div id="container">
-				<div class="row-fluid">
-					<div class="col-md-2"></div>
-					<div class="col-md-8">
-						<p>Welcome, <span th:text="${gigauserconnection.displayName}">name</span>!</p>
-					</div>
-					<div class="col-md-2"></div>
-				</div>
-				
-		  		<div class="row-fluid">
-					<div class="col-md-2"></div>
-					<div class="col-md-8">
-						<form method="GET" th:action="@{/table}">
-							<input type="hidden" name="_csrf" th:value="${_csrf.token}" />
-							<button th:text="giga.viewGigs"></button>
-						</form>			
-					</div>
-					<div class="col-md-2"></div>
-				</div>
 
-		  		<div class="row-fluid">
-					<div class="col-md-2"></div>
-					<div class="col-md-8">	
-						<div class="col-sm-4">					
-							<form method="POST" th:action="@{/signout}">
-								<input type="hidden" name="_csrf" th:value="${_csrf.token}" />
-								<button>Sign Out</button>
-							</form>
-						</div>
-						<div class="col-sm-4">						
-					</div>
-					<div class="col-md-2"></div>
+		  		<div class="jumbotron">
+					<h3 class="text-muted">Welcome, <span th:text="${gigauserconnection.displayName}">name!</span></h3>
+					<form method="GET" th:action="@{/table}">
+						<input type="hidden" name="_csrf" th:value="${_csrf.token}" />
+						<button class="btn btn-sm btn-primary badge custom" th:text="#{giga.viewGigs}"></button>
+					</form>			
+					<form method="GET" th:action="@{/table}">
+						<input type="hidden" name="_csrf" th:value="${_csrf.token}" />
+						<button class="btn btn-sm btn-primary badge custom" th:text="#{giga.viewProviders}"></button>
+					</form>	
+					<form method="POST" th:action="@{/signout}">
+						<input type="hidden" name="_csrf" th:value="${_csrf.token}" />
+						<button class="btn btn-sm btn-primary badge custom" th:text="#{giga.signout}">Sign Out</button>
+					</form>	
+											
 				</div>
 			</div>
-			</div>
+
 		</main>
 	</body>
 </html>

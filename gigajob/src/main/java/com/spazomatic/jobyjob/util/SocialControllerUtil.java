@@ -126,6 +126,22 @@ public class SocialControllerUtil {
         }
     }
 
+    public void updateSession(HttpSession session, String userId){
+    	 
+    	 //TODO: optimize for when there bazillions...
+    	 UserProfile userProfile  = usersDao.getUserProfile(userId);
+         
+         User user = usersDao.findUserByName(userId);
+         List<String> profileRoles = new ArrayList<>();
+         for(Authority auth : user.getRoles()){
+         	profileRoles.add(auth.getAuthority());
+         }
+         userProfile.setRoles(profileRoles);
+         
+         session.setAttribute(USER_PROFILE, userProfile);
+    }
+    
+    
     protected void logInfo(HttpServletRequest request, Model model, String userId, String path, HttpSession session) {
         // Log the content of the model
         LOG.debug("Path: " + path + ", currentUserId: " + userId);

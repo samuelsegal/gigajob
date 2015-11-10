@@ -103,10 +103,16 @@ public class UsersDao {
                 }
             }, userId);
     }
+    public void addRole(String userId, String roleName) {
+        if (LOG.isDebugEnabled()) {
+            LOG.debug(String.format("SQL INSERT ON users, authorities: %s with role: %s",userId,roleName));
+        }
 
+        jdbcTemplate.update("INSERT into authorities(username,authority) values(?,?)",userId,roleName);
+    }
     public void createUser(String userId, UserProfile profile) {
         if (LOG.isDebugEnabled()) {
-            LOG.debug("SQL INSERT ON users, authorities and userProfile: " + userId + " with profile: " +
+            LOG.debug("SQL INSERT ON users, authorities and UserProfile: " + userId + " with profile: " +
                 profile.getEmail() + ", " +
                 profile.getFirstName() + ", " +
                 profile.getLastName() + ", " +
@@ -116,7 +122,7 @@ public class UsersDao {
 
         jdbcTemplate.update("INSERT into users(username,password,enabled) values(?,?,true)",userId, RandomStringUtils.randomAlphanumeric(8));
         jdbcTemplate.update("INSERT into authorities(username,authority) values(?,?)",userId,"USER");
-        jdbcTemplate.update("INSERT into userProfile(userId, email, firstName, lastName, name, username) values(?,?,?,?,?,?)",
+        jdbcTemplate.update("INSERT into UserProfile(userId, email, firstName, lastName, name, username) values(?,?,?,?,?,?)",
             userId,
             profile.getEmail(),
             profile.getFirstName(),
