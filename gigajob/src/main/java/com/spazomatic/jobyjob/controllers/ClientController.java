@@ -74,7 +74,7 @@ public class ClientController {
 		
 		util.setModel(request, currentUser, model);
 		post.setLocation(new double[]{loc.getLatitude(), loc.getLongitude()});
-		post.setUser_id(currentUser.getName());
+		post.setUserId(currentUser.getName());
 		
 		HttpSession session = request.getSession();
 		UserProfile client = (UserProfile) session.getAttribute(SocialControllerUtil.USER_PROFILE);

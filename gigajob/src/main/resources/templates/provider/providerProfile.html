@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:social="http://spring.io/springsocial"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorator="layout/layout">
+
+<body>
+
+
+<main layout:fragment="content"
+	class="mdl-layout__content mdl-color--grey-100">
+
+	<div id="container">
+		<div class="row">
+			<div class="col-md-12"><br /></div>
+		</div>
+		<div class="row">
+			<div class="col-md-2"></div>
+			<div class="col-md-6">
+				
+				<img th:src="${gigauserconnection.imageUrl}" class="demo-avatar" />
+				
+				<span th:text="${gigauser.name}" class="mdl-color-text--blue-grey-400">name</span>
+			
+				<br />
+				<hr />
+				<div class="mdl-color-text--blue-400">
+				Email: <span th:text="${gigauser.email}" >email</span><br /> 
+				First Name: <span th:text="${gigauser.firstName}" >first name</span><br />
+				Last Name: <span th:text="${gigauser.lastName}">last name</span><br />
+				</div>
+				<hr />
+				<div class="mdl-color-text--blue-400">
+				Provider Ad Name: <span th:text="(${gigaProvider.providerName} != null) ? ${gigaProvider.providerName} : ''" >provider name</span><br /> 
+				Provider Ad Title: <span th:text="(${gigaProvider.title} != null) ? ${gigaProvider.title} : ''" >title</span><br />
+				Provider Ad Description: <span th:text="(${gigaProvider.description} != null) ? ${gigaProvider.description} : ''">description</span><br />
+				</div>
+				<form method="GET" th:action="@{/editProviderProfile}">
+					<input type="hidden" name="_csrf" th:value="${_csrf.token}" />
+					<button type="submit" th:text="#{giga.profile.edit}"></button>
+				</form>
+				<form method="POST" th:action="@{/signout}">
+					<input type="hidden" name="_csrf" th:value="${_csrf.token}" />
+					<button>Sign Out</button>
+				</form>
+			</div>
+			<div class="col-md-4"></div>
+		</div>
+	</div>
+
+</main>
+
+</body>
+</html>

@@ -7,26 +7,29 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.GeoSpatialIndexType;
 import org.springframework.data.mongodb.core.index.GeoSpatialIndexed;
 
-public class Provider {
+public class GigaProvider {
     @Id
     private String id;
     
     
-    private ObjectId user_id;
+    private String userId;
     private String title;
     private String description;
     private Boolean active;
     private String providerName;
     
+	@GeoSpatialIndexed(type = GeoSpatialIndexType.GEO_2DSPHERE)
+    private double[] location;	
+    private List<Tag> tags;
     
-	public Provider() {
+	public GigaProvider() {
 	}
 
-	public Provider(String id, ObjectId user_id, String title, String description, Boolean active, double[] location,
+	public GigaProvider(String id, String userId, String title, String description, Boolean active, double[] location,
 			List<Tag> tags) {
 		super();
 		this.id = id;
-		this.user_id = user_id;
+		this.userId = userId;
 		this.title = title;
 		this.description = description;
 		this.active = active;
@@ -34,10 +37,6 @@ public class Provider {
 		this.tags = tags;
 	}
 
-	@GeoSpatialIndexed(type = GeoSpatialIndexType.GEO_2DSPHERE)
-    private double[] location;
-	
-    private List<Tag> tags;
 
 
 	public String getId() {
@@ -48,12 +47,12 @@ public class Provider {
 		this.id = id;
 	}
 
-	public ObjectId getUser_id() {
-		return user_id;
+	public String getUserId() {
+		return userId;
 	}
 
-	public void setUser_id(ObjectId user_id) {
-		this.user_id = user_id;
+	public void setUserId(String userId) {
+		this.userId = userId;
 	}
 
 	public String getTitle() {
@@ -78,6 +77,15 @@ public class Provider {
 
 	public void setActive(Boolean active) {
 		this.active = active;
+	}
+
+	
+	public String getProviderName() {
+		return providerName;
+	}
+
+	public void setProviderName(String providerName) {
+		this.providerName = providerName;
 	}
 
 	public double[] getLocation() {

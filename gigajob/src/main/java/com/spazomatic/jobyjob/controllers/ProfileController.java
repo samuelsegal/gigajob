@@ -18,6 +18,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.spazomatic.jobyjob.db.dao.UsersDao;
+import com.spazomatic.jobyjob.nosql.entities.GigaProvider;
+import com.spazomatic.jobyjob.nosql.entities.IpLoc;
+import com.spazomatic.jobyjob.service.GigaProviderService;
 import com.spazomatic.jobyjob.util.SocialControllerUtil;
 import com.spazomatic.jobyjob.util.Util;
 
@@ -27,6 +30,9 @@ public class ProfileController {
 	private static final Logger LOG = LoggerFactory.getLogger(Util.LOG_TAG);
 	
 	private final UsersDao usersDao;
+
+	@Autowired
+	private GigaProviderService gigaProviderService;
 	
     @Autowired
     private SocialControllerUtil util;
@@ -59,7 +65,12 @@ public class ProfileController {
 		if(Util.ROLE_CLIENT.equals(roleParam)){
 			return "client/createClientProfile";
 		}else if(Util.ROLE_PROVIDER.equals(roleParam)){
-			return "provider/createProviderProfile";
+			GigaProvider gigaProvider = gigaProviderService.findByUserId(currentUser.getName()) != null 
+					? gigaProviderService.findByUserId(currentUser.getName()) 
+					: new GigaProvider();
+			IpLoc ipLoc = new IpLoc();
+			model.addAttribute("gigaProvider",gigaProvider);
+			return "provider/providerProfile";
 		}else{
 			return "error";
 		}

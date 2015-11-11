@@ -117,7 +117,7 @@ public class HomeController {
 			ipLoc.setLongitude(Double.valueOf(location.getLongitude()));
 			Page<Post> posts = postService.findByLocationNear(
 					new Point(ipLoc.getLatitude(), ipLoc.getLongitude()),
-					distance, new PageRequest(0,20));
+					distance, new PageRequest(0,200));
 			model.addAttribute("posts", posts.getContent());
 			
 			ObjectMapper mapper = new ObjectMapper();

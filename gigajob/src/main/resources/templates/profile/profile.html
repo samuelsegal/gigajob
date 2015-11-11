@@ -21,9 +21,9 @@
 <body>
 	<main layout:fragment="content" class="mdl-layout__content mdl-color--grey-100">
 
-			<div id="container">
+		<div id="container">
 
-		  		<div class="card">
+		  <div class="card">
 
 			<form method="GET" th:action="@{/editProfile}">
 				<input type="hidden" name="_csrf" th:value="${_csrf.token}" />
@@ -58,8 +58,8 @@
 				<button class="btn btn-sm btn-primary badge" th:text="#{giga.signout}">Sign Ouuut</button>
 			</form>      
 
-</div>
-</div>
+			</div>
+		</div>
 	</main>
 
 </body>
