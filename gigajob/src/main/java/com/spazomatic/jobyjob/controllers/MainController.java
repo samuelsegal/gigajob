@@ -73,16 +73,16 @@ public class MainController {
         Principal currentUser,
         Model model,
         @RequestParam(value = "status", required = true) String status) {
-        MultiValueMap<String, Connection<?>> cmap = connectionRepository.findAllConnections();
-        LOG.error("cs.size = {}", cmap.size());
-        Set<Map.Entry<String, List<Connection<?>>>> entries = cmap.entrySet();
-        for (Map.Entry<String, List<Connection<?>>> entry : entries) {
-            for (Connection<?> c : entry.getValue()) {
-                LOG.debug("Updates {} with the status '{}'", entry.getKey(), status);
-                c.updateStatus(status);
-            }
-        }
-
-        return "home";
+	        
+    		MultiValueMap<String, Connection<?>> cmap = connectionRepository.findAllConnections();
+	        LOG.error("cs.size = {}", cmap.size());
+	        Set<Map.Entry<String, List<Connection<?>>>> entries = cmap.entrySet();
+	        for (Map.Entry<String, List<Connection<?>>> entry : entries) {
+	            for (Connection<?> c : entry.getValue()) {
+	                LOG.debug("Updates {} with the status '{}'", entry.getKey(), status);
+	                c.updateStatus(status);
+	            }
+	        }	
+	        return "home";
     }
 }

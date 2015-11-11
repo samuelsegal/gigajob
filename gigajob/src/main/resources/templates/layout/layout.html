@@ -33,40 +33,51 @@
 	<!-- Latest compiled and minified CSS -->
 	<link rel="stylesheet"
 		href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css" />		
-	<!-- Optional theme -->
+	<!--______________________ Optional theme ________________ -->
 	<link rel="stylesheet"
 		href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap-theme.min.css" />
     <link href="https://fonts.googleapis.com/css?family=Roboto:regular,bold,italic,thin,light,bolditalic,black,medium&amp;lang=en" rel="stylesheet" />
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
     <link rel="stylesheet" href="css/material.min.css" />
     <link rel="stylesheet" href="css/styles.css" />
+	
+	<!-- ____________________  MapBox  ______________________ -->
 	<link href='https://api.mapbox.com/mapbox.js/plugins/leaflet-locatecontrol/v0.43.0/L.Control.Locate.mapbox.css' rel='stylesheet' />
 	<!--[if lt IE 9]>
 	<link href='https://api.mapbox.com/mapbox.js/plugins/leaflet-locatecontrol/v0.43.0/L.Control.Locate.ie.css' rel='stylesheet' />
 	<![endif]-->
 	<link href='https://api.mapbox.com/mapbox.js/plugins/leaflet-locatecontrol/v0.43.0/css/font-awesome.min.css' rel='stylesheet' />
-
+   	
    	<script src='https://api.mapbox.com/mapbox.js/v2.2.2/mapbox.js'></script>
 	<link href='https://api.mapbox.com/mapbox.js/v2.2.2/mapbox.css' rel='stylesheet' />
 	<link rel="stylesheet" th:href="@{/css/jobyjobmap.css}" type="text/css" media="screen"></link>
 		
     <script src="js/gigascript.js"></script>
+    
+    
 	</head>
 	<body>
+	
+	
 	<div class="demo-layout mdl-layout mdl-js-layout mdl-layout--fixed-drawer mdl-layout--fixed-header">
-		<div th:replace="fragments/header :: header"> </div>		
-		<div th:replace="fragments/leftnav :: leftnav"> </div>
+		<!-- ___________________  HEADER  ____________________ -->
+		<div th:replace="fragments/header :: header"> HEADER </div>		
 		
+		<!-- ___________________  LEFT NAV  __________________ -->
+		<div th:replace="fragments/leftnav :: leftnav"> LEFT NAV </div>
+		
+		<!-- _________________  MAIN CONTENT  ________________ -->
 		<div id="content" layout:fragment="content">
 			Content goes here
 		</div>	
 	</div>
 
+	<!-- ______________________  SCRIPTS  ____________________ -->
     <script src="js/material.min.js"></script>
     
     <th:block>			
 	
-		<!-- SCRIPTS -->	
+			
 		<script src='https://api.mapbox.com/mapbox.js/plugins/leaflet-locatecontrol/v0.43.0/L.Control.Locate.min.js'></script>
 		<script src="//code.jquery.com/jquery-1.11.3.min.js"></script>
 		<script src="//code.jquery.com/jquery-migrate-1.2.1.min.js"></script>

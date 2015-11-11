@@ -2,17 +2,25 @@ package com.spazomatic.jobyjob.nosql.entities;
 
 import java.util.List;
 
+import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.GeoSpatialIndexType;
 import org.springframework.data.mongodb.core.index.GeoSpatialIndexed;
-
+import org.springframework.data.mongodb.core.mapping.Document;
+@Document
 //@Document(indexName = "jobyjob", type = "geo-class-point-type", shards = 1, replicas = 0)
 public class Post {
     @Id
     private String id;
     private String title;
+    private String description;
     
-    @GeoSpatialIndexed(type = GeoSpatialIndexType.GEO_2DSPHERE)
+    private String user_id;
+    private Boolean active;
+    private String clientName;
+    
+    
+	@GeoSpatialIndexed(type = GeoSpatialIndexType.GEO_2DSPHERE)
     private double[] location;
 
 	// @Field(type= FieldType.Nested)
@@ -28,6 +36,7 @@ public class Post {
         this.location[1] = longitude;
     }
 
+    
     public String getId() {
         return id;
     }
@@ -44,7 +53,40 @@ public class Post {
         this.title = title;
     }
     
-    public double[] getLocation() {
+    public String getDescription() {
+		return description;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
+	}
+	
+	
+    public String getUser_id() {
+		return user_id;
+	}
+
+	public void setUser_id(String user_id) {
+		this.user_id = user_id;
+	}
+
+	public Boolean getActive() {
+		return active;
+	}
+
+	public void setActive(Boolean active) {
+		this.active = active;
+	}
+
+	public String getClientName() {
+		return clientName;
+	}
+
+	public void setClientName(String clientName) {
+		this.clientName = clientName;
+	}
+
+	public double[] getLocation() {
 		return location;
 	}
 

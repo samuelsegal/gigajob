@@ -64,14 +64,12 @@ public class UsersDao {
 			        	List<Authority> userAuthorities = new ArrayList<>();
 			        	User user  = null;
 			        	while (rs.next()) {
-			        		Authority auth = new Authority();
-			        		String id = rs.getString("username");
+			        		Authority auth = new Authority();			        	
 			        	    auth.setAuthority(rs.getString("authority"));
 			        	    if (user == null) {
 			        	        user = new User();
 			        	        user.setUsername(rs.getString("username"));
-			        	        user.setEnabled(new Byte("1"));
-			        	        
+			        	        user.setEnabled(new Byte("1"));			        	       
 			        	    }
 			        	    userAuthorities.add(auth);
 			        	}

@@ -6,6 +6,8 @@ buildscript {
         mavenCentral()
         maven { url "https://repo.spring.io/snapshot" }
         maven { url "https://repo.spring.io/milestone" }
+	//maven { url "http://repo.springsource.org/libs-release-local" }
+
     }
     dependencies {
         classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}") 
@@ -35,6 +37,7 @@ repositories {
     mavenCentral()
         maven { url "https://repo.spring.io/snapshot" }
         maven { url "https://repo.spring.io/milestone" }
+	maven { url "http://repo.springsource.org/libs-release-local" }
 
 }
 
@@ -68,9 +71,10 @@ dependencies {
     compile("org.springframework.social:spring-social-twitter")
     compile("org.springframework.social:spring-social-linkedin")
     compile("org.springframework.social:spring-social-github:1.0.0.M4")
-    //compile("org.springframework.social:spring-social-google:1.0.0.RELEASE")
+    compile("org.springframework.social:spring-social-google:1.0.0.RELEASE")
+    //compile("org.springframework.social:spring-social-amazon:1.0.0-RELEASE")
     //compile("org.springframework.social:spring-social-live:1.0.0-SNAPSHOT") {
-   //     exclude group: 'javax.servlet', module: 'servlet-api'
+    //    exclude group: 'javax.servlet', module: 'servlet-api'
     //} 
     compile("org.apache.commons:commons-lang3:3.3.2")
     compile("com.maxmind.geoip2:geoip2:2.3.1")

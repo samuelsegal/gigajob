@@ -5,21 +5,39 @@
 	layout:decorator="layout/layout">
 <head>
 	<link href='css/form.css' rel='stylesheet' />
+	<link href='css/gigadiv.css' rel='stylesheet' />
+
+    <style type="text/css">
+	    .custom {
+	    	width: 278px !important;
+		}
+		.card{
+			margin: 10px;
+			padding: 10px;
+			height: 600px;
+		}
+    </style>	
 </head>
 <body>
 	<main layout:fragment="content" class="mdl-layout__content mdl-color--grey-100">
 
-		<div id="container">
-					
-					
+			<div id="container">
+
+		  		<div class="card">
+
 			<form method="GET" th:action="@{/editProfile}">
 				<input type="hidden" name="_csrf" th:value="${_csrf.token}" />
-				<button type="submit" th:text="#{giga.profile.edit}"></button>
+				<button type="submit" class="btn btn-sm btn-primary badge" th:text="#{giga.profile.edit}"></button>
 			</form>	
 			<form method="POST" th:action="@{/assignRole}">
 				<input type="hidden" name="_csrf" th:value="${_csrf.token}" />
-				<button th:text="#{giga.profile.client.signup}" name="roleParam" value="ROLE_CLIENT">Sign UP ClyBy</button>
-				<button th:text="#{giga.profile.provider.signup}" name="roleParam" value="ROLE_PROVIDER">Sign Up And PRo Ride</button>
+				<button th:text="#{giga.profile.client.signup}" class="btn btn-sm btn-primary badge" name="roleParam" value="ROLE_CLIENT">Sign UP ClyBy</button>
+				
+			</form>	
+			<form method="POST" th:action="@{/assignRole}">
+				<input type="hidden" name="_csrf" th:value="${_csrf.token}" />
+				
+				<button th:text="#{giga.profile.provider.signup}" class="btn btn-sm btn-primary badge" name="roleParam" value="ROLE_PROVIDER">Sign Up And PRo Ride</button>
 			</form>		
 			<br />
 			<hr />
@@ -37,11 +55,11 @@
 			<hr/>
 			<form method="POST" th:action="@{/signout}">
 				<input type="hidden" name="_csrf" th:value="${_csrf.token}" />
-				<button th:text="#{giga.signout}">Sign Ouuut</button>
-			</form>
-	
-		</div>
+				<button class="btn btn-sm btn-primary badge" th:text="#{giga.signout}">Sign Ouuut</button>
+			</form>      
 
+</div>
+</div>
 	</main>
 
 </body>

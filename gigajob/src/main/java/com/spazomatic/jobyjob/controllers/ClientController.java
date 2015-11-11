@@ -4,18 +4,16 @@ import java.io.IOException;
 import java.security.Principal;
 
 import javax.inject.Inject;
-import javax.inject.Provider;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
+import org.bson.types.ObjectId;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.geo.Point;
-import org.springframework.social.connect.Connection;
-import org.springframework.social.connect.ConnectionRepository;
-import org.springframework.social.facebook.api.Facebook;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -26,6 +24,7 @@ import org.springframework.web.client.RestTemplate;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.maxmind.geoip2.exception.GeoIp2Exception;
 import com.spazomatic.jobyjob.db.dao.UsersDao;
+import com.spazomatic.jobyjob.db.model.UserProfile;
 import com.spazomatic.jobyjob.location.ServerLocation;
 import com.spazomatic.jobyjob.location.ServerLocationBo;
 import com.spazomatic.jobyjob.nosql.entities.IpLoc;
@@ -75,6 +74,12 @@ public class ClientController {
 		
 		util.setModel(request, currentUser, model);
 		post.setLocation(new double[]{loc.getLatitude(), loc.getLongitude()});
+		post.setUser_id(currentUser.getName());
+		
+		HttpSession session = request.getSession();
+		UserProfile client = (UserProfile) session.getAttribute(SocialControllerUtil.USER_PROFILE);
+		post.setClientName(client.getName());
+		
 		postService.save(post);	
 		
 		String ipAddress = request.getHeader("X-FORWARDED-FOR");

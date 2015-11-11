@@ -13,15 +13,19 @@
 					<div class="col-md-8">			
 						<h3 th:text="#{giga.Post}"></h3>
 						<hr />			
-						<form method="POST" th:object="${post}" th:action="@{/submitJob}" id="postForm">
+						<form method="POST" th:object="${post}" th:action="@{/submitJob}" id="postForm" class="" role="form">
 							<fieldset>
+							
 								<input type="hidden" name="_csrf" th:value="${_csrf.token}" />
-								<div>
+								<div class="form-group">
 								  <label for="title" th:text="#{giga.Title}"></label>
-								  <input type="text" th:field="*{title}" id="title" name="title"/>
-								<button type="button" onclick="getLocation()" th:text="#{giga.UseCurrentLocation}"></button>
-								<input type="hidden" th:field="${loc.latitude}" id="loclat"/>
-								<input type="hidden" th:field="${loc.longitude}" id="loclon"/>	
+								  <input type="text" th:field="*{title}" id="title" name="title" class="form-control"/>
+								  <label for="description" th:text="#{giga.Description}"></label>
+								  <input type="text" th:field="*{description}" id="description" name="description" class="form-control"/>
+								  <button type="button" class="form-control" onclick="getLocation()" th:text="#{giga.UseCurrentLocation}"></button>
+								  
+								  <input type="hidden" th:field="${loc.latitude}" id="loclat"/>
+								  <input type="hidden" th:field="${loc.longitude}" id="loclon"/>	
 								</div>
 							
 								<p id="displayLocation"></p>

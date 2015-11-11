@@ -33,10 +33,10 @@ import com.spazomatic.jobyjob.db.model.UserProfile;
 @Component
 public class SocialControllerUtil {
 
-    private static final Logger LOG = LoggerFactory.getLogger(SocialControllerUtil.class);
+    private static final Logger LOG = LoggerFactory.getLogger(Util.LOG_TAG);
 
     private static final String USER_CONNECTION = "MY_USER_CONNECTION";
-    private static final String USER_PROFILE = "MY_USER_PROFILE";
+    public static final String USER_PROFILE = "MY_USER_PROFILE";
 
     @Autowired
     private JdbcTemplate jdbcTemplate;
@@ -52,6 +52,8 @@ public class SocialControllerUtil {
             Connection c = jdbcTemplate.getDataSource().getConnection();
             DatabaseMetaData md = c.getMetaData();
             ResultSet rs = md.getTables(null, null, "%", null);
+            
+            LOG.debug(String.format("DB Connection INFO Catalog: %s", c.getCatalog()));
             while (rs.next()) {
                 if (rs.getString(4).equalsIgnoreCase("TABLE")) {
 

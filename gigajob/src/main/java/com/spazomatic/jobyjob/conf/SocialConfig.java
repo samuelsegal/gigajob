@@ -15,6 +15,8 @@ import org.springframework.social.connect.UsersConnectionRepository;
 import org.springframework.social.connect.jdbc.JdbcUsersConnectionRepository;
 import org.springframework.social.facebook.connect.FacebookConnectionFactory;
 import org.springframework.social.github.connect.GitHubConnectionFactory;
+import org.springframework.social.google.connect.GoogleConnectionFactory;
+import org.springframework.social.linkedin.connect.LinkedInConnectionFactory;
 import org.springframework.social.security.AuthenticationNameUserIdSource;
 
 import com.spazomatic.jobyjob.db.dao.UsersDao;
@@ -35,21 +37,16 @@ public class SocialConfig implements SocialConfigurer {
         connectionFactoryConfigurer.addConnectionFactory(new FacebookConnectionFactory(
             environment.getProperty("facebook.appKey"),
             environment.getProperty("facebook.appSecret")));
-      //  connectionFactoryConfigurer.addConnectionFactory(new TwitterConnectionFactory(
-       //     environment.getProperty("twitter.consumerKey"),
-       //     environment.getProperty("twitter.consumerSecret")));
-       // connectionFactoryConfigurer.addConnectionFactory(new LinkedInConnectionFactory(
-      //      environment.getProperty("spring.social.linkedin.appId"),
-     //       environment.getProperty("spring.social.linkedin.appSecret")));
-     //   connectionFactoryConfigurer.addConnectionFactory(new GoogleConnectionFactory(
-     //       environment.getProperty("spring.social.google.appId"),
-    //        environment.getProperty("spring.social.google.appSecret")));
+        connectionFactoryConfigurer.addConnectionFactory(new LinkedInConnectionFactory(
+            environment.getProperty("linkedin.appKey"),
+            environment.getProperty("linkedin.appSecret")));
+        connectionFactoryConfigurer.addConnectionFactory(new GoogleConnectionFactory(
+            environment.getProperty("google.appKey"),
+            environment.getProperty("google.appSecret")));
         connectionFactoryConfigurer.addConnectionFactory(new GitHubConnectionFactory(
-            environment.getProperty("spring.social.github.appKey"),
-            environment.getProperty("spring.social.github.appSecret")));
-    //    connectionFactoryConfigurer.addConnectionFactory(new LiveConnectionFactory(
-    //        environment.getProperty("spring.social.live.appId"),
-     //       environment.getProperty("spring.social.live.appSecret")));
+            environment.getProperty("github.appKey"),
+            environment.getProperty("github.appSecret")));
+        
     }
 
     @Override
