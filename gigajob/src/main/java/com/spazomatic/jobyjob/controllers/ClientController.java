@@ -68,6 +68,19 @@ public class ClientController {
 		return "client/postJob";
 		
 	}
+	
+	@RequestMapping(value = { "/managePosts" }, method = RequestMethod.GET)
+	public String managePosts(Principal currentUser, Model model) {
+		
+		util.setModel(request, currentUser, model);
+		Post post = new Post();
+		IpLoc ipLoc = new IpLoc();
+		model.addAttribute("post",post);
+		model.addAttribute("loc", ipLoc);
+		return "client/postJob";
+		
+	}
+	
 	@RequestMapping(value = { "/submitJob" }, method = RequestMethod.POST)
 	public String submitJob(Principal currentUser, Model model,
 			@ModelAttribute Post post, @ModelAttribute IpLoc loc) {

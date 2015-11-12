@@ -4,13 +4,23 @@
 	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
 	layout:decorator="layout/layout">
 
+<head>
+	<link href='css/form.css' rel='stylesheet' />
+	<link href='css/gigadiv.css' rel='stylesheet' />
+    <style type="text/css">
+	    .custom {
+	    	width: 278px !important;
+		}
+		.card{
+			margin: 10px;
+			padding: 10px;
+			height: 600px;
+		}
+    </style>
+</head>
 <body>
-
-
-<main layout:fragment="content"
-	class="mdl-layout__content mdl-color--grey-100">
-
-	<div id="container">
+<main layout:fragment="content" class="mdl-layout__content mdl-color--grey-100">
+	<div id="container" class="card">
 		<div class="row">
 			<div class="col-md-12"><br /></div>
 		</div>
@@ -21,33 +31,36 @@
 				<img th:src="${gigauserconnection.imageUrl}" class="demo-avatar" />
 				
 				<span th:text="${gigauser.name}" class="mdl-color-text--blue-grey-400">name</span>
-			
+						
 				<br />
 				<hr />
+				
 				<div class="mdl-color-text--blue-400">
-				Email: <span th:text="${gigauser.email}" >email</span><br /> 
-				First Name: <span th:text="${gigauser.firstName}" >first name</span><br />
-				Last Name: <span th:text="${gigauser.lastName}">last name</span><br />
+				<span th:text="(${gigaProvider.providerName} != null) ? #{giga.provider.label.providerAd} : ''" >provider name</span>
+				<span th:text="(${gigaProvider.providerName} != null) ? ${gigaProvider.providerName} : ''" >name</span><br /> 
+				
+				<span th:text="(${gigaProvider.title} != null) ? #{giga.provider.label.titleAd} : ''" >provider title</span>
+				<span th:text="(${gigaProvider.title} != null) ? ${gigaProvider.title} : ''" >title</span><br />
+				
+				<span th:text="(${gigaProvider.description} != null) ? #{giga.provider.label.descriptionAd} : ''" >provider description</span>
+				<span th:text="(${gigaProvider.description} != null) ? ${gigaProvider.description} : ''">description</span><br />
 				</div>
-				<hr />
-				<div class="mdl-color-text--blue-400">
-				Provider Ad Name: <span th:text="(${gigaProvider.providerName} != null) ? ${gigaProvider.providerName} : ''" >provider name</span><br /> 
-				Provider Ad Title: <span th:text="(${gigaProvider.title} != null) ? ${gigaProvider.title} : ''" >title</span><br />
-				Provider Ad Description: <span th:text="(${gigaProvider.description} != null) ? ${gigaProvider.description} : ''">description</span><br />
-				</div>
+				
+				<br />
+				<hr />				
+				
 				<form method="GET" th:action="@{/editProviderProfile}">
 					<input type="hidden" name="_csrf" th:value="${_csrf.token}" />
-					<button type="submit" th:text="#{giga.profile.edit}"></button>
+					<button type="submit" th:text="#{giga.profile.edit}" class="btn btn-sm btn-primary badge"></button>
 				</form>
 				<form method="POST" th:action="@{/signout}">
 					<input type="hidden" name="_csrf" th:value="${_csrf.token}" />
-					<button>Sign Out</button>
+					<button th:text="#{giga.signout}" class="btn btn-sm btn-primary badge">Sign Out</button>
 				</form>
 			</div>
 			<div class="col-md-4"></div>
 		</div>
 	</div>
-
 </main>
 
 </body>

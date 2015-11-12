@@ -9,9 +9,11 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.geo.Distance;
 import org.springframework.data.geo.Metrics;
 import org.springframework.data.geo.Point;
+import org.springframework.data.mongodb.core.FindAndModifyOptions;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
+import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.stereotype.Service;
 
 import com.spazomatic.jobyjob.nosql.entities.GigaProvider;
@@ -85,6 +87,24 @@ public class GigaProviderServiceImpl implements GigaProviderService{
 		
 		GigaProvider gigaProvider = gigaProviderRepository.findByUserId(userId);
 		return gigaProvider;
+	}
+
+	@Override
+	public GigaProvider update(GigaProvider gigaProvider) {
+		Query providerToUpdate = new Query(
+			Criteria
+				.where("userId")
+				.is(gigaProvider.getUserId()));
+		
+		Update update = new Update()
+				.set("name",gigaProvider.getProviderName())
+				.set("title", gigaProvider.getTitle())
+				.set("description", gigaProvider.getDescription());
+			
+		return mongoTemplate.findAndModify(providerToUpdate, update, 
+				new FindAndModifyOptions().returnNew(true).upsert(true), 
+				GigaProvider.class);		
+		//mongoTemplate.upsert(query, update, entityClass)
 	}
 	
 	

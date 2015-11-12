@@ -19,7 +19,6 @@ import java.io.IOException;
 import java.security.Principal;
 
 import javax.inject.Inject;
-import javax.inject.Provider;
 import javax.servlet.http.HttpServletRequest;
 
 import org.slf4j.Logger;
@@ -28,10 +27,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.geo.Point;
-import org.springframework.social.connect.Connection;
-import org.springframework.social.connect.ConnectionRepository;
-import org.springframework.social.facebook.api.Facebook;
-import org.springframework.social.github.api.GitHub;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -43,11 +38,12 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.maxmind.geoip2.exception.GeoIp2Exception;
 import com.spazomatic.jobyjob.db.dao.DataDao;
 import com.spazomatic.jobyjob.db.dao.UsersDao;
-import com.spazomatic.jobyjob.db.model.UserProfile;
 import com.spazomatic.jobyjob.location.ServerLocation;
 import com.spazomatic.jobyjob.location.ServerLocationBo;
+import com.spazomatic.jobyjob.nosql.entities.GigaProvider;
 import com.spazomatic.jobyjob.nosql.entities.IpLoc;
 import com.spazomatic.jobyjob.nosql.entities.Post;
+import com.spazomatic.jobyjob.service.GigaProviderService;
 import com.spazomatic.jobyjob.service.PostService;
 import com.spazomatic.jobyjob.util.SocialControllerUtil;
 import com.spazomatic.jobyjob.util.Util;
@@ -67,6 +63,9 @@ public class HomeController {
     
 	@Autowired
 	private PostService postService;
+
+	@Autowired
+	private GigaProviderService gigaProviderService;
 	
 	@Autowired
 	private ServerLocationBo serverLocationBo;
@@ -131,6 +130,45 @@ public class HomeController {
 		}
 		
 		return "data/table";
+	}
+	
+	@RequestMapping(value = { "/listProviders" }, method = RequestMethod.GET)
+	public String listProviders(Principal currentUser, Model model,
+			@RequestParam(value = "distance", 
+							required = false, 
+							defaultValue = "30") 
+							String distance) {
+		
+		util.setModel(request, currentUser, model);
+		try {		
+			String ipAddress = request.getHeader("X-FORWARDED-FOR");
+			if (ipAddress == null) {
+				ipAddress = request.getRemoteAddr();		
+			}
+		
+			ServerLocation location = getLocation(ipAddress);
+			LOG.debug(String.format("Client IP Addy: %s", ipAddress));
+			LOG.debug(String.format("Client Loaked the Cloak: %s", location.toString()));
+			
+			IpLoc ipLoc = new IpLoc();
+			ipLoc.setLatitude(Double.valueOf(location.getLatitude()));
+			ipLoc.setLongitude(Double.valueOf(location.getLongitude()));
+			//Page<GigaProvider> gigaProviders = gigaProviderService.findByLocationNear(
+			// Point(ipLoc.getLatitude(), ipLoc.getLongitude()),
+			//		"3000", new PageRequest(0,200));
+			Iterable<GigaProvider> gigaProviders = gigaProviderService.findAll();
+			model.addAttribute("gigaProviders", gigaProviders);
+			ObjectMapper mapper = new ObjectMapper();
+			String postsAsJSON = mapper.writeValueAsString(gigaProviders);
+			model.addAttribute("postsAsJSON",postsAsJSON);
+			LOG.debug("PostsAsJSON: " + postsAsJSON);
+		} catch (Exception e) {
+			LOG.error(e.getMessage());
+			model.addAttribute("message",e.getMessage());
+			return "error";
+		}
+		
+		return "data/listGigaProviders";
 	}
 	
 	private ServerLocation getLocation(String ipAddress) throws Exception{

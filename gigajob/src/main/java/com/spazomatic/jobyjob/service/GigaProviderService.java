@@ -7,6 +7,7 @@ import org.springframework.data.geo.Point;
 import com.spazomatic.jobyjob.nosql.entities.GigaProvider;
 
 public interface GigaProviderService {
+	GigaProvider update(GigaProvider gigaProvider);
     GigaProvider save(GigaProvider gigaProvider);
     GigaProvider findOne(String id);
     Iterable<GigaProvider> findAll();

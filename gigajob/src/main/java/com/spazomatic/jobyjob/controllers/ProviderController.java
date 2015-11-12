@@ -46,9 +46,22 @@ public class ProviderController {
 	
 	public ProviderController() {
 	}
-
+	
+	@RequestMapping(value = { "/providerProfile" }, method = RequestMethod.GET)
+	public String providerProfile(Principal currentUser, Model model) {
+		
+		util.setModel(request, currentUser, model);
+		GigaProvider gigaProvider = gigaProviderService.findByUserId(currentUser.getName()) != null 
+				? gigaProviderService.findByUserId(currentUser.getName()) 
+				: new GigaProvider();
+		IpLoc ipLoc = new IpLoc();
+		model.addAttribute("gigaProvider",gigaProvider);
+		model.addAttribute("loc", ipLoc);
+		return "provider/providerProfile";	
+	}
+	
 	@RequestMapping(value = { "/editProviderProfile" }, method = RequestMethod.GET)
-	public String postJob(Principal currentUser, Model model) {
+	public String editProviderProfile(Principal currentUser, Model model) {
 		
 		util.setModel(request, currentUser, model);
 		GigaProvider gigaProvider = gigaProviderService.findByUserId(currentUser.getName()) != null 
@@ -61,7 +74,26 @@ public class ProviderController {
 	}
 	
 	@RequestMapping(value = { "/updateProviderProfile" }, method = RequestMethod.POST)
-	public String submitJob(Principal currentUser, Model model,
+	public String updateProviderProfile(Principal currentUser, Model model,
+			@ModelAttribute GigaProvider gigaProvider, @ModelAttribute IpLoc loc) {
+		
+		util.setModel(request, currentUser, model);
+		gigaProvider.setLocation(new double[]{loc.getLatitude(), loc.getLongitude()});
+		gigaProvider.setUserId(currentUser.getName());
+		
+		HttpSession session = request.getSession();
+		UserProfile client = (UserProfile) session.getAttribute(SocialControllerUtil.USER_PROFILE);
+		gigaProvider.setProviderName(client.getUsername());
+		
+		gigaProviderService.update(gigaProvider);	
+		IpLoc ipLoc = new IpLoc();
+		model.addAttribute("gigaProvider",gigaProvider);
+		model.addAttribute("loc", ipLoc);
+		return "provider/providerProfile";
+	}
+	
+	@RequestMapping(value = { "/createProviderProfile" }, method = RequestMethod.POST)
+	public String createProviderProfile(Principal currentUser, Model model,
 			@ModelAttribute GigaProvider gigaProvider, @ModelAttribute IpLoc loc) {
 		
 		util.setModel(request, currentUser, model);
@@ -77,8 +109,7 @@ public class ProviderController {
 		model.addAttribute("gigaProvider",gigaProvider);
 		model.addAttribute("loc", ipLoc);
 		return "provider/providerProfile";
-	}
-	
+	}	
 	private ServerLocation getLocation(String ipAddress) throws Exception{
 		ServerLocation location = null;
 		try {

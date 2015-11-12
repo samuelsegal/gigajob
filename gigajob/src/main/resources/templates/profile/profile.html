@@ -29,30 +29,49 @@
 				<input type="hidden" name="_csrf" th:value="${_csrf.token}" />
 				<button type="submit" class="btn btn-sm btn-primary badge" th:text="#{giga.profile.edit}"></button>
 			</form>	
-			<form method="POST" th:action="@{/assignRole}">
+			
+			<form th:if="${gigauser.roles.contains('ROLE_CLIENT')} != true" method="POST" th:action="@{/assignRole}">
 				<input type="hidden" name="_csrf" th:value="${_csrf.token}" />
 				<button th:text="#{giga.profile.client.signup}" class="btn btn-sm btn-primary badge" name="roleParam" value="ROLE_CLIENT">Sign UP ClyBy</button>
 				
 			</form>	
-			<form method="POST" th:action="@{/assignRole}">
-				<input type="hidden" name="_csrf" th:value="${_csrf.token}" />
-				
+			<form th:if="${gigauser.roles.contains('ROLE_PROVIDER')} != true" method="POST" th:action="@{/assignRole}">
+				<input type="hidden" name="_csrf" th:value="${_csrf.token}" />				
 				<button th:text="#{giga.profile.provider.signup}" class="btn btn-sm btn-primary badge" name="roleParam" value="ROLE_PROVIDER">Sign Up And PRo Ride</button>
 			</form>		
 			<br />
 			<hr />
 			<img th:src="${gigauserconnection} ? ${gigauserconnection.imageUrl} : @{images/user.jpg}" class="demo-avatar"/>
 			
-			<span th:text="${gigauserconnection.displayName}" class="mdl-color-text--blue-grey-400">username</span>
+			<span th:text="${gigauserconnection.displayName}" class="mdl-color-text--blue-grey-400">user name</span>
 			
 			<div class="mdl-color-text--blue-400">
 			Email: <span th:text="${gigauser.email}">email</span><br /> 
 			First Name: <span th:text="${gigauser.firstName}">first name</span><br />
 			Last Name: <span th:text="${gigauser.lastName}">last name</span><br />
 			</div>
+			
 			<br/>
-	
 			<hr/>
+			
+			<form th:if="${gigauser.roles.contains('ROLE_PROVIDER')} == true" method="GET" th:action="@{/providerProfile}">
+				<input type="hidden" name="_csrf" th:value="${_csrf.token}" />				
+				<button th:text="#{giga.provider.profile}" class="btn btn-sm btn-primary badge" name="roleParam" value="ROLE_PROVIDER">Sign Up And PRo Ride</button>
+			</form>		
+
+			<br/>		
+			<hr/>
+						
+			<form th:if="${gigauser.roles.contains('ROLE_CLIENT')} == true" method="GET" th:action="@{/managePosts}">
+				<input type="hidden" name="_csrf" th:value="${_csrf.token}" />				
+				<button th:text="#{giga.ManagePosts}" class="btn btn-sm btn-primary badge" name="roleParam" value="ROLE_PROVIDER">Sign Up And PRo Ride</button>
+			</form>	
+			
+			<br/>		
+			<hr/>
+			
+
+									
 			<form method="POST" th:action="@{/signout}">
 				<input type="hidden" name="_csrf" th:value="${_csrf.token}" />
 				<button class="btn btn-sm btn-primary badge" th:text="#{giga.signout}">Sign Ouuut</button>

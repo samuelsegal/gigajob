@@ -3,61 +3,74 @@
 	  xmlns:social="http://spring.io/springsocial"
 	  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
 	  layout:decorator="layout/layout">
+<head>
+	<link href='css/form.css' rel='stylesheet' />
+	<link href='css/gigadiv.css' rel='stylesheet' />
+    <style type="text/css">
+	    .custom {
+	    	width: 278px !important;
+		}
+		.card{
+			margin: 10px;
+			padding: 10px;
+			height: 600px;
+		}
+    </style>
+</head>
+<body>
+<main layout:fragment="content" class="mdl-layout__content mdl-color--grey-100">		
+	<div id="container" class="card">
+		<div class="row">
+			<div class="col-md-2"></div>
+			<div class="col-md-8">	
+										
+				<h3 th:text="#{giga.provider.profile}"></h3>
+				<hr />		
+											
+				<form method="POST" th:object="${gigaProvider}" th:action="@{/updateProviderProfile}" id="postForm" class="" role="form">
+					<fieldset>
+					
+						<input type="hidden" name="_csrf" th:value="${_csrf.token}" />
+						<div class="form-group">
+						  <label for="title" th:text="#{giga.Title}"></label>
+						  <input type="text" th:field="*{title}" id="title" name="title" class="form-control"/>
+						  <label for="description" th:text="#{giga.Description}"></label>
+						  <textarea th:field="*{description}" id="description" name="description" class="form-control" ></textarea>
+						</div>
 
-	<body>
+						<div class="form-group">
+						  <button type="button" class="form-control" onclick="getLocation()" th:text="#{giga.UseCurrentLocation}"></button>							  
+						  <input type="hidden" th:field="${loc.latitude}" id="loclat"/>
+						  <input type="hidden" th:field="${loc.longitude}" id="loclon"/>	
+						</div>		
+											
+						<p id="displayLocation"></p>										
+						<br/>
 
-		<main layout:fragment="content" class="mdl-layout__content mdl-color--grey-100">		
-			<div id="container">
-				<div class="row">
-					<div class="col-md-2"></div>
-					<div class="col-md-8">			
-						<h3 th:text="#{giga.provider.profile}"></h3>
-						<hr />			
-						<form method="POST" th:object="${gigaProvider}" th:action="@{/updateProviderProfile}" id="postForm" class="" role="form">
-							<fieldset>
-							
-								<input type="hidden" name="_csrf" th:value="${_csrf.token}" />
-								<div class="form-group">
-								  <label for="title" th:text="#{giga.Title}"></label>
-								  <input type="text" th:field="*{title}" id="title" name="title" class="form-control"/>
-								  <label for="description" th:text="#{giga.Description}"></label>
-								  <input type="text" th:field="*{description}" id="description" name="description" class="form-control"/>
-								  <button type="button" class="form-control" onclick="getLocation()" th:text="#{giga.UseCurrentLocation}"></button>
-								  
-								  <input type="hidden" th:field="${loc.latitude}" id="loclat"/>
-								  <input type="hidden" th:field="${loc.longitude}" id="loclon"/>	
-								</div>
-							
-								<p id="displayLocation"></p>
-								<div id="postLocationMap" style="height: 180px"></div>
-								<br/>
-
-								<script th:inline="javascript">
-			
-									 console.log("LATITUDE LONGITUDE");
-									 navigator.geolocation.getCurrentPosition(assignPosition);
-									 function assignPosition(pos){
-										 console.log(pos.coords.latitude);
-										 console.log(pos.coords.longitude); 
-										 document.getElementById("loclat").value = pos.coords.latitude;
-										 console.log($('loclat').val());
-										 document.getElementById("loclon").value = pos.coords.longitude;
-										 console.log($('loclon').val());
-									 }
-			
-								</script>
-						        <div class="submit">
-						          <button type="submit" name="save" th:text="#{giga.Update}">Update</button>
-						        </div>
-							</fieldset>
-						</form>
-					</div>
-					<div class="col-md-2"></div>
-				</div>
-
+						<script th:inline="javascript">
+	
+							 console.log("LATITUDE LONGITUDE");
+							 navigator.geolocation.getCurrentPosition(assignPosition);
+							 function assignPosition(pos){
+								 console.log(pos.coords.latitude);
+								 console.log(pos.coords.longitude); 
+								 document.getElementById("loclat").value = pos.coords.latitude;
+								 console.log($('loclat').val());
+								 document.getElementById("loclon").value = pos.coords.longitude;
+								 console.log($('loclon').val());
+							 }
+	
+						</script>
+						
+				        <div class="submit">
+				          <button type="submit" name="save" th:text="#{giga.Update}" class="btn btn-sm btn-primary badge">Update</button>
+				        </div>						        
+					</fieldset>						
+				</form>
 			</div>
-		</main>
-
-
-	</body>
+			<div class="col-md-2"></div>
+		</div>
+	</div>
+</main>
+</body>
 </html>
