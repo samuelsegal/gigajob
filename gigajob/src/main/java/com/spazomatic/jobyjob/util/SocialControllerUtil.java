@@ -116,12 +116,12 @@ public class SocialControllerUtil {
         Throwable exception = (Throwable)session.getAttribute(WebAttributes.AUTHENTICATION_EXCEPTION);
 
         // Update the model with the information we collected
-        model.addAttribute("exception",              exception == null ? null : exception.getMessage());
-        model.addAttribute("currentUserId",          userId);
-        model.addAttribute("gigauser",               profile);
-        model.addAttribute("gigauserconnection",     connection);
-        model.addAttribute("currentUserDisplayName", displayName);
-        model.addAttribute("currentData",            data);
+        model.addAttribute("exception",               exception == null ? null : exception.getMessage());
+        model.addAttribute("currentUserId",           userId);
+        model.addAttribute(Util.GIGA_USER,            profile);
+        model.addAttribute(Util.GIGA_USER_CONNECTION, connection);
+        model.addAttribute("currentUserDisplayName",  displayName);
+        model.addAttribute("currentData",             data);
 
         if (LOG.isDebugEnabled()) {
             logInfo(request, model, userId, path, session);

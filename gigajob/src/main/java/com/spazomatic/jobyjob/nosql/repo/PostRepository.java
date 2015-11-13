@@ -16,4 +16,7 @@ public interface PostRepository extends MongoRepository<Post, String>{
     Page<Post> findByLocation(Point location, Pageable pageable);
     Page<Post> findByLocationNear(Point location, Distance distance, Pageable pageable);
     List<Post> findByLocationNear(Point location, Distance distance);
+    Page<Post> findByUserId(String userId, Pageable pageable);
+    Page<Post> findByClientName(String clientName, Pageable pageable);
+    Page<Post> findByTitle(String title, Pageable pageable);
 }

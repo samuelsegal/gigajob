@@ -65,27 +65,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 			.apply(
 					new SpringSocialConfigurer()
 	                .postLoginUrl("/")
-	                .alwaysUsePostLoginUrl(true));
-/*
-    	http
-            .formLogin()
-                .loginPage("/login")
-                .loginProcessingUrl("/login/authenticate")
-                .failureUrl("/login?param.error=bad_credentials")
-                .permitAll()
-        .and()
-            .logout()
-                .logoutUrl("/logout")
-                .deleteCookies("JSESSIONID")
-        .and()
-            .authorizeRequests()
-                .antMatchers("/favicon.ico", "/static/**").permitAll()
-                .antMatchers("/**").authenticated()
-        .and()
-            .rememberMe()
-        .and()
-            .apply(new SpringSocialConfigurer());
-    */            
+	                .alwaysUsePostLoginUrl(true));         
     }
 
     @Bean

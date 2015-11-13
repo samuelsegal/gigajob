@@ -69,9 +69,7 @@
 			
 			<br/>		
 			<hr/>
-			
-
-									
+							
 			<form method="POST" th:action="@{/signout}">
 				<input type="hidden" name="_csrf" th:value="${_csrf.token}" />
 				<button class="btn btn-sm btn-primary badge" th:text="#{giga.signout}">Sign Ouuut</button>

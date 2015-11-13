@@ -19,6 +19,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.client.RestTemplate;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -69,18 +70,7 @@ public class ClientController {
 		
 	}
 	
-	@RequestMapping(value = { "/managePosts" }, method = RequestMethod.GET)
-	public String managePosts(Principal currentUser, Model model) {
-		
-		util.setModel(request, currentUser, model);
-		Post post = new Post();
-		IpLoc ipLoc = new IpLoc();
-		model.addAttribute("post",post);
-		model.addAttribute("loc", ipLoc);
-		return "client/postJob";
-		
-	}
-	
+
 	@RequestMapping(value = { "/submitJob" }, method = RequestMethod.POST)
 	public String submitJob(Principal currentUser, Model model,
 			@ModelAttribute Post post, @ModelAttribute IpLoc loc) {
@@ -130,6 +120,62 @@ public class ClientController {
 		}
 
 		return "client/userPosts";
+	}
+
+	@RequestMapping(value = { "/managePosts" }, method = RequestMethod.GET)
+	public String managePosts(Principal currentUser, Model model,
+			@RequestParam(value = "distance", 
+							required = false, 
+							defaultValue = "30") 
+							String distance) {
+		
+		util.setModel(request, currentUser, model);
+		try {		
+			String ipAddress = request.getHeader("X-FORWARDED-FOR");
+			if (ipAddress == null) {
+				ipAddress = request.getRemoteAddr();		
+			}
+		
+			ServerLocation location = getLocation(ipAddress);
+			LOG.debug(String.format("Client IP Addy: %s", ipAddress));
+			LOG.debug(String.format("Client Loaked the Cloak: %s", location.toString()));
+			
+			IpLoc ipLoc = new IpLoc();
+			ipLoc.setLatitude(Double.valueOf(location.getLatitude()));
+			ipLoc.setLongitude(Double.valueOf(location.getLongitude()));
+			Page<Post> posts = postService.findByUserId(
+					currentUser.getName(), new PageRequest(0,100));
+			model.addAttribute("posts", posts.getContent());	
+			ObjectMapper mapper = new ObjectMapper();
+			String postsAsJSON = mapper.writeValueAsString(posts);
+			model.addAttribute("postsAsJSON",postsAsJSON);
+			LOG.debug("PostsAsJSON: " + postsAsJSON);
+			
+		} catch (Exception e) {
+			LOG.error(e.getMessage());
+			model.addAttribute("message",e.getMessage());
+			return "error";
+		}
+		
+		return "client/userPosts";
+	}
+	
+	@RequestMapping(value = { "/editPost" }, method = RequestMethod.GET)
+	public String editPost(Principal currentUser, Model model,
+			@RequestParam(value = "postid") 
+							String postid) {
+		
+		util.setModel(request, currentUser, model);
+
+		Post post = postService.findOne(postid);
+		model.addAttribute("post", post);	
+
+		IpLoc ipLoc = new IpLoc();
+		ipLoc.setLatitude(Double.valueOf(post.getLocation()[0]));
+		ipLoc.setLongitude(Double.valueOf(post.getLocation()[1]));
+		model.addAttribute("loc",ipLoc);
+		
+		return "client/editPost";
 	}
 	
 	private ServerLocation getLocation(String ipAddress) throws Exception{

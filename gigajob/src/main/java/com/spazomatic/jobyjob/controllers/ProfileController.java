@@ -3,21 +3,20 @@ package com.spazomatic.jobyjob.controllers;
 import java.security.Principal;
 
 import javax.inject.Inject;
-import javax.inject.Provider;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.social.connect.Connection;
-import org.springframework.social.connect.ConnectionRepository;
-import org.springframework.social.facebook.api.Facebook;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.spazomatic.jobyjob.db.dao.UsersDao;
+import com.spazomatic.jobyjob.db.model.UserProfile;
 import com.spazomatic.jobyjob.nosql.entities.GigaProvider;
 import com.spazomatic.jobyjob.nosql.entities.IpLoc;
 import com.spazomatic.jobyjob.service.GigaProviderService;
@@ -54,7 +53,7 @@ public class ProfileController {
 		
 	}
 	
-	@RequestMapping("/assignRole")
+	@RequestMapping(value = { "/assignRole" }, method = RequestMethod.POST)
 	public String assignRole(Principal currentUser, Model model,
 			@RequestParam(value = "roleParam") String roleParam) {
 		
@@ -65,9 +64,7 @@ public class ProfileController {
 		if(Util.ROLE_CLIENT.equals(roleParam)){
 			return "client/createClientProfile";
 		}else if(Util.ROLE_PROVIDER.equals(roleParam)){
-			GigaProvider gigaProvider = gigaProviderService.findByUserId(currentUser.getName()) != null 
-					? gigaProviderService.findByUserId(currentUser.getName()) 
-					: new GigaProvider();
+			GigaProvider gigaProvider = getGigaProvider(currentUser);
 			IpLoc ipLoc = new IpLoc();
 			model.addAttribute("gigaProvider",gigaProvider);
 			return "provider/providerProfile";
@@ -75,6 +72,21 @@ public class ProfileController {
 			return "error";
 		}
 		
+	}
+
+	private GigaProvider getGigaProvider(Principal currentUser) {
+		GigaProvider gigaProvider = gigaProviderService.findByUserId(currentUser.getName()); 
+		if(gigaProvider == null){
+			HttpSession session = request.getSession();
+			UserProfile userProfile = (UserProfile) session.getAttribute(
+					SocialControllerUtil.USER_PROFILE);
+			gigaProvider = new GigaProvider();
+			gigaProvider.setActive(false);
+			gigaProvider.setDescription("");
+			gigaProvider.setTitle(userProfile.getName() != null ? userProfile.getName() : "");
+			gigaProvider.setProviderName(userProfile.getName() != null ? userProfile.getName() : "");
+		}
+		return gigaProvider;
 	}
 	
 }

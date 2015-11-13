@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.geo.Distance;
 import org.springframework.data.geo.Metrics;
 import org.springframework.data.geo.Point;
@@ -64,5 +65,23 @@ public class PostServiceImpl implements PostService{
 				location, new Distance(Double.valueOf(distance), Metrics.MILES), 
 				pageRequest);
 		return postPage;
+	}
+
+	@Override
+	public Page<Post> findByUserId(String userId, Pageable pageable) {
+		Page<Post> postPage = postRepository.findByUserId(userId, pageable);
+		return postPage;		
+	}
+
+	@Override
+	public Page<Post> findByClientName(String clientName, Pageable pageable) {
+		Page<Post> postPage = postRepository.findByClientName(clientName, pageable);
+		return postPage;	
+	}
+
+	@Override
+	public Page<Post> findByTitle(String title, Pageable pageable) {
+		Page<Post> postPage = postRepository.findByTitle(title, pageable);
+		return postPage;	
 	}
 }

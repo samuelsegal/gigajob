@@ -51,9 +51,8 @@ public class ProviderController {
 	public String providerProfile(Principal currentUser, Model model) {
 		
 		util.setModel(request, currentUser, model);
-		GigaProvider gigaProvider = gigaProviderService.findByUserId(currentUser.getName()) != null 
-				? gigaProviderService.findByUserId(currentUser.getName()) 
-				: new GigaProvider();
+
+		GigaProvider gigaProvider = getGigaProvider(currentUser);
 		IpLoc ipLoc = new IpLoc();
 		model.addAttribute("gigaProvider",gigaProvider);
 		model.addAttribute("loc", ipLoc);
@@ -110,6 +109,22 @@ public class ProviderController {
 		model.addAttribute("loc", ipLoc);
 		return "provider/providerProfile";
 	}	
+	
+	private GigaProvider getGigaProvider(Principal currentUser) {
+		GigaProvider gigaProvider = gigaProviderService.findByUserId(currentUser.getName()); 
+		if(gigaProvider == null){
+			HttpSession session = request.getSession();
+			UserProfile userProfile = (UserProfile) session.getAttribute(
+					SocialControllerUtil.USER_PROFILE);
+			gigaProvider = new GigaProvider();
+			gigaProvider.setActive(false);
+			gigaProvider.setDescription("");
+			gigaProvider.setTitle(userProfile.getName());
+			gigaProvider.setProviderName(userProfile.getUsername());
+		}
+		return gigaProvider;
+	}
+	
 	private ServerLocation getLocation(String ipAddress) throws Exception{
 		ServerLocation location = null;
 		try {
