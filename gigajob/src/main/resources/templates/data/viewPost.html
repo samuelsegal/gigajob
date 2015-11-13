@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	  xmlns:social="http://spring.io/springsocial"
+	  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	  layout:decorator="layout/layout">
+
+<head>
+ 	<link href='css/form.css' rel='stylesheet' />
+	<link href='css/gigadiv.css' rel='stylesheet' />
+    <style type="text/css">
+	    .custom {
+	    	width: 278px !important;
+		}
+		.card{
+			margin: 10px;
+			padding: 10px;
+			height: 600px;
+		}
+    </style>
+ </head>
+    	
+<body>
+<main layout:fragment="content" class="mdl-layout__content mdl-color--grey-100">		
+	<div id="container" class="card">
+		<div class="row">
+			<div class="col-md-2"></div>
+			<div class="col-md-8">								
+				<table class="table">
+					<thead>
+						<tr>
+							<td><h3><span th:text="#{giga.Post}"></span></h3></td>
+						</tr>
+					</thead>
+					<tr> 
+						<td><label for="title" th:text="#{giga.Title}"></label></td>
+					  	<td th:text="${post.title}" id="title" ></td>
+					</tr><tr>
+					  	<td><label for="description" th:text="#{giga.Description}"></label></td>
+					  	<td th:text="${post.description}" id="description"></td>
+					</tr><tr>
+					  	<td><label for="clientName" th:text="#{giga.Poster}"></label></td>
+					  	<td id="clientName"><a th:href="@{/viewClientProfile(userid=${post?.userId})}" th:text="${post.clientName}" ></a></td>								
+					</tr>
+				</table>
+			</div>
+			<div class="col-md-2"></div>
+		</div>
+	</div>
+</main>
+</body>
+</html>

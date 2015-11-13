@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:social="http://spring.io/springsocial"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorator="layout/layout">
+<head>
+	<link href='css/form.css' rel='stylesheet' />
+	<link href='css/gigadiv.css' rel='stylesheet' />
+
+    <style type="text/css">
+	    .custom {
+	    	width: 278px !important;
+		}
+		.card{
+			margin: 10px;
+			padding: 10px;
+			height: 600px;
+		}
+    </style>	
+</head>
+<body>
+<main layout:fragment="content" class="mdl-layout__content mdl-color--grey-100">
+
+	<div id="container">
+
+	  <div class="card">
+
+		<img th:src="${clientSocialConnect} ? ${clientSocialConnect.imageUrl} : @{images/user.jpg}" class="demo-avatar"/>		
+		<span th:text="${clientSocialConnect.displayName}" class="mdl-color-text--blue-grey-400">user name</span>
+		
+		<table class="table">
+			<thead>
+				<tr>
+					<td><h3><span th:text="#{giga.Poster}"></span></h3></td>
+				</tr>
+			</thead>
+			<tr> 
+				<td><label for="name" th:text="#{giga.Name}"></label></td>
+			  	<td th:text="${clientProfile.name}" id="name" ></td>
+			</tr><tr>
+			  	<td><label for="firstName" th:text="#{giga.FirstName}"></label></td>
+			  	<td th:text="${clientProfile.firstName}" id="firstName"></td>
+			</tr><tr>
+			  	<td><label for="lastName" th:text="#{giga.LastName}"></label></td>
+			  	<td th:text="${clientProfile.lastName}" id="lastName"> </td>								
+			</tr>
+		</table>			
+		
+		<br/>		
+		<hr/>
+						
+		<form method="POST" th:action="@{/signout}">
+			<input type="hidden" name="_csrf" th:value="${_csrf.token}" />
+			<button class="btn btn-sm btn-primary badge" th:text="#{giga.signout}">Sign Ouuut</button>
+		</form>      
+
+		</div>
+	</div>
+</main>
+
+</body>
+</html>

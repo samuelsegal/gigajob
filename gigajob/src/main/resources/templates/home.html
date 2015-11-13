@@ -18,7 +18,7 @@
 
 		  		<div class="jumbotron">
 					<h3 class="text-muted">Welcome, <span th:text="${gigauserconnection.displayName}">name!</span></h3>
-					<form method="GET" th:action="@{/table}">
+					<form method="GET" th:action="@{/listPosts}">
 						<input type="hidden" name="_csrf" th:value="${_csrf.token}" />
 						<button class="btn btn-sm btn-primary badge custom" th:text="#{giga.viewGigs}"></button>
 					</form>			

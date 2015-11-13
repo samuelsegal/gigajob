@@ -15,9 +15,7 @@
 		
 </head>
 <body>
-
-
-	<main layout:fragment="content" class="mdl-layout__content mdl-color--grey-100">
+<main layout:fragment="content" class="mdl-layout__content mdl-color--grey-100">
 	<div id="container">
 		<div class="row">	
 		<div class="col-md-2"></div>
@@ -38,7 +36,7 @@
 					</thead>
 					<tbody>
 						<tr th:each="post : ${posts}">
-							<td th:text="${post?.title}"></td>
+							<td><a th:href="@{/viewPost(postid=${post?.id})}" th:text="${post?.title}"></a></td>
 							<td th:text="(${post?.description} != null) ? ${post?.description} : null"></td>
 							<td th:text="(${post?.clientName} != null) ? ${post?.clientName} : null"></td>
 						</tr>
@@ -54,10 +52,10 @@
 			</div>
 			<div class="col-md-2"></div>
 		</div>
-		</div>
-	</main>
-	<!-- Latest compiled and minified JavaScript -->
-	<script
-		src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+	</div>
+</main>
+<!-- Latest compiled and minified JavaScript -->
+<script
+	src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
 </body>
 </html>

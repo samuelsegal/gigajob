@@ -93,8 +93,8 @@ public class HomeController {
 		
 	}
 	
-	@RequestMapping(value = { "/table" }, method = RequestMethod.GET)
-	public String table(Principal currentUser, Model model,
+	@RequestMapping(value = { "/listPosts" }, method = RequestMethod.GET)
+	public String listPosts(Principal currentUser, Model model,
 			@RequestParam(value = "distance", 
 							required = false, 
 							defaultValue = "30") 
@@ -129,7 +129,7 @@ public class HomeController {
 			return "error";
 		}
 		
-		return "data/table";
+		return "data/listPosts";
 	}
 	
 	@RequestMapping(value = { "/listProviders" }, method = RequestMethod.GET)
@@ -153,10 +153,10 @@ public class HomeController {
 			IpLoc ipLoc = new IpLoc();
 			ipLoc.setLatitude(Double.valueOf(location.getLatitude()));
 			ipLoc.setLongitude(Double.valueOf(location.getLongitude()));
-			//Page<GigaProvider> gigaProviders = gigaProviderService.findByLocationNear(
-			// Point(ipLoc.getLatitude(), ipLoc.getLongitude()),
-			//		"3000", new PageRequest(0,200));
-			Iterable<GigaProvider> gigaProviders = gigaProviderService.findAll();
+			Page<GigaProvider> gigaProviders = gigaProviderService.findByLocationNear(
+					new Point(ipLoc.getLatitude(), ipLoc.getLongitude()),
+					"90000", new PageRequest(0,200));
+			//Iterable<GigaProvider> gigaProviders = gigaProviderService.findAll();
 			model.addAttribute("gigaProviders", gigaProviders);
 			ObjectMapper mapper = new ObjectMapper();
 			String postsAsJSON = mapper.writeValueAsString(gigaProviders);

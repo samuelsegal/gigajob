@@ -21,14 +21,26 @@
 				<img th:src="${fb_connection.imageUrl}" class="demo-avatar" />
 				
 				<span th:text="${gigauser.login}" class="mdl-color-text--blue-grey-400">username</span>
-			
-				<br />
-				<hr />
-				<div class="mdl-color-text--blue-400">
-				Email: <span th:text="${gigauser.email}" >email</span><br /> 
-				First Name: <span th:text="${gigauser.firstName}" >first name</span><br />
-				Last Name: <span th:text="${gigauser.lastName}">last name</span><br />
-				</div>
+				<table class="table">
+					<thead>
+						<tr>
+							<td><h3><span th:text="#{giga.Poster}"></span></h3></td>
+						</tr>
+					</thead>
+					<tr> 
+						<td><label for="name" th:text="#{giga.Name}"></label></td>
+					  	<td th:text="${gigauser.name}" id="name" ></td>
+					</tr><tr>
+					  	<td><label for="firstName" th:text="#{giga.FirstName}"></label></td>
+					  	<td th:text="${gigauser.firstName}" id="firstName"></td>
+					</tr><tr>
+					  	<td><label for="lastName" th:text="#{giga.LastName}"></label></td>
+					  	<td th:text="${gigauser.lastName}" id="lastName"> </td>								
+					</tr><tr>
+					  	<td><label for="email" th:text="#{giga.Email}"></label></td>
+					  	<td th:text="${gigauser.email}" id="email"> </td>								
+					</tr>
+				</table>
 				<hr />
 				<form method="GET" th:action="@{/editProfile}">
 					<input type="hidden" name="_csrf" th:value="${_csrf.token}" />

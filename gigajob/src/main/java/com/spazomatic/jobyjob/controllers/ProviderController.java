@@ -82,7 +82,7 @@ public class ProviderController {
 		
 		HttpSession session = request.getSession();
 		UserProfile client = (UserProfile) session.getAttribute(SocialControllerUtil.USER_PROFILE);
-		gigaProvider.setProviderName(client.getUsername());
+		gigaProvider.setProviderName(client.getName());
 		
 		gigaProviderService.update(gigaProvider);	
 		IpLoc ipLoc = new IpLoc();
@@ -101,7 +101,7 @@ public class ProviderController {
 		
 		HttpSession session = request.getSession();
 		UserProfile client = (UserProfile) session.getAttribute(SocialControllerUtil.USER_PROFILE);
-		gigaProvider.setProviderName(client.getUsername());
+		gigaProvider.setProviderName(client.getName());
 		
 		gigaProviderService.save(gigaProvider);	
 		IpLoc ipLoc = new IpLoc();

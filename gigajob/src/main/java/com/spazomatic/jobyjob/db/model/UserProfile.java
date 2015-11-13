@@ -4,26 +4,19 @@ import java.util.List;
 
 public class UserProfile {
 
-    private final String userId;
+    private String userId;
 
     private String name;
 
-    private final String firstName;
+    private String firstName;
 
-    private final String lastName;
+    private String lastName;
 
-    private final String email;
+    private String email;
 
-    private final String username;
-
-    private List<String> roles;
+    private String username;
     
-    public List<String> getRoles() {
-		return roles;
-	}
-	public void setRoles(List<String> roles) {
-		this.roles = roles;
-	}
+    public UserProfile(){}
 	public UserProfile(String userId, String name, String firstName, String lastName, String email, String username) {
         this.userId = userId;
         this.name = name;
@@ -45,6 +38,16 @@ public class UserProfile {
         
         fixName();
     }
+    private List<String> roles;
+    
+    public List<String> getRoles() {
+		return roles;
+	}
+	public void setRoles(List<String> roles) {
+		this.roles = roles;
+	}
+	
+
     private void fixName() {
         // Is the name null?
         if (name == null) {

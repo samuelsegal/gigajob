@@ -97,10 +97,10 @@ public class GigaProviderServiceImpl implements GigaProviderService{
 				.is(gigaProvider.getUserId()));
 		
 		Update update = new Update()
-				.set("name",gigaProvider.getProviderName())
-				.set("title", gigaProvider.getTitle())
-				.set("description", gigaProvider.getDescription());
-			
+				.set("providerName", gigaProvider.getProviderName())
+				.set("title",        gigaProvider.getTitle())
+				.set("description",  gigaProvider.getDescription())
+				.set("location",     gigaProvider.getLocation());
 		return mongoTemplate.findAndModify(providerToUpdate, update, 
 				new FindAndModifyOptions().returnNew(true).upsert(true), 
 				GigaProvider.class);		

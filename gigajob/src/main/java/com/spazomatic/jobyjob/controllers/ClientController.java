@@ -7,7 +7,6 @@ import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
-import org.bson.types.ObjectId;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,6 +24,7 @@ import org.springframework.web.client.RestTemplate;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.maxmind.geoip2.exception.GeoIp2Exception;
 import com.spazomatic.jobyjob.db.dao.UsersDao;
+import com.spazomatic.jobyjob.db.model.UserConnection;
 import com.spazomatic.jobyjob.db.model.UserProfile;
 import com.spazomatic.jobyjob.location.ServerLocation;
 import com.spazomatic.jobyjob.location.ServerLocationBo;
@@ -57,12 +57,28 @@ public class ClientController {
 	public ClientController(UsersDao usersDao) {
 		this.usersDao = usersDao;
 	}
+
+	@RequestMapping(value= { "/viewClientProfile" }, method = RequestMethod.GET)
+	public String viewClientProfile(Principal currentUser, Model model,
+									@ModelAttribute UserProfile clientProfile,
+									@ModelAttribute UserConnection clientSocialConnect,
+									@RequestParam(value = "userid", 
+									required = true) String userid){
+		
+		util.setModel(request, currentUser, model);
+		clientProfile       = usersDao.getUserProfile(userid);
+		clientSocialConnect = usersDao.getUserConnection(userid); 
+		model.addAttribute("clientProfile",       clientProfile);
+		model.addAttribute("clientSocialConnect", clientSocialConnect);
+		return "client/viewClientProfile";
+		
+	}
 	
 	@RequestMapping(value = { "/postJob" }, method = RequestMethod.GET)
 	public String postJob(Principal currentUser, Model model) {
 		
 		util.setModel(request, currentUser, model);
-		Post post = new Post();
+		Post post   = new Post();
 		IpLoc ipLoc = new IpLoc();
 		model.addAttribute("post",post);
 		model.addAttribute("loc", ipLoc);
@@ -80,7 +96,7 @@ public class ClientController {
 		post.setUserId(currentUser.getName());
 		
 		HttpSession session = request.getSession();
-		UserProfile client = (UserProfile) session.getAttribute(SocialControllerUtil.USER_PROFILE);
+		UserProfile client  = (UserProfile) session.getAttribute(SocialControllerUtil.USER_PROFILE);
 		post.setClientName(client.getName());
 		
 		postService.save(post);	

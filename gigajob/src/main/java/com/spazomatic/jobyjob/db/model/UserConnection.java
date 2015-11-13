@@ -2,19 +2,20 @@ package com.spazomatic.jobyjob.db.model;
 
 public class UserConnection {
 
-    private final String userId;
+    private String userId;
 
-    private final String providerId;
-    private final String providerUserId;
-    private final int rank;
-    private final String displayName;
-    private final String profileUrl;
-    private final String imageUrl;
-    private final String accessToken;
-    private final String secret;
-    private final String refreshToken;
-    private final Long expireTime;
+    private String providerId;
+    private String providerUserId;
+    private int rank;
+    private String displayName;
+    private String profileUrl;
+    private String imageUrl;
+    private String accessToken;
+    private String secret;
+    private String refreshToken;
+    private Long expireTime;
 
+    public UserConnection(){}
     public UserConnection(String userId, String providerId, String providerUserId, int rank, String displayName, String profileUrl, String imageUrl, String accessToken, String secret, String refreshToken, Long expireTime) {
         this.userId = userId;
         this.providerId = providerId;

@@ -31,20 +31,23 @@
 				<img th:src="${gigauserconnection.imageUrl}" class="demo-avatar" />
 				
 				<span th:text="${gigauser.name}" class="mdl-color-text--blue-grey-400">name</span>
-						
-				<br />
-				<hr />
-				
-				<div class="mdl-color-text--blue-400">
-				<span th:text="(${gigaProvider.providerName} != null) ? #{giga.provider.label.providerAd} : ''" >provider name</span>
-				<span th:text="(${gigaProvider.providerName} != null) ? ${gigaProvider.providerName} : ''" >name</span><br /> 
-				
-				<span th:text="(${gigaProvider.title} != null) ? #{giga.provider.label.titleAd} : ''" >provider title</span>
-				<span th:text="(${gigaProvider.title} != null) ? ${gigaProvider.title} : ''" >title</span><br />
-				
-				<span th:text="(${gigaProvider.description} != null) ? #{giga.provider.label.descriptionAd} : ''" >provider description</span>
-				<span th:text="(${gigaProvider.description} != null) ? ${gigaProvider.description} : ''">description</span><br />
-				</div>
+				<table class="table">
+					<thead>
+						<tr>
+							<td><h3><span th:text="#{giga.Poster}"></span></h3></td>
+						</tr>
+					</thead>
+					<tr> 
+						<td><label for="name" th:text="#{giga.Name}"></label></td>
+					  	<td th:text="${gigaProvider.providerName}" id="name" ></td>
+					</tr><tr>
+					  	<td><label for="firstName" th:text="#{giga.FirstName}"></label></td>
+					  	<td th:text="${gigaProvider.title}" id="firstName"></td>
+					</tr><tr>
+					  	<td><label for="lastName" th:text="#{giga.LastName}"></label></td>
+					  	<td th:text="${gigaProvider.description}" id="lastName"> </td>								
+					</tr>
+				</table>
 				
 				<br />
 				<hr />				
