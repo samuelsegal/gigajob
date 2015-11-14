@@ -2,60 +2,61 @@
 <html xmlns:th="http://www.thymeleaf.org"
 	xmlns:social="http://spring.io/springsocial"
 	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-	layout:decorator="layout">
+	layout:decorator="layout/layout">
+<head>
+	<link href='css/form.css' rel='stylesheet' />
+	<link href='css/gigadiv.css' rel='stylesheet' />
 
+    <style type="text/css">
+	    .custom {
+	    	width: 278px !important;
+		}
+		.card{
+			margin:  10px;
+			padding: 10px;
+			height:  600px;
+			width:   500px;
+		}
+    </style>	
+</head>
 <body>
-
-
-	<main layout:fragment="content"
-		class="mdl-layout__content mdl-color--grey-100">
-
-	<div id="container">
-		<div class="row">
-			<div class="col-md-12"><br /></div>
-		</div>
-		<div class="row">
-			<div class="col-md-2"></div>
-			<div class="col-md-6">
-				
-				<img th:src="${fb_connection.imageUrl}" class="demo-avatar" />
-				
-				<span th:text="${gigauser.login}" class="mdl-color-text--blue-grey-400">username</span>
+<main layout:fragment="content" class="mdl-layout__content mdl-color--grey-100">
+<div id="container" class="card">
+	<div class="row">
+		<div class="col-md-12"><br /></div>
+	</div>
+	<div class="row">
+		<div class="col-md-12">
+			<form method="POST" th:action="@{/updateProfile}" th:object="${gigauser}" >				
 				<table class="table">
 					<thead>
-						<tr>
-							<td><h3><span th:text="#{giga.Poster}"></span></h3></td>
-						</tr>
-					</thead>
+					<tr>
+						<td><img th:src="${gigauserconnection} ? ${gigauserconnection.imageUrl} : @{images/user.jpg}" class="demo-avatar"/>
+						</td>
+						<td><h5><span th:text="${gigauserconnection.displayName}" class="mdl-color-text--blue-grey-400">user name</span>
+						</h5></td>
+					</tr>
+					</thead>					
 					<tr> 
 						<td><label for="name" th:text="#{giga.Name}"></label></td>
-					  	<td th:text="${gigauser.name}" id="name" ></td>
+					  	<td><input th:field="*{name}" id="name" /></td>
 					</tr><tr>
 					  	<td><label for="firstName" th:text="#{giga.FirstName}"></label></td>
-					  	<td th:text="${gigauser.firstName}" id="firstName"></td>
+					  	<td><input th:field="*{firstName}" id="firstName" /></td>
 					</tr><tr>
 					  	<td><label for="lastName" th:text="#{giga.LastName}"></label></td>
-					  	<td th:text="${gigauser.lastName}" id="lastName"> </td>								
+					  	<td><input th:field="*{lastName}" id="lastName" /> </td>								
 					</tr><tr>
 					  	<td><label for="email" th:text="#{giga.Email}"></label></td>
-					  	<td th:text="${gigauser.email}" id="email"> </td>								
+					  	<td><input th:field="*{email}" id="email" /> </td>								
 					</tr>
 				</table>
-				<hr />
-				<form method="GET" th:action="@{/editProfile}">
-					<input type="hidden" name="_csrf" th:value="${_csrf.token}" />
-					<button type="submit" th:text="#{giga.profile.edit}"></button>
-				</form>
-				<form method="POST" th:action="@{/signout}">
-					<input type="hidden" name="_csrf" th:value="${_csrf.token}" />
-					<button>Sign Out</button>
-				</form>
-			</div>
-			<div class="col-md-4"></div>
+				<input type="hidden" name="_csrf" th:value="${_csrf.token}" />
+				<button type="submit" th:text="#{giga.Update}" class="btn btn-sm btn-primary badge"></button>
+			</form>
 		</div>
 	</div>
-
-	</main>
-
+</div>
+</main>
 </body>
 </html>

@@ -26,6 +26,10 @@
 						<input type="hidden" name="_csrf" th:value="${_csrf.token}" />
 						<button class="btn btn-sm btn-primary badge custom" th:text="#{giga.viewProviders}"></button>
 					</form>	
+					<form method="GET" th:action="@{/postRib}">
+						<input type="hidden" name="_csrf" th:value="${_csrf.token}" />
+						<button class="btn btn-sm btn-primary badge custom" th:text="#{giga.PostRib}"></button>
+					</form>						
 					<form method="POST" th:action="@{/signout}">
 						<input type="hidden" name="_csrf" th:value="${_csrf.token}" />
 						<button class="btn btn-sm btn-primary badge custom" th:text="#{giga.signout}">Sign Out</button>

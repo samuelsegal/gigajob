@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:social="http://spring.io/springsocial"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorator="layout/layout">
+
+<head>
+	<link href='css/form.css' rel='stylesheet' />
+	<link href='css/gigadiv.css' rel='stylesheet' />
+    <style type="text/css">
+	    .custom {
+	    	width: 278px !important;
+		}
+		.card{
+			margin: 10px;
+			padding: 10px;
+			height: 600px;
+		}
+    </style>
+</head>
+<body>
+<main layout:fragment="content" class="mdl-layout__content mdl-color--grey-100">
+	<div id="container" class="card">
+		<div class="row">
+			<div class="col-md-12"><br /></div>
+		</div>
+		<div class="row">
+			<div class="col-md-8">
+				<table class="table">
+					<thead>
+						<tr>
+							<td><h5><span th:text="${gigaProvider?.title}"></span></h5></td>
+						</tr>
+					</thead>
+					<tr> 
+						<td><label for="name" th:text="#{giga.Name}"></label></td>
+					  	<td th:text="${gigaProvider?.providerName}" id="name" ></td>
+					</tr><tr>
+					  	<td><label for="description" th:text="#{giga.Description}"></label></td>
+					  	<td th:text="${gigaProvider?.description}" id="description"></td>
+					</tr>
+				</table>			
+
+			</div>
+			<div class="col-md-4"></div>
+		</div>
+	</div>
+</main>
+
+</body>
+</html>

@@ -170,6 +170,14 @@ public class HomeController {
 		
 		return "data/listGigaProviders";
 	}
+
+	@RequestMapping( value = { "/postRib" }, method = RequestMethod.GET )
+	public String postRib(Principal currentUser, Model model){
+				
+		util.setModel(request, currentUser, model);
+		return "usr/postRib";
+	
+	}
 	
 	private ServerLocation getLocation(String ipAddress) throws Exception{
 		ServerLocation location = null;

@@ -3,7 +3,6 @@ package com.spazomatic.jobyjob.controllers;
 import java.io.IOException;
 import java.security.Principal;
 
-import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
@@ -15,6 +14,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.client.RestTemplate;
 
 import com.maxmind.geoip2.exception.GeoIp2Exception;
@@ -59,6 +59,20 @@ public class ProviderController {
 		return "provider/providerProfile";	
 	}
 	
+	@RequestMapping(value = { "/viewProviderProfile" }, method = RequestMethod.GET)
+	public String viewProviderProfile(Principal currentUser, Model model,
+			@RequestParam( value = "userid", required = true) String userid) {
+		
+		util.setModel(request, currentUser, model);
+
+		GigaProvider gigaProvider = gigaProviderService.findByUserId(userid); 
+		IpLoc ipLoc = new IpLoc();
+		model.addAttribute("gigaProvider",gigaProvider);
+		model.addAttribute("loc", ipLoc);
+		return "data/viewProviderProfile";	
+	}	
+
+
 	@RequestMapping(value = { "/editProviderProfile" }, method = RequestMethod.GET)
 	public String editProviderProfile(Principal currentUser, Model model) {
 		
@@ -124,7 +138,7 @@ public class ProviderController {
 		}
 		return gigaProvider;
 	}
-	
+
 	private ServerLocation getLocation(String ipAddress) throws Exception{
 		ServerLocation location = null;
 		try {

@@ -32,27 +32,30 @@
 			
 			<form th:if="${gigauser.roles.contains('ROLE_CLIENT')} != true" method="POST" th:action="@{/assignRole}">
 				<input type="hidden" name="_csrf" th:value="${_csrf.token}" />
-				<button th:text="#{giga.profile.client.signup}" class="btn btn-sm btn-primary badge" name="roleParam" value="ROLE_CLIENT">Sign UP ClyBy</button>
-				
+				<button th:text="#{giga.profile.client.signup}" class="btn btn-sm btn-primary badge" name="roleParam" value="ROLE_CLIENT">Sign UP ClyBy</button>			
 			</form>	
 			<form th:if="${gigauser.roles.contains('ROLE_PROVIDER')} != true" method="POST" th:action="@{/assignRole}">
 				<input type="hidden" name="_csrf" th:value="${_csrf.token}" />				
 				<button th:text="#{giga.profile.provider.signup}" class="btn btn-sm btn-primary badge" name="roleParam" value="ROLE_PROVIDER">Sign Up And PRo Ride</button>
 			</form>		
+			
 			<br />
 			<hr />
-			<img th:src="${gigauserconnection} ? ${gigauserconnection.imageUrl} : @{images/user.jpg}" class="demo-avatar"/>
-			
-			<span th:text="${gigauserconnection.displayName}" class="mdl-color-text--blue-grey-400">user name</span>
+				
 			<table class="table">
 				<thead>
 					<tr>
-						<td><h3><span th:text="#{giga.Poster}"></span></h3></td>
+						<td>
+							<img th:src="${gigauserconnection} ? ${gigauserconnection.imageUrl} : @{images/user.jpg}" class="demo-avatar"/>
+						</td>
+						<td><h5>
+							<span th:text="${gigauserconnection.displayName}" class="mdl-color-text--blue-grey-400">user name</span>
+						</h5></td>
 					</tr>
 				</thead>
 				<tr> 
-					<td><label for="name" th:text="#{giga.Name}"></label></td>
-				  	<td th:text="${gigauser.name}" id="name" ></td>
+					<td><label for="userName" th:text="#{giga.UserName}"></label></td>
+				  	<td th:text="${gigauser.username}" id="userName" ></td>
 				</tr><tr>
 				  	<td><label for="firstName" th:text="#{giga.FirstName}"></label></td>
 				  	<td th:text="${gigauser.firstName}" id="firstName"></td>

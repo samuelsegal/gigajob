@@ -34,10 +34,8 @@
 						</tr>
 					</thead>
 					<tbody>
-						<tr th:each="post : ${posts}">
-							
-							<td><a th:href="@{/editPost(postid=${post?.id})}" th:text="${post?.title}"></a></td>
-							
+						<tr th:each="post : ${posts}">							
+							<td><a th:href="@{/viewPost(postid=${post?.id})}" th:text="${post?.title}"></a></td>						
 							<td th:text="(${post?.description} != null) ? ${post?.description} : null"></td>
 							<td th:text="(${post?.clientName} != null) ? ${post?.clientName} : null"></td>
 						</tr>

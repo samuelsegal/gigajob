@@ -12,9 +12,10 @@
 	    	width: 278px !important;
 		}
 		.card{
-			margin: 10px;
+			margin:  10px;
 			padding: 10px;
-			height: 600px;
+			height:  600px;
+			width:   400px;
 		}
     </style>
  </head>
@@ -23,12 +24,11 @@
 <main layout:fragment="content" class="mdl-layout__content mdl-color--grey-100">		
 	<div id="container" class="card">
 		<div class="row">
-			<div class="col-md-2"></div>
-			<div class="col-md-8">								
+			<div class="col-md-12">								
 				<table class="table">
 					<thead>
 						<tr>
-							<td><h3><span th:text="#{giga.Post}"></span></h3></td>
+							<td><h5><span th:text="#{giga.Post}"></span></h5></td>
 						</tr>
 					</thead>
 					<tr> 
@@ -43,7 +43,6 @@
 					</tr>
 				</table>
 			</div>
-			<div class="col-md-2"></div>
 		</div>
 	</div>
 </main>
