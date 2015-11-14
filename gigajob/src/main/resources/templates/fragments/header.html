@@ -4,9 +4,9 @@
         <div class="mdl-layout__header-row">
           <span class="mdl-layout-title">LOGOS</span>
 			
-          <a th:if="${gigauser.roles.contains('ROLE_CLIENT')} == true" class="mdl-navigation__link" th:href="@{/postJob}"><i class="mdl-color-text--blue-grey-400 material-icons" role="presentation">note_add</i>Post a Post</a>
-          <a th:if="${gigauser.roles.contains('USER')} == true" class="mdl-navigation__link" th:href="@{/profile}"><i class="mdl-color-text--blue-grey-400 material-icons" role="presentation">account_circle</i>Profile</a>
-          <a th:if="${gigauser.roles.contains('ROLE_PROVIDER')} == true" class="mdl-navigation__link" th:href="@{/becomeAvailable}"><i class="mdl-color-text--blue-grey-400 material-icons" role="presentation">accessibility</i>Accessibility</a>
+          <a th:if="${gigauser.roles.contains('ROLE_CLIENT')} == true" th:href="@{/postJob}"><i class="material-icons">note_add</i>Post a Post</a>
+          <a th:if="${gigauser.roles.contains('USER')} == true" th:href="@{/profile}"><i class="material-icons">account_circle</i>Profile</a>
+          <a th:if="${gigauser.roles.contains('ROLE_PROVIDER')} == true" th:href="@{/becomeAvailable}"><i class="material-icons">accessibility</i>Accessibility</a>
           <div class="mdl-layout-spacer"></div>
           <div class="mdl-textfield mdl-js-textfield mdl-textfield--expandable">
             <label class="mdl-button mdl-js-button mdl-button--icon" for="search">

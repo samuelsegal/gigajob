@@ -53,7 +53,6 @@ public class PostController {
 			@ModelAttribute Post post, @ModelAttribute IpLoc loc){
 				
 		util.setModel(request, currentUser, model);
-		return "usr/postRib";
-	
+		return "usr/postRib";	
 	}
 }

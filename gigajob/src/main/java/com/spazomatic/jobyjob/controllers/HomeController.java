@@ -20,6 +20,7 @@ import java.security.Principal;
 
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
+import javax.swing.Icon;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -175,6 +176,10 @@ public class HomeController {
 	public String postRib(Principal currentUser, Model model){
 				
 		util.setModel(request, currentUser, model);
+		Post rib = new Post();
+		IpLoc loc = new IpLoc();
+		model.addAttribute("rib", rib);
+		model.addAttribute("loc", loc);
 		return "usr/postRib";
 	
 	}

@@ -3,7 +3,43 @@
 	  xmlns:social="http://spring.io/springsocial"
 	  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
 	  layout:decorator="layout/layout">
-
+<head>
+	
+	<link href='css/gigadiv.css' rel='stylesheet' />
+	<link href='css/form.css' rel='stylesheet' />
+    <style type="text/css">
+	    .custom {
+	    	width: 278px !important;
+		}
+		.card{
+			margin:  10px;
+			padding: 10px;
+			height:  600px;
+			width:   400px;
+		}
+    </style>
+	<script src="js/fileUpload.js" type="text/javascript"></script>
+	<script>
+	var todo_global_js_ok_or_no;
+	function onFileSelected(event) {
+		
+		var selectedFile = event.srcElement.files[0];
+		var reader = new FileReader();
+		var imgtag = document.getElementById(todo_global_js_ok_or_no);
+		imgtag.title = selectedFile.name;
+		imgtag.src = selectedFile.name;
+		reader.onload = function(event) {
+		  imgtag.src = event.target.result;
+		};
+		reader.readAsDataURL(selectedFile);			  
+	}
+	function chooseFile(imgNum) {
+		
+		todo_global_js_ok_or_no = 'postNail' + imgNum;
+		$("#fileInput").click();
+	}
+	</script>
+</head>
 <body>
 <main layout:fragment="content" class="mdl-layout__content mdl-color--grey-100">		
 <div id="container">
@@ -11,19 +47,23 @@
 		<div class="col-md-2"></div>
 		<div class="col-md-8">			
 	
-			<form method="POST" th:object="${post}" th:action="@{/postRibSubmit}" id="postForm" class="" role="form">
+			<form id="file-form" method="POST" enctype="multipart/form-data" th:object="${rib}" th:action="@{/submitJob}">
 				<fieldset>			
 				<input type="hidden" name="_csrf" th:value="${_csrf.token}" />
 				<table class="table">
-					<thead>
-						<tr><td>
-						<h5 th:text="#{giga.appname}"></h5>
-						</td></tr>
+					<thead class="center">
+						<tr>
+							<td colspan="6"><h3 th:text="#{giga.appname}"></h3></td>
+						</tr>
+						<tr>
+							<td colspan="6"><h5 th:text="#{giga.INeedSomeoneTo}"></h5></td>
+						</tr>						
+						
 					</thead>
 					<tbody>
 						<tr>
-							<td>
-							  <input list="categories" th:field="*{tag?.name}" />
+							<td colspan="4">
+							  <input list="categories" th:field="*{tags[0]?.id}" placeholder="!Help me lift a.." />
 							  <datalist id="categories">
 							    <option value="!Help me lift a.." />
 							    <option value="!Move a.." />
@@ -34,62 +74,72 @@
 							    <option value="!Work on my crew.." />
 							  </datalist>	
 							</td>
-							<td>
-								<input type="text" th:field="*{title}" th:placeholder="with..." id="title" name="title" />
-							</td>
-						</tr><tr>
-							<td></td>
-							<td>
-								<button type="button" onclick="getLocation()" th:text="#{giga.UseCurrentLocation}"></button>
-							</td>
-							  <input type="hidden" th:field="${loc.latitude}" id="loclat"/>
-							  <input type="hidden" th:field="${loc.longitude}" id="loclon"/>	
-							
-								<script th:inline="javascript">
-		
-									 console.log("LATITUDE LONGITUDE");
-									 navigator.geolocation.getCurrentPosition(assignPosition);
-									 function assignPosition(pos){
-										 console.log(pos.coords.latitude);
-										 console.log(pos.coords.longitude); 
-										 document.getElementById("loclat").value = pos.coords.latitude;
-										 console.log($('loclat').val());
-										 document.getElementById("loclon").value = pos.coords.longitude;
-										 console.log($('loclon').val());
-									 }
-			
-								</script>	
-						</tr><tr>
-							<td>
-							</td>
-							<td>
-								<textarea th:field="*{description}" th:placeholder="Enter additional details here..."/> 
-							</td>
-						</tr><tr>
-							<td></td>
-							<td>
-								<input type="text" th:placeholder="with..." />
-							</td>
-						</tr><tr>
+
 							<td colspan="2">
+								<input type="text" th:field="*{tags[0]?.name}" th:placeholder="with..." id="title" name="title" />
+							</td>
+						</tr><tr>
 							
+							<td colspan="6">								
+								<a href="#"><i class="material-icons">room</i>Current Location</a>
+								<input type="hidden" th:field="${loc.latitude}" id="loclat"/>
+								<input type="hidden" th:field="${loc.longitude}" id="loclon"/>	
+								
+
 							</td>
-						</tr><tr>																	
+						</tr><tr>
+							<td colspan="6">
+								<textarea th:field="*{description}" th:placeholder="#{giga.AddDetails}"></textarea> 
+							</td>
+						</tr><tr>
+							<td colspan="6">
+								<input type="text" th:field="*{title}" th:placeholder="#{giga.AdditionalBangTags}" />
+							</td>
+						</tr><tr>
+							<td colspan="1">
+								<div style="height:0px;width:0px;overflow:hidden">
+								   <input type="file" onchange="onFileSelected(event)" id="fileInput" name="fileInput" />
+								</div>
+								<a href="#" onclick="chooseFile(1)"><i class="material-icons">camera_alt</i></a>
+							</td><td colspan="1">
+								<a href="#" onclick="chooseFile(2)"><i class="material-icons">camera_alt</i></a>																				
+							</td><td colspan="1">
+								<a href="#" onclick="chooseFile(3)"><i class="material-icons">camera_alt</i></a>																					
+							</td><td colspan="1">
+								<a href="#" onclick="chooseFile(4)"><i class="material-icons">camera_alt</i></a>																					
+							</td><td colspan="1">
+								<a href="#" onclick="chooseFile(5)"><i class="material-icons">camera_alt</i></a>																				
+							</td><td colspan="1">																												
+						        <button type="submit" name="save" th:text="#{giga.Post}" class="btn btn-sm btn-primary badge">Post</button>				
+							</td>
+						</tr>
+						<tr>
 							<td>
-						        <div class="submit">
-						          <button type="submit" name="save" th:text="#{giga.Post}">Post</button>
-						        </div>						
+								<img id="postNail1" src="" style="height:50px;width:50px"></img>
 							</td>
+							<td>
+								<img id="postNail2" src="" style="height:50px;width:50px"></img>
+							</td>
+							<td>
+								<img id="postNail3" src="" style="height:50px;width:50px"></img>
+							</td>
+							<td>
+								<img id="postNail4" src="" style="height:50px;width:50px"></img>
+							</td>
+							<td>
+								<img id="postNail5" src="" style="height:50px;width:50px"></img>
+							</td>																												
 						</tr>				
 					</tbody>
 				</table>
 				</fieldset>
-				
+			
 			</form>
 		</div>
 		<div class="col-md-2"></div>
 	</div>
 </div>
 </main>
+
 </body>
 </html>

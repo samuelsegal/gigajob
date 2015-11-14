@@ -23,6 +23,7 @@ public class Post {
 	@GeoSpatialIndexed(type = GeoSpatialIndexType.GEO_2DSPHERE)
     private double[] location;
 
+	private List<String> imageURLs;
 	// @Field(type= FieldType.Nested)
     private List<Tag> tags;
     
@@ -86,6 +87,7 @@ public class Post {
 		this.clientName = clientName;
 	}
 
+
 	public double[] getLocation() {
 		return location;
 	}
@@ -93,8 +95,17 @@ public class Post {
 	public void setLocation(double[] location) {
 		this.location = location;
 	}
+
 	
-    public List<Tag> getTags() {
+    public List<String> getImageURLs() {
+		return imageURLs;
+	}
+
+	public void setImageURLs(List<String> imageURLs) {
+		this.imageURLs = imageURLs;
+	}
+
+	public List<Tag> getTags() {
         return tags;
     }
 
