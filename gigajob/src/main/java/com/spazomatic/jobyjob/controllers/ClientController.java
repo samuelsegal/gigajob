@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.maxmind.geoip2.exception.GeoIp2Exception;
@@ -89,7 +90,12 @@ public class ClientController {
 
 	@RequestMapping(value = { "/submitJob" }, method = RequestMethod.POST)
 	public String submitJob(Principal currentUser, Model model,
-			@ModelAttribute Post post, @ModelAttribute IpLoc loc) {
+			@ModelAttribute Post post, @ModelAttribute IpLoc loc, 
+			@ModelAttribute MultipartFile fileInput1, 
+			@ModelAttribute MultipartFile fileInput2,
+			@ModelAttribute MultipartFile fileInput3,
+			@ModelAttribute MultipartFile fileInput4,
+			@ModelAttribute MultipartFile fileInput5) {
 		
 		util.setModel(request, currentUser, model);
 		post.setLocation(new double[]{loc.getLatitude(), loc.getLongitude()});

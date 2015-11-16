@@ -2,11 +2,12 @@ package com.spazomatic.jobyjob.nosql.entities;
 
 import java.util.List;
 
-import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.annotation.Transient;
 import org.springframework.data.mongodb.core.index.GeoSpatialIndexType;
 import org.springframework.data.mongodb.core.index.GeoSpatialIndexed;
 import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.web.multipart.MultipartFile;
 @Document
 //@Document(indexName = "jobyjob", type = "geo-class-point-type", shards = 1, replicas = 0)
 public class Post {
@@ -26,6 +27,9 @@ public class Post {
 	private List<String> imageURLs;
 	// @Field(type= FieldType.Nested)
     private List<Tag> tags;
+    
+    @Transient
+    List<MultipartFile> imgFiles;
     
     public Post(){
     }
@@ -112,4 +116,13 @@ public class Post {
     public void setTags(List<Tag> tags) {
         this.tags = tags;
     }
+
+	public List<MultipartFile> getImgFiles() {
+		return imgFiles;
+	}
+
+	public void setImgFiles(List<MultipartFile> imgFiles) {
+		this.imgFiles = imgFiles;
+	}    
+    
 }

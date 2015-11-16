@@ -14,6 +14,7 @@ import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.core.query.Update;
+import org.springframework.data.mongodb.gridfs.GridFsTemplate;
 import org.springframework.stereotype.Service;
 
 import com.spazomatic.jobyjob.nosql.entities.GigaProvider;
@@ -22,12 +23,12 @@ import com.spazomatic.jobyjob.service.GigaProviderService;
 
 @Service
 public class GigaProviderServiceImpl implements GigaProviderService{
-    @Autowired
-    private GigaProviderRepository gigaProviderRepository;
+    @Autowired private GigaProviderRepository gigaProviderRepository;
 	
-    @Autowired
-	private MongoTemplate mongoTemplate;
+    @Autowired private MongoTemplate mongoTemplate;
 	
+    @Autowired GridFsTemplate template;
+    
     @Override
     public GigaProvider save(GigaProvider gigaProvider) {
         gigaProviderRepository.save(gigaProvider);
