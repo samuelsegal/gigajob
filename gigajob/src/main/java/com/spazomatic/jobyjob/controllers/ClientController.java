@@ -2,6 +2,8 @@ package com.spazomatic.jobyjob.controllers;
 
 import java.io.IOException;
 import java.security.Principal;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
@@ -199,7 +201,57 @@ public class ClientController {
 		
 		return "client/editPost";
 	}
+
+	@RequestMapping(value = { "/confirmSubmitRib" }, method = RequestMethod.POST)
+	public String confirmSubmitRib(Principal currentUser, Model model,
+			@ModelAttribute Post post, @ModelAttribute IpLoc loc) {
+
+        post.setLocation(new double[]{loc.getLatitude(), loc.getLongitude()});	
+		util.setModel(request, currentUser, model);		
+		post.setUserId(currentUser.getName());		
+		HttpSession session = request.getSession();
+		UserProfile client  = (UserProfile) session.getAttribute(
+				SocialControllerUtil.USER_PROFILE);
+		post.setClientName(client.getName());	
+		postService.save(post);
+
+		String ipAddress = request.getHeader("X-FORWARDED-FOR");
+		if (ipAddress == null) {
+			ipAddress = request.getRemoteAddr();		
+		}
 	
+		ServerLocation location;
+		try {
+			location = getLocation(ipAddress);
+
+			LOG.debug(String.format("Client IP Addy: %s", ipAddress));
+			LOG.debug(String.format("Client Loaked the Cloak: %s", 
+					location.toString()));
+			
+			IpLoc ipLoc = new IpLoc();
+			ipLoc.setLatitude(Double.valueOf(location.getLatitude()));
+			ipLoc.setLongitude(Double.valueOf(location.getLongitude()));
+			
+			Page<Post> posts = postService.findByLocationNear(
+					new Point(ipLoc.getLatitude(), ipLoc.getLongitude()),
+					"30", new PageRequest(0,100));
+			model.addAttribute("posts", posts.getContent());
+			
+			ObjectMapper mapper = new ObjectMapper();
+
+				String postsAsJSON = mapper.writeValueAsString(posts);
+				model.addAttribute("postsAsJSON",postsAsJSON);
+				LOG.debug("postsAsJSON: " + postsAsJSON);
+
+			model.addAttribute("posts", posts.getContent());		
+		} catch (Exception e) {
+			LOG.error(e.getMessage());
+			model.addAttribute("message",e.getMessage());
+			return "error";
+		}
+
+		return "client/userPosts";
+	}
 	private ServerLocation getLocation(String ipAddress) throws Exception{
 		ServerLocation location = null;
 		try {

@@ -20,6 +20,7 @@ import java.security.Principal;
 
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import javax.swing.Icon;
 
 import org.slf4j.Logger;
@@ -174,12 +175,17 @@ public class HomeController {
 
 	@RequestMapping( value = { "/postRib" }, method = RequestMethod.GET )
 	public String postRib(Principal currentUser, Model model){
-				
+		HttpSession session = request.getSession();
+		
 		util.setModel(request, currentUser, model);
-		Post rib = new Post();
+		Post rib =  session.getAttribute("rib") != null ? 
+				(Post) session.getAttribute("rib") : new Post();
+				
+		session.removeAttribute("rib");
 		IpLoc loc = new IpLoc();
 		model.addAttribute("rib", rib);
 		model.addAttribute("loc", loc);
+		
 		return "usr/postRib";
 	
 	}

@@ -10,10 +10,11 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.config.annotation.web.servlet.configuration.EnableWebMvcSecurity;
+import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.social.security.SocialUserDetailsService;
 import org.springframework.social.security.SpringSocialConfigurer;
 
+import com.spazomatic.jobyjob.security.MyCustomLoginSuccessHandler;
 import com.spazomatic.jobyjob.service.SimpleSocialUsersDetailService;
 
 @Configuration
@@ -55,19 +56,22 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 				.antMatchers("/admin/**", "/favicon.ico", 
 						"/static/**","/static/img/**", 
 						"/auth/**", "/signin/**", 
-						"/signup/**", "/disconnect/facebook").permitAll()
-				.antMatchers("/**").authenticated()
-				.antMatchers("/client/**").access("hasRole('CLIENT')")
-				.antMatchers("/provider/**").access("hasRole('PROVIDER')")
-		.and()
-			.rememberMe()
+						"/signup/**", "/disconnect/**",
+						"/usr/**","/index.html").permitAll()
+				.antMatchers("/sec_*").authenticated()
+				//.antMatchers("/client/**").access("hasRole('CLIENT')")
+				//.antMatchers("/provider/**").access("hasRole('PROVIDER')")
+		.and().requestCache()
 		.and()
 			.apply(
-					new SpringSocialConfigurer()
-	                .postLoginUrl("/")
-	                .alwaysUsePostLoginUrl(true));         
+					new SpringSocialConfigurer().postLoginUrl("/home"));         
     }
 
+    @Bean
+    public AuthenticationSuccessHandler successHandler() {
+        return new MyCustomLoginSuccessHandler("/home");
+    }
+    
     @Bean
     public SocialUserDetailsService socialUsersDetailService() {
         return new SimpleSocialUsersDetailService(userDetailsService());

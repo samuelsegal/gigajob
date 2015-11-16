@@ -8,6 +8,7 @@ import java.util.Map;
 import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -17,11 +18,16 @@ import org.springframework.social.connect.ConnectionRepository;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.MultiValueMap;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.context.request.WebRequest;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.spazomatic.jobyjob.db.dao.DataDao;
+import com.spazomatic.jobyjob.nosql.entities.IpLoc;
+import com.spazomatic.jobyjob.nosql.entities.Post;
 import com.spazomatic.jobyjob.util.SocialControllerUtil;
 import com.spazomatic.jobyjob.util.Util;
 
@@ -38,16 +44,40 @@ public class MainController {
 
     @Autowired
     private SocialControllerUtil util;
-
     @RequestMapping("/")
+    public String usr() {
+       // util.setModel(request, currentUser, model);
+    	
+        return "usr/index";
+    }    
+    
+    @RequestMapping("/home")
     public String home(HttpServletRequest request, Principal currentUser, Model model) {
+        HttpSession session = request.getSession();
+        if (session != null) {
+            String redirectUrl = (String) session.getAttribute("url_prior_login");
+            if (redirectUrl != null) {
+                // we do not forget to clean this attribute from session
+                session.removeAttribute("url_prior_login");
+                // then we redirect
+                util.setModel(request, currentUser, model);
+                return "redirect:" + redirectUrl;
+            } else {
+               // super.onAuthenticationSuccess(request, response, authentication);
+            }
+        } 
+
         util.setModel(request, currentUser, model);
         return "home";
     }
 
     @RequestMapping("/signin")
-    public String login(HttpServletRequest request, Principal currentUser, Model model) {
+    public String login(HttpServletRequest request, Principal currentUser, Model model,
+    		Post post,RedirectAttributes redirectAttributes) {
         util.setModel(request, currentUser, model);
+        String referrer = request.getHeader("Referer");
+        LOG.debug("REFERER:::::::::"+referrer);
+        request.getSession().setAttribute("url_prior_login", referrer);
         return "login";
     }
 

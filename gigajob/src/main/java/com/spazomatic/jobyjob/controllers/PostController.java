@@ -1,7 +1,5 @@
 package com.spazomatic.jobyjob.controllers;
 
-import java.awt.image.ImageFilter;
-import java.io.File;
 import java.io.IOException;
 import java.security.Principal;
 import java.util.ArrayList;
@@ -27,7 +25,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.maxmind.geoip2.exception.GeoIp2Exception;
-import com.mongodb.gridfs.GridFSDBFile;
 import com.spazomatic.jobyjob.db.model.UserProfile;
 import com.spazomatic.jobyjob.location.ServerLocation;
 import com.spazomatic.jobyjob.location.ServerLocationBo;
@@ -42,17 +39,10 @@ public class PostController {
 	
 	private static final Logger LOG = LoggerFactory.getLogger(Util.LOG_TAG);
 	
-	@Autowired
-	private PostService postService;
-	
-	@Autowired
-	private HttpServletRequest request;
-
-	@Autowired
-	private ServerLocationBo serverLocationBo;	
-	
-    @Autowired
-    private SocialControllerUtil util;
+	@Autowired private PostService postService;	
+	@Autowired private HttpServletRequest request;
+	@Autowired private ServerLocationBo serverLocationBo;		
+    @Autowired private SocialControllerUtil util;
     
 	public PostController() {
 	}
@@ -75,6 +65,7 @@ public class PostController {
 		util.setModel(request, currentUser, model);
 		return "usr/postRib";	
 	}
+	
 	@RequestMapping(value = { "/submitRib" }, method = RequestMethod.POST)
 	public String submitRib(Principal currentUser, Model model,
 			@ModelAttribute Post post, @ModelAttribute IpLoc loc, 
@@ -84,70 +75,52 @@ public class PostController {
 			@ModelAttribute MultipartFile fileInput4,
 			@ModelAttribute MultipartFile fileInput5) {
 
-    	LOG.debug("UHHHHHHHHHHHHHHHH....");
     	List<MultipartFile> imgFiles = new ArrayList<>();
         if (!fileInput1.isEmpty()) {
-        	LOG.debug("FILE NOT EMPTY, WHA WHA WHA WHA????");
             try {            	
             	//store files with post
             	imgFiles.add(fileInput1);    
             	post.setImgFiles(imgFiles);
             } catch (Exception e) {
-            	LOG.error("SHHHEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEET");
-             //   return "You failed to upload " + fileInput1.getName() + " => " + e.getMessage();
+            	LOG.error(String.format(
+            			"ERROR setting Post Image files :: %s", 
+            			e.getMessage()));
             }
         }	
-		
-		util.setModel(request, currentUser, model);
-		post.setLocation(new double[]{loc.getLatitude(), loc.getLongitude()});
-		post.setUserId(currentUser.getName());
-		
+        if(loc != null && loc.getLatitude() != null && loc.getLongitude() != null){
+        	post.setLocation(new double[]{loc.getLatitude(), loc.getLongitude()});
+        }
+		if(currentUser == null){
+			HttpSession session = request.getSession();
+			session.setAttribute("rib", post);
+			return "redirect:/sec_submitRib";
+		}		
+		util.setModel(request, currentUser, model);		
+		post.setUserId(currentUser.getName());		
 		HttpSession session = request.getSession();
-		UserProfile client  = (UserProfile) session.getAttribute(SocialControllerUtil.USER_PROFILE);
+		UserProfile client  = (UserProfile) session.getAttribute(
+				SocialControllerUtil.USER_PROFILE);
 		post.setClientName(client.getName());
-		if(imgFiles.isEmpty()){
-			postService.save(post);
-		}else{
-			postService.save(post);
-		}
 		
-		String ipAddress = request.getHeader("X-FORWARDED-FOR");
-		if (ipAddress == null) {
-			ipAddress = request.getRemoteAddr();		
-		}
+		model.addAttribute("rib", post);
+		model.addAttribute("loc", loc);
+		return "client/confirmSubmitRib";
 	
-		ServerLocation location;
-		try {
-			location = getLocation(ipAddress);
-
-			LOG.debug(String.format("Client IP Addy: %s", ipAddress));
-			LOG.debug(String.format("Client Loaked the Cloak: %s", location.toString()));
-			
-			IpLoc ipLoc = new IpLoc();
-			ipLoc.setLatitude(Double.valueOf(location.getLatitude()));
-			ipLoc.setLongitude(Double.valueOf(location.getLongitude()));
-			
-			Page<Post> posts = postService.findByLocationNear(
-					new Point(ipLoc.getLatitude(), ipLoc.getLongitude()),
-					"30", new PageRequest(0,100));
-			model.addAttribute("posts", posts.getContent());
-			
-			ObjectMapper mapper = new ObjectMapper();
-
-				String postsAsJSON = mapper.writeValueAsString(posts);
-				model.addAttribute("postsAsJSON",postsAsJSON);
-				LOG.debug("postsAsJSON: " + postsAsJSON);
-
-			model.addAttribute("posts", posts.getContent());		
-		} catch (Exception e) {
-			LOG.error(e.getMessage());
-			model.addAttribute("message",e.getMessage());
-			return "error";
-		}
-
-		return "client/userPosts";
 	}
 
+	@RequestMapping(value = { "/sec_submitRib" }, method = RequestMethod.GET)
+	public String sec_submitRib(Principal currentUser, Model model) {
+		HttpSession session = request.getSession();
+		
+		util.setModel(request, currentUser, model);
+		Post rib =  session.getAttribute("rib") != null ? 
+				(Post) session.getAttribute("rib") : new Post();
+		IpLoc loca = new IpLoc();
+		model.addAttribute("rib", rib);
+		model.addAttribute("loc", loca);
+		return "client/confirmSubmitRib";
+
+	}
 	
 	private ServerLocation getLocation(String ipAddress) throws Exception{
 		ServerLocation location = null;

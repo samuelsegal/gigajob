@@ -39,6 +39,7 @@ public class PersistenceConfig {
 
   @Bean
   public DataSource restDataSource() {
+  	 //TODO: revisit all this, may be causing leak, requires org.apache.commons:commons-dbcp2:2.1
      BasicDataSource dataSource = new BasicDataSource();
      dataSource.setDriverClassName(env.getProperty("jdbc.driverClassName"));
      dataSource.setUrl(env.getProperty("jdbc.url"));
