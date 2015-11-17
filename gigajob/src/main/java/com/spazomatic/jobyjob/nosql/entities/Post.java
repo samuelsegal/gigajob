@@ -2,12 +2,15 @@ package com.spazomatic.jobyjob.nosql.entities;
 
 import java.util.List;
 
+import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.Transient;
 import org.springframework.data.mongodb.core.index.GeoSpatialIndexType;
 import org.springframework.data.mongodb.core.index.GeoSpatialIndexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.web.multipart.MultipartFile;
+
+import com.google.api.client.util.DateTime;
 @Document
 //@Document(indexName = "jobyjob", type = "geo-class-point-type", shards = 1, replicas = 0)
 public class Post {
@@ -19,17 +22,22 @@ public class Post {
     private String userId;
     private Boolean active;
     private String clientName;
-    
-    
+       
 	@GeoSpatialIndexed(type = GeoSpatialIndexType.GEO_2DSPHERE)
     private double[] location;
 
 	private List<String> imageURLs;
-	// @Field(type= FieldType.Nested)
     private List<Tag> tags;
     
     @Transient
     List<MultipartFile> imgFiles;
+    
+    @CreatedDate private DateTime createdDate;
+    
+    private DateTime expirationTime;
+    
+    private EstimatedTime estimatedTime;
+    private BasePay basePay;
     
     public Post(){
     }
@@ -123,6 +131,38 @@ public class Post {
 
 	public void setImgFiles(List<MultipartFile> imgFiles) {
 		this.imgFiles = imgFiles;
+	}
+
+	public DateTime getCreatedDate() {
+		return createdDate;
+	}
+
+	public void setCreatedDate(DateTime createdDate) {
+		this.createdDate = createdDate;
+	}
+
+	public DateTime getExpirationTime() {
+		return expirationTime;
+	}
+
+	public void setExpirationTime(DateTime expirationTime) {
+		this.expirationTime = expirationTime;
+	}
+
+	public EstimatedTime getEstimatedTime() {
+		return estimatedTime;
+	}
+
+	public void setEstimatedTime(EstimatedTime estimatedTime) {
+		this.estimatedTime = estimatedTime;
+	}
+
+	public BasePay getBasePay() {
+		return basePay;
+	}
+
+	public void setBasePay(BasePay basePay) {
+		this.basePay = basePay;
 	}    
     
 }

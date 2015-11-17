@@ -57,9 +57,15 @@
 				<table class="table">
 					<thead class="center">
 						<tr>
-							<td colspan="6"><h3 th:text="#{giga.appname}"></h3><br/>
+							<td colspan="4"><h3 th:text="#{giga.appname}"></h3><br/>
 
 							<h5 th:text="#{giga.INeedSomeoneTo}"></h5></td>
+							
+							<td colspan="2">
+								<a th:href="@{/postRib}"><button th:text="#{giga.Edit}" class="btn btn-sm btn-primary badge"></button></a>
+								<br/>
+								<button type="submit" name="save" th:text="#{giga.Save}" class="btn btn-sm btn-primary badge">Save</button>
+							</td>
 						</tr>						
 						
 					</thead>
@@ -111,6 +117,29 @@
 								<input type="text" th:field="*{title}" th:placeholder="#{giga.AdditionalBangTags}" />
 							</td>
 						</tr><tr>
+							<td colspan="3">
+								<label for="timeSpan" th:text="#{giga.EstimatedTime}"></label>
+								<input type="number" id="timeSpan" th:field="*{estimatedTime.timeSpan}" style="width:40px" placeholder="1"/>
+								  <input list="timeMetrics" th:field="*{estimatedTime.timeMetric}" placeholder="mins" />
+								  <datalist id="timeMetrics">
+								    <option value="mins" />
+								    <option value="hours" />
+								    <option value="days" />
+								  </datalist>							
+							</td>
+							<td colspan="3">
+								<span th:text="#{giga.BasePay}"></span>
+								<input type="text" th:field="*{basePay.wage}" />
+								<span th:text="#{giga.Per}"></span>
+								
+								  <input list="timeMetrics" th:field="*{basePay.per}" placeholder="job" />
+								  <datalist id="timeMetrics">
+								    <option value="job" />
+								    <option value="item" />
+								    <option value="hour" />
+								  </datalist>	
+							</td>							
+						</tr><tr>
 							<td colspan="1">
 								<div style="height:0px;width:0px;overflow:hidden">
 								   <input type="file" onchange="onFileSelected(event)" id="fileInput1" name="fileInput1" />
@@ -142,7 +171,7 @@
 						</tr>
 						<tr>
 							<td>
-								<img th:field="*{imgFiles[0]" id="postNail1" src="" style="height:50px;width:50px"></img>
+								<img th:field="*{imgFiles[0]}" id="postNail1" style="height:50px;width:50px"></img>
 							</td>
 							<td>
 								<img id="postNail2" src="" style="height:50px;width:50px"></img>
