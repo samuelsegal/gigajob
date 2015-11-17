@@ -17,6 +17,7 @@ import javax.servlet.http.HttpSession;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.security.web.WebAttributes;
@@ -119,7 +120,7 @@ public class SocialControllerUtil {
         model.addAttribute("exception",               exception == null ? null : exception.getMessage());
         model.addAttribute("currentUserId",           userId);
         model.addAttribute(Util.GIGA_USER,            profile);
-        model.addAttribute(Util.GIGA_USER_CONNECTION, connection);
+        model.addAttribute(Util.GIGA_USER_CONNECTION, connection != null ? connection : null);
         model.addAttribute("currentUserDisplayName",  displayName);
         model.addAttribute("currentData",             data);
 
@@ -128,8 +129,8 @@ public class SocialControllerUtil {
         }
     }
 
-    public void updateSession(HttpSession session, String userId){
-    	 
+    public void updateSession(HttpServletRequest request, String userId){
+    	 HttpSession session = request.getSession();
     	 //TODO: optimize for when there bazillions...
     	 UserProfile userProfile  = usersDao.getUserProfile(userId);
          
@@ -209,7 +210,11 @@ public class SocialControllerUtil {
 
         // Reload from persistence storage if not set or invalid (i.e. no valid userId)
         if (connection == null || !userId.equals(connection.getUserId())) {
-            connection = usersDao.getUserConnection(userId);
+            try{
+            	connection = usersDao.getUserConnection(userId);
+            }catch(EmptyResultDataAccessException ex){
+            	connection = new UserConnection();
+            }
             session.setAttribute(USER_CONNECTION, connection);
         }
         return connection;

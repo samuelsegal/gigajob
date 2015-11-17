@@ -2,13 +2,12 @@
 <html xmlns:th="http://www.thymeleaf.org"
 	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
 	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3"
-	layout:decorator="layout.html">
+	layout:decorator="layout/layout">
 <head>
-<script type="text/javascript" src="/static/js/app/user.form.js"
-	th:src="@{/static/js/app/user.form.js}"></script>
+<script type="text/javascript" src="js/form.js"></script>
 </head>
 <body>
-	<div layout:fragment="body">
+	<main layout:fragment="content" class="mdl-layout__content mdl-color--grey-100">
 		<div class="page-header">
 			<h1 th:text="#{label.user.registration.page.title}">Register
 				User Account</h1>
@@ -70,6 +69,6 @@
 		<p sec:authorize="isAuthenticated()" th:text="#{text.registration.page.authenticated.user.help}">
 			You cannot create an user account because you are already logged in.
 		</p>
-	</div>
+	</main>
 </body>
 </html>

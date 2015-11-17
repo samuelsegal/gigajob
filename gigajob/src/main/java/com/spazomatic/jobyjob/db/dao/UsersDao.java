@@ -117,8 +117,7 @@ public class UsersDao {
                 profile.getName() + ", " +
                 profile.getUsername());
         }
-
-        jdbcTemplate.update("INSERT into users(username,password,enabled) values(?,?,true)",userId, RandomStringUtils.randomAlphanumeric(8));
+        jdbcTemplate.update("INSERT into users(username,password,enabled) values(?,?,true)",userId,RandomStringUtils.randomAlphanumeric(8));       
         jdbcTemplate.update("INSERT into authorities(username,authority) values(?,?)",userId,"USER");
         jdbcTemplate.update("INSERT into UserProfile(userId, email, firstName, lastName, name, username) values(?,?,?,?,?,?)",
             userId,
@@ -127,5 +126,37 @@ public class UsersDao {
             profile.getLastName(),
             profile.getName(),
             profile.getUsername());
+    }
+    public void createUser(String userId, UserProfile profile, User user) {
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("SQL INSERT ON users, authorities and UserProfile: " + userId + " with profile: " +
+                profile.getEmail() + ", " +
+                profile.getFirstName() + ", " +
+                profile.getLastName() + ", " +
+                profile.getName() + ", " +
+                profile.getUsername());
+        }
+        String pw = user.getPassword();
+        jdbcTemplate.update("INSERT into users(username,password,enabled) values(?,?,true)",userId,pw);
+        jdbcTemplate.update("INSERT into authorities(username,authority) values(?,?)",userId,"USER");
+        jdbcTemplate.update("INSERT into UserProfile(userId, email, firstName, lastName, name, username) values(?,?,?,?,?,?)",
+            userId,
+            profile.getEmail(),
+            profile.getFirstName(),
+            profile.getLastName(),
+            profile.getName(),
+            profile.getUsername());
+    }
+    public void updateUser(UserProfile up, String userId) throws DataAccessException{
+
+        jdbcTemplate.update("UPDATE UserProfile SET name = ?, firstName = ?, lastName = ?, username = ? WHERE userId = ?",
+        		up.getName(), 
+        		up.getFirstName(), 
+        		up.getLastName(),
+        		up.getUsername(), 
+        		userId);
+    	if (LOG.isDebugEnabled()) {
+            LOG.debug(String.format("SQL :: %s FOR USerProfile %s",jdbcTemplate.toString(), up));
+        }        
     }
 }

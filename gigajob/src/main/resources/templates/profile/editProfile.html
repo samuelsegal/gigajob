@@ -27,30 +27,19 @@
 	</div>
 	<div class="row">
 		<div class="col-md-12">
-			<form method="POST" th:action="@{/updateProfile}" th:object="${gigauser}" >				
-				<table class="table">
-					<thead>
-					<tr>
-						<td><img th:src="${gigauserconnection} ? ${gigauserconnection.imageUrl} : @{images/user.jpg}" class="demo-avatar"/>
-						</td>
-						<td><h5><span th:text="${gigauserconnection.displayName}" class="mdl-color-text--blue-grey-400">user name</span>
-						</h5></td>
-					</tr>
-					</thead>					
-					<tr> 
-						<td><label for="name" th:text="#{giga.Name}"></label></td>
-					  	<td><input th:field="*{name}" id="name" /></td>
-					</tr><tr>
-					  	<td><label for="firstName" th:text="#{giga.FirstName}"></label></td>
-					  	<td><input th:field="*{firstName}" id="firstName" /></td>
-					</tr><tr>
-					  	<td><label for="lastName" th:text="#{giga.LastName}"></label></td>
-					  	<td><input th:field="*{lastName}" id="lastName" /> </td>								
-					</tr><tr>
-					  	<td><label for="email" th:text="#{giga.Email}"></label></td>
-					  	<td><input th:field="*{email}" id="email" /> </td>								
-					</tr>
-				</table>
+			<form th:method="POST" th:action="@{/updateProfile}" th:object="${gigauser}" >				
+
+<label th:text="#{giga.UserName}"></label>
+<input th:field="*{username}" />
+<label th:text="#{giga.Name}"></label>
+<input th:field="*{name}" />
+<label th:text="#{giga.FirstName}"></label>
+<input th:field="*{firstName}" />
+<label th:text="#{giga.LastName}"></label>
+<input th:value="*{lastName}" th:field="*{lastName}"/>
+<label th:text="#{giga.Email}"></label>
+<input th:field="*{email}"/> 							
+
 				<input type="hidden" name="_csrf" th:value="${_csrf.token}" />
 				<button type="submit" th:text="#{giga.Update}" class="btn btn-sm btn-primary badge"></button>
 			</form>

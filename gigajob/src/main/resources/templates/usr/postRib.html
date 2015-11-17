@@ -5,8 +5,8 @@
 	  layout:decorator="layout/layout">
 <head>
 	
-	<link href='css/gigadiv.css' rel='stylesheet' />
-	<link href='css/form.css' rel='stylesheet' />
+	<link th:href="@{css/gigadiv.css}" rel='stylesheet' />
+	<link href="@{css/form.css}" rel='stylesheet' />
     <style type="text/css">
 	    .custom {
 	    	width: 278px !important;
@@ -126,8 +126,8 @@
 								<input type="text" th:field="*{basePay.wage}" />
 								<span th:text="#{giga.Per}"></span>
 								
-								  <input list="timeMetrics" th:field="*{basePay.per}" placeholder="job" />
-								  <datalist id="timeMetrics">
+								  <input list="per" th:field="*{basePay.per}" placeholder="job" />
+								  <datalist id="per">
 								    <option value="job" />
 								    <option value="item" />
 								    <option value="hour" />
@@ -136,9 +136,9 @@
 						</tr><tr>
 							<td colspan="1">
 								<div style="height:0px;width:0px;overflow:hidden">
-								   <input type="file" onchange="onFileSelected(event)" id="fileInput1" name="fileInput1" />
+								   <input type="file" th:onchange="onFileSelected(event)" id="fileInput1" name="fileInput1" />
 								</div>
-								<a href="#" onclick="chooseFile(1)"><i class="material-icons">camera_alt</i></a>
+								<a href="#" th:onclick="chooseFile(1)"><i class="material-icons">camera_alt</i></a>
 							</td><td colspan="1">
 								<div style="height:0px;width:0px;overflow:hidden">
 								   <input type="file" onchange="onFileSelected(event)" id="fileInput2" name="fileInput2" />
@@ -165,7 +165,7 @@
 						</tr>
 						<tr>
 							<td>
-								<img th:field="*{imgFiles[0]}" id="postNail1" src="" style="height:50px;width:50px"></img>
+								<img th:field="*{imgFiles[0]}" id="postNail1" src="${rib.imgFiles[0]?.originalFilename}" style="height:50px;width:50px"></img>
 							</td>
 							<td>
 								<img id="postNail2" src="" style="height:50px;width:50px"></img>

@@ -49,13 +49,16 @@
 							<img th:src="${gigauserconnection} ? ${gigauserconnection.imageUrl} : @{images/user.jpg}" class="demo-avatar"/>
 						</td>
 						<td><h5>
-							<span th:text="${gigauserconnection.displayName}" class="mdl-color-text--blue-grey-400">user name</span>
+							<span th:text="${gigauser.name}" class="mdl-color-text--blue-grey-400">user name</span>
 						</h5></td>
 					</tr>
 				</thead>
 				<tr> 
 					<td><label for="userName" th:text="#{giga.UserName}"></label></td>
 				  	<td th:text="${gigauser.username}" id="userName" ></td>
+				</tr><tr>
+				  	<td><label for="name" th:text="#{giga.Name}"></label></td>
+				  	<td th:text="${gigauser.name}" id="name"></td>
 				</tr><tr>
 				  	<td><label for="firstName" th:text="#{giga.FirstName}"></label></td>
 				  	<td th:text="${gigauser.firstName}" id="firstName"></td>

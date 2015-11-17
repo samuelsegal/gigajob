@@ -27,18 +27,12 @@ import com.spazomatic.jobyjob.util.Util;
 
 @Controller
 public class ProfileController {
-	private static final Logger LOG = LoggerFactory.getLogger(Util.LOG_TAG);
 	
+	private static final Logger LOG = LoggerFactory.getLogger(Util.LOG_TAG);	
 	private final UsersDao usersDao;
-
-	@Autowired
-	private GigaProviderService gigaProviderService;
-	
-    @Autowired
-    private SocialControllerUtil util;
-    
-	@Autowired
-	private HttpServletRequest request;
+	@Autowired private GigaProviderService gigaProviderService;	
+    @Autowired private SocialControllerUtil util;    
+	@Autowired private HttpServletRequest request;
 
 	@Inject
 	public ProfileController(UsersDao usersDao) {
@@ -50,19 +44,18 @@ public class ProfileController {
 	public String editProfile(Principal currentUser, Model model) {
 		
 		util.setModel(request, currentUser, model);
-		return "profile/editProfile";
-		
+		HttpSession session = request.getSession();
+		return "profile/editProfile";		
 	}
 	
 	@RequestMapping(value = { "/updateProfile" }, method = RequestMethod.POST)
 	public String updateProviderProfile(Principal currentUser, Model model,
-			@ModelAttribute UserProfile gigauser, @ModelAttribute IpLoc loc) {
+			@ModelAttribute("gigauser") UserProfile gigauser) {
 
 		LOG.debug(String.format("Updating User %s", gigauser));
+		usersDao.updateUser(gigauser, currentUser.getName());
+		util.updateSession(request, currentUser.getName());		
 		util.setModel(request, currentUser, model);
-		//HttpSession session = request.getSession();
-		// client = (UserProfile) session.getAttribute(SocialControllerUtil.USER_PROFILE);
-
 		return "profile/profile";
 	}
 	
@@ -71,7 +64,7 @@ public class ProfileController {
 			@RequestParam(value = "roleParam") String roleParam) {
 		
 		usersDao.addRole(currentUser.getName(), roleParam);
-		util.updateSession(request.getSession(),currentUser.getName());
+		util.updateSession(request,currentUser.getName());
 		util.setModel(request, currentUser, model);
 		
 		if(Util.ROLE_CLIENT.equals(roleParam)){
