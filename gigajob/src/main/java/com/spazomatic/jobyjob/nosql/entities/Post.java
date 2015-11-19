@@ -1,6 +1,7 @@
 package com.spazomatic.jobyjob.nosql.entities;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.Id;
@@ -8,7 +9,6 @@ import org.springframework.data.annotation.Transient;
 import org.springframework.data.mongodb.core.index.GeoSpatialIndexType;
 import org.springframework.data.mongodb.core.index.GeoSpatialIndexed;
 import org.springframework.data.mongodb.core.mapping.Document;
-import org.springframework.web.multipart.MultipartFile;
 
 import com.google.api.client.util.DateTime;
 @Document
@@ -30,7 +30,7 @@ public class Post {
     private List<Tag> tags;
     
     @Transient
-    List<MultipartFile> imgFiles;
+    Map<String, byte[]> imgFiles;
     
     @CreatedDate private DateTime createdDate;
     
@@ -125,11 +125,11 @@ public class Post {
         this.tags = tags;
     }
 
-	public List<MultipartFile> getImgFiles() {
+	public Map<String, byte[]> getImgFiles() {
 		return imgFiles;
 	}
 
-	public void setImgFiles(List<MultipartFile> imgFiles) {
+	public void setImgFiles(Map<String, byte[]> imgFiles) {
 		this.imgFiles = imgFiles;
 	}
 

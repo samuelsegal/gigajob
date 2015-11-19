@@ -1,33 +1,30 @@
 package com.spazomatic.jobyjob.controllers;
 
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.security.Principal;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.apache.tomcat.util.http.fileupload.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.geo.Point;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.client.RestTemplate;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.maxmind.geoip2.exception.GeoIp2Exception;
 import com.spazomatic.jobyjob.db.model.UserProfile;
-import com.spazomatic.jobyjob.location.ServerLocation;
-import com.spazomatic.jobyjob.location.ServerLocationBo;
 import com.spazomatic.jobyjob.nosql.entities.IpLoc;
 import com.spazomatic.jobyjob.nosql.entities.Post;
 import com.spazomatic.jobyjob.service.PostService;
@@ -40,8 +37,7 @@ public class PostController {
 	private static final Logger LOG = LoggerFactory.getLogger(Util.LOG_TAG);
 	
 	@Autowired private PostService postService;	
-	@Autowired private HttpServletRequest request;
-	@Autowired private ServerLocationBo serverLocationBo;		
+	@Autowired private HttpServletRequest request;	
     @Autowired private SocialControllerUtil util;
     
 	public PostController() {
@@ -75,18 +71,9 @@ public class PostController {
 			@ModelAttribute MultipartFile fileInput4,
 			@ModelAttribute MultipartFile fileInput5) {
 
-    	List<MultipartFile> imgFiles = new ArrayList<>();
-        if (!fileInput1.isEmpty()) {
-            try {            	
-            	//store files with post
-            	imgFiles.add(fileInput1);    
-            	post.setImgFiles(imgFiles);
-            } catch (Exception e) {
-            	LOG.error(String.format(
-            			"ERROR setting Post Image files :: %s", 
-            			e.getMessage()));
-            }
-        }	
+		setPostImages(post, fileInput1, fileInput2, 
+				fileInput3, fileInput4, fileInput5);
+
         if(loc != null && loc.getLatitude() != null && loc.getLongitude() != null){
         	post.setLocation(new double[]{loc.getLatitude(), loc.getLongitude()});
         }
@@ -101,12 +88,13 @@ public class PostController {
 		UserProfile client  = (UserProfile) session.getAttribute(
 				SocialControllerUtil.USER_PROFILE);
 		post.setClientName(client.getName());
-		
+		session.setAttribute("rib", post);
 		model.addAttribute("rib", post);
 		model.addAttribute("loc", loc);
 		return "client/confirmSubmitRib";
 	
 	}
+
 
 	@RequestMapping(value = { "/sec_submitRib" }, method = RequestMethod.GET)
 	public String sec_submitRib(Principal currentUser, Model model) {
@@ -121,26 +109,52 @@ public class PostController {
 		return "client/confirmSubmitRib";
 
 	}
-	
-	private ServerLocation getLocation(String ipAddress) throws Exception{
-		ServerLocation location = null;
-		try {
-			location = serverLocationBo.getLocation(ipAddress);
-		} catch (IOException | GeoIp2Exception e1) {
-			if(e1 instanceof GeoIp2Exception){
-				RestTemplate restTemplate = new RestTemplate();
-				ipAddress = restTemplate.getForObject(
-						"http://checkip.amazonaws.com",
-						String.class);
-				try {
-					location = serverLocationBo.getLocation(ipAddress);
-				} catch (IOException | GeoIp2Exception e) {
-					LOG.error(e.getMessage());
-					throw new Exception(e.getMessage());
-				}
-			}
-		}
-		return location;
+
+	@RequestMapping(value= {"/getImgFile/{id}"}, method = RequestMethod.GET)
+	public void getUserImage(HttpServletResponse response, 
+			Principal currentUser, Model model, 
+			@PathVariable("id") String postNailId) throws IOException{
+		HttpSession session = request.getSession();
+		Post rib = session.getAttribute("rib") != null 
+				? (Post) session.getAttribute("rib") 
+				: new Post();
+		//TODO: setContentType dynamic		
+		response.setContentType("image/jpeg");
+		byte[] buffer = rib.getImgFiles().get(postNailId);
+
+		InputStream in1 = new ByteArrayInputStream(buffer);
+		IOUtils.copy(in1, response.getOutputStream());        
+	}	
+
+	private void setPostImages(Post post, MultipartFile fileInput1, 
+			MultipartFile fileInput2, MultipartFile fileInput3,
+			MultipartFile fileInput4, MultipartFile fileInput5) {
+		
+    	Map<String, byte[]> imgFiles = new HashMap<>();
+        try {
+	    	if (!fileInput1.isEmpty()) {          	
+	        	imgFiles.put("fileInput1", fileInput1.getBytes());    	        	
+	    	}
+	    	if (!fileInput2.isEmpty()) {          	
+	        	imgFiles.put("fileInput2", fileInput2.getBytes());    
+	    	}
+	    	if (!fileInput3.isEmpty()) {          	
+	        	imgFiles.put("fileInput3", fileInput3.getBytes());    
+	    	}
+	    	if (!fileInput4.isEmpty()) {          	
+	        	imgFiles.put("fileInput4", fileInput4.getBytes());    
+	    	}
+	    	if (!fileInput5.isEmpty()) {          	
+	        	imgFiles.put("fileInput5", fileInput5.getBytes());    	        	
+	    	}
+	    	
+	    	post.setImgFiles(imgFiles);
+	    	
+        } catch (Exception e) {
+        	LOG.error(String.format(
+        			"ERROR setting Post Image files :: %s", 
+        			e.getMessage()));
+        }     			
 	}
 	
 }

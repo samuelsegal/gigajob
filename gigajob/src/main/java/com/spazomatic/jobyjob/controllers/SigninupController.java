@@ -8,13 +8,13 @@ import java.util.Map;
 import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.social.connect.Connection;
 import org.springframework.social.connect.ConnectionRepository;
+import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -27,20 +27,27 @@ import com.spazomatic.jobyjob.nosql.entities.Post;
 import com.spazomatic.jobyjob.util.SocialControllerUtil;
 import com.spazomatic.jobyjob.util.Util;
 
+@Controller
 public class SigninupController {
 
     private static final Logger LOG = LoggerFactory.getLogger(Util.LOG_TAG);
     @Autowired private ConnectionRepository connectionRepository;
     @Autowired private DataDao dataDao;
     @Autowired private SocialControllerUtil util;
-   
-    @RequestMapping("/signin")
+  
+    public SigninupController() {
+	}
+    
+	@RequestMapping("/signin")
     public String signin(HttpServletRequest request, Principal currentUser, Model model,
     		Post post,RedirectAttributes redirectAttributes) {
-        util.setModel(request, currentUser, model);
-        String referrer = request.getHeader("Referer");
-        LOG.debug("REFERER:::::::::"+referrer);
-        request.getSession().setAttribute("url_prior_login", referrer);
+        if(currentUser != null){
+        	util.setModel(request, currentUser, model);
+        }else{
+	        String referrer = request.getHeader("Referer");
+	        LOG.debug("REFERER:::::::::"+referrer);
+	        request.getSession().setAttribute("url_prior_login", referrer);
+        }
         return "login";
     }
     @RequestMapping("/signup")
