@@ -205,8 +205,9 @@ public class ClientController {
 	@RequestMapping(value = { "/confirmSubmitRib" }, method = RequestMethod.POST)
 	public String confirmSubmitRib(Principal currentUser, Model model,
 			@ModelAttribute Post post, @ModelAttribute IpLoc loc) {
-
-        post.setLocation(new double[]{loc.getLatitude(), loc.getLongitude()});	
+		if(loc != null && loc.getLatitude() != null && loc.getLongitude() != null){
+			post.setLocation(new double[]{loc.getLatitude(), loc.getLongitude()});	
+		}
 		util.setModel(request, currentUser, model);		
 		post.setUserId(currentUser.getName());		
 		HttpSession session = request.getSession();

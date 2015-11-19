@@ -49,109 +49,133 @@
 		<div class="col-md-1"></div>
 		<div class="col-md-11">		
 		
-			<h3 th:text="#{giga.appname}"></h3><br/>	
-			<h5 th:text="#{giga.INeedSomeoneTo}"></h5>	
+			<h2 th:text="#{giga.appname}"></h2>	
+			<h5 th:text="#{giga.INeedSomeoneTo}"></h5>
+			
 			<form id="file-form" role="form" method="POST" 
-				enctype="multipart/form-data" th:object="${rib}" th:action="@{/submitRib}">
+				enctype="multipart/form-data" th:object="${rib}" 
+				th:action="@{/submitRib}" class="form-horizontal">
 				
 				<input type="hidden" name="_csrf" th:value="${_csrf.token}" /> 
 				<div class="form-group">
-				  <input list="categories" th:field="*{tags[0]?.id}" class="form-control" placeholder="!Help me lift a.." />
-				  <datalist id="categories">
-				    <option value="!Help me lift a.." />
-				    <option value="!Move a.." />
-				    <option value="!Deliver.." />
-				    <option value="!Give me a ride to.." />
-				    <option value="!Fix my.." />
-				    <option value="!Clean my.." />
-				    <option value="!Work on my crew.." />
-				  </datalist>	
+					<div class="col-sm-5">
+						<input list="categories" th:field="*{tags[0]?.id}" 
+							class="form-control" placeholder="!Help me lift a.." />
+						<datalist id="categories">
+							<option value="!Help me lift a.." />
+							<option value="!Move a.." />
+							<option value="!Deliver.." />
+							<option value="!Give me a ride to.." />
+							<option value="!Fix my.." />
+							<option value="!Clean my.." />
+							<option value="!Work on my crew.." />
+						</datalist>	
+					</div><div class="col-sm-7">
+						<input type="text" th:field="*{tags[0]?.name}" 
+							class="form-control" id="title" name="title" />
+					</div>
 				</div>
-				<div class="form-group">
-					<input type="text" th:field="*{tags[0]?.name}" class="form-control"  th:placeholder="with..." id="title" name="title" />
+				<div class="form-group">	
+					<div class="col-sm-12">
+						<a href="#" onclick="getLocation()"><i class="material-icons">room</i>Current Location</a>
+						<div id="displayLocation"></div>
+						<input type="hidden" th:field="${loc.latitude}" id="loclat"/>
+						<input type="hidden" th:field="${loc.longitude}" id="loclon"/>	
+					</div>				
+				</div>
 				
-					<a href="#"><i class="material-icons">room</i>Current Location</a>
-					<input type="hidden" th:field="${loc.latitude}" id="loclat"/>
-					<input type="hidden" th:field="${loc.longitude}" id="loclon"/>	
-					<script th:inline="javascript">
-
-						 console.log("LATITUDE LONGITUDE");
-						 navigator.geolocation.getCurrentPosition(assignPosition);
-						 function assignPosition(pos){
-							 console.log(pos.coords.latitude);
-							 console.log(pos.coords.longitude); 
-							 document.getElementById("loclat").value = pos.coords.latitude;
-							 console.log($('loclat').val());
-							 document.getElementById("loclon").value = pos.coords.longitude;
-							 console.log($('loclon').val());
-						 }
-
-					</script>					
-				</div>
 				<div class="form-group">
-					<textarea th:field="*{description}" class="form-control" th:placeholder="#{giga.AddDetails}"></textarea> 
-					<input type="text" th:field="*{title}" class="form-control" th:placeholder="#{giga.AdditionalBangTags}" />
+					<div class="col-sm-12">
+						<textarea th:field="*{description}" class="form-control" th:placeholder="#{giga.AddDetails}"></textarea> 
+					</div>
 				</div>
+				
 				<div class="form-group">
-					<label for="timeSpan" th:text="#{giga.EstimatedTime}"></label>
-					<input type="number" id="timeSpan" th:field="*{estimatedTime.timeSpan}" class="form-control" placeholder="1"/>
+					<div class="col-sm-12">
+						<input type="text" th:field="*{title}" class="form-control" th:placeholder="#{giga.AdditionalBangTags}" />
+					</div>
+				</div>
+				
+				<div class="form-group">
+					<label class="col-sm-4" for="timeSpan" th:text="#{giga.EstimatedTime}"></label>
+					<div class="col-sm-3">
+						<input type="number" id="timeSpan" th:field="*{estimatedTime.timeSpan}" 
+							class="form-control" size="1" placeholder="1"/>
+					</div>
+					<div class="col-sm-5">
 					  <input list="timeMetrics" th:field="*{estimatedTime.timeMetric}" class="form-control" placeholder="mins" />
+					
 					  <datalist id="timeMetrics">
 					    <option value="mins" />
 					    <option value="hours" />
 					    <option value="days" />
 					  </datalist>							
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="col-sm-4" for="wage" th:text="#{giga.BasePay}"></label>
+					<div class="col-sm-3">
+						<input id="wage" type="text" th:field="*{basePay.wage}" class="form-control"/>
+					</div>
+					<label class="col-sm-1" for="per" th:text="#{giga.Per}"></label>
+					<div class="col-sm-4">
+						<input list="per" th:field="*{basePay.per}" class="form-control" placeholder="job" />
+						<datalist id="per">
+							<option value="job" />
+							<option value="item" />
+							<option value="hour" />
+						</datalist>	
+					</div>
+				</div>
+				<div class="form-group">
+					<div class="col-sm-2">
+						<div style="height:0px;width:0px;overflow:hidden;float: left;">
+						   <input type="file" onchange="onFileSelected(event)" id="fileInput1" name="fileInput1" />
+						</div>
+						<a href="#" onclick="chooseFile(1)"><i class="material-icons" style="font-size:48px;color:black;">camera_alt</i></a>
+					</div><div class="col-sm-2">
+						<div style="height:0px;width:0px;overflow:hidden">
+						   <input type="file" onchange="onFileSelected(event)" id="fileInput2" name="fileInput2" />
+						</div>
+						<a href="#" onclick="chooseFile(2)"><i class="material-icons" style="font-size:48px;color:black;">camera_alt</i></a>																				
+					</div><div class="col-sm-2">
+						<div style="height:0px;width:0px;overflow:hidden">
+						   <input type="file" onchange="onFileSelected(event)" id="fileInput3" name="fileInput3" />
+						</div>							
+						<a href="#" onclick="chooseFile(3)"><i class="material-icons" style="font-size:48px;color:black;">camera_alt</i></a>																					
+					</div><div class="col-sm-2">
+						<div style="height:0px;width:0px;overflow:hidden">
+						   <input type="file" onchange="onFileSelected(event)" id="fileInput4" name="fileInput4" />
+						</div>									
+						<a href="#" onclick="chooseFile(4)"><i class="material-icons" style="font-size:48px;color:black;">camera_alt</i></a>																					
+					</div><div class="col-sm-2">
+						<div style="height:0px;width:0px;overflow:hidden">
+						   <input type="file" onchange="onFileSelected(event)" id="fileInput5" name="fileInput5" />
+						</div>									
+						<a href="#" onclick="chooseFile(5)"><i class="material-icons" style="font-size:48px;color:black;">camera_alt</i></a>																				
+					</div>
+				</div>
 
-					<span th:text="#{giga.BasePay}"></span>
-					<input type="text" th:field="*{basePay.wage}" class="form-control"/>
-					<span th:text="#{giga.Per}"></span>
-					
-					  <input list="per" th:field="*{basePay.per}" class="form-control" placeholder="job" />
-					  <datalist id="per">
-					    <option value="job" />
-					    <option value="item" />
-					    <option value="hour" />
-					  </datalist>	
-				</div>
-				<div style="float: left;">
-					<div style="height:0px;width:0px;overflow:hidden;float: left;">
-					   <input type="file" onchange="onFileSelected(event)" id="fileInput1" name="fileInput1" />
+				
+				<div class="form-group">
+					<div class="col-sm-2">
+						<img th:field="*{imgFiles['fileInput1']}" id="postNail1" src="" style="height:50px;width:50px"></img>
+					</div><div class="col-sm-2">
+						<img th:field="*{imgFiles['fileInput2']}" id="postNail2" src="" style="height:50px;width:50px"></img>	
+					</div><div class="col-sm-2">
+						<img th:field="*{imgFiles['fileInput3']}" id="postNail3" src="" style="height:50px;width:50px"></img>	
+					</div><div class="col-sm-2">
+						<img th:field="*{imgFiles['fileInput4']}" id="postNail4" src="" style="height:50px;width:50px"></img>	
+					</div><div class="col-sm-2">
+						<img th:field="*{imgFiles['fileInput5']}" id="postNail5" src="" style="height:50px;width:50px"></img>
 					</div>
-					<a href="#" onclick="chooseFile(1)"><i class="material-icons">camera_alt</i></a>
-				</div><div style="float: left;">
-					<div style="height:0px;width:0px;overflow:hidden">
-					   <input type="file" onchange="onFileSelected(event)" id="fileInput2" name="fileInput2" />
-					</div>
-					<a href="#" onclick="chooseFile(2)"><i class="material-icons">camera_alt</i></a>																				
-				</div><div style="float: left;">
-					<div style="height:0px;width:0px;overflow:hidden">
-					   <input type="file" onchange="onFileSelected(event)" id="fileInput3" name="fileInput3" />
-					</div>							
-					<a href="#" onclick="chooseFile(3)"><i class="material-icons">camera_alt</i></a>																					
-				</div><div style="float: left;">
-					<div style="height:0px;width:0px;overflow:hidden">
-					   <input type="file" onchange="onFileSelected(event)" id="fileInput4" name="fileInput4" />
-					</div>									
-					<a href="#" onclick="chooseFile(4)"><i class="material-icons">camera_alt</i></a>																					
-				</div><div style="float: left;">
-					<div style="height:0px;width:0px;overflow:hidden">
-					   <input type="file" onchange="onFileSelected(event)" id="fileInput5" name="fileInput5" />
-					</div>									
-					<a href="#" onclick="chooseFile(5)"><i class="material-icons">camera_alt</i></a>																				
-				</div><div style="float: left;">																				
-			        <button type="submit" name="save" th:text="#{giga.Post}" class="btn btn-sm btn-primary badge">Post</button>				
 				</div>
 				
-				<br/>
-				<hr/>
-				
-				<div style="float: left;">
-					<img th:field="*{imgFiles['fileInput1']}" id="postNail1" src="" style="height:50px;width:50px"></img>
-					<img th:field="*{imgFiles['fileInput2']}" id="postNail2" src="" style="height:50px;width:50px"></img>	
-					<img th:field="*{imgFiles['fileInput3']}" id="postNail3" src="" style="height:50px;width:50px"></img>	
-					<img th:field="*{imgFiles['fileInput4']}" id="postNail4" src="" style="height:50px;width:50px"></img>	
-					<img th:field="*{imgFiles['fileInput5']}" id="postNail5" src="" style="height:50px;width:50px"></img>
-				</div>
+				<div class="form-group">	
+					<div class="col-sm-6">																			
+			        <button type="submit" name="save" th:text="#{giga.Post}" class="form-control btn btn-sm btn-primary badge">Post</button>
+			        </div>	
+			    </div>	
 			</form>
 		</div>
 	</div>

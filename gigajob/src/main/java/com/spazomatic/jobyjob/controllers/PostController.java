@@ -85,7 +85,7 @@ public class PostController {
 		util.setModel(request, currentUser, model);		
 		post.setUserId(currentUser.getName());		
 		HttpSession session = request.getSession();
-		UserProfile client  = (UserProfile) session.getAttribute(
+		UserProfile client = (UserProfile) session.getAttribute(
 				SocialControllerUtil.USER_PROFILE);
 		post.setClientName(client.getName());
 		session.setAttribute("rib", post);
