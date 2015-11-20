@@ -215,34 +215,17 @@ public class ClientController {
 				SocialControllerUtil.USER_PROFILE);
 		post.setClientName(client.getName());	
 		postService.save(post);
-
-		String ipAddress = request.getHeader("X-FORWARDED-FOR");
-		if (ipAddress == null) {
-			ipAddress = request.getRemoteAddr();		
-		}
-	
-		ServerLocation location;
-		try {
-			location = getLocation(ipAddress);
-
-			LOG.debug(String.format("Client IP Addy: %s", ipAddress));
-			LOG.debug(String.format("Client Loaked the Cloak: %s", 
-					location.toString()));
-			
-			IpLoc ipLoc = new IpLoc();
-			ipLoc.setLatitude(Double.valueOf(location.getLatitude()));
-			ipLoc.setLongitude(Double.valueOf(location.getLongitude()));
-			
+		try{
 			Page<Post> posts = postService.findByLocationNear(
-					new Point(ipLoc.getLatitude(), ipLoc.getLongitude()),
+					new Point(loc.getLatitude(), loc.getLongitude()),
 					"30", new PageRequest(0,100));
 			model.addAttribute("posts", posts.getContent());
 			
 			ObjectMapper mapper = new ObjectMapper();
 
-				String postsAsJSON = mapper.writeValueAsString(posts);
-				model.addAttribute("postsAsJSON",postsAsJSON);
-				LOG.debug("postsAsJSON: " + postsAsJSON);
+			String postsAsJSON = mapper.writeValueAsString(posts);
+			model.addAttribute("postsAsJSON",postsAsJSON);
+			LOG.debug("postsAsJSON: " + postsAsJSON);
 
 			model.addAttribute("posts", posts.getContent());		
 		} catch (Exception e) {

@@ -25,7 +25,8 @@ public class Post {
        
 	@GeoSpatialIndexed(type = GeoSpatialIndexType.GEO_2DSPHERE)
     private double[] location;
-
+	private String formattedAddress;
+	
 	private List<String> imageURLs;
     private List<Tag> tags;
     
@@ -107,9 +108,16 @@ public class Post {
 	public void setLocation(double[] location) {
 		this.location = location;
 	}
-
 	
-    public List<String> getImageURLs() {
+    public String getFormattedAddress() {
+		return formattedAddress;
+	}
+
+	public void setFormattedAddress(String formattedAddress) {
+		this.formattedAddress = formattedAddress;
+	}
+
+	public List<String> getImageURLs() {
 		return imageURLs;
 	}
 

@@ -26,7 +26,7 @@
 						<input type="hidden" name="_csrf" th:value="${_csrf.token}" />
 						<button class="btn btn-sm btn-primary badge custom" th:text="#{giga.getarib}"></button>
 					</form>		
-					<form method="GET" th:action="@{/listPosts}">
+					<form method="GET" th:action="@{/loadSearchRibs}">
 						<input type="hidden" name="_csrf" th:value="${_csrf.token}" />
 						<button class="btn btn-sm btn-primary badge custom" th:text="#{giga.searchribs}"></button>
 					</form>					

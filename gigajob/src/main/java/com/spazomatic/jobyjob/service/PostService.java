@@ -18,4 +18,5 @@ public interface PostService {
     Page<Post> findByUserId(String userId, Pageable pageable);
     Page<Post> findByClientName(String clientName, Pageable pageable);
     Page<Post> findByTitle(String title, Pageable pageable);
+    Page<Post> findByTitleLike(String title, Pageable pageable);
 }

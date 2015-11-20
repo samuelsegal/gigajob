@@ -15,6 +15,7 @@ import org.apache.tomcat.util.http.fileupload.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -22,6 +23,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.client.RestTemplate;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.spazomatic.jobyjob.db.model.UserProfile;
@@ -39,6 +41,7 @@ public class PostController {
 	@Autowired private PostService postService;	
 	@Autowired private HttpServletRequest request;	
     @Autowired private SocialControllerUtil util;
+    @Autowired private Environment env;
     
 	public PostController() {
 	}
@@ -77,7 +80,14 @@ public class PostController {
         if(loc != null && loc.getLatitude() != null && loc.getLongitude() != null){
         	post.setLocation(new double[]{loc.getLatitude(), loc.getLongitude()});
         }
-		if(currentUser == null){
+        if(post.getTags() != null && post.getTags().get(0) != null){
+        	String titlePart1 = post.getTags().get(0).getId() != null ? 
+        			post.getTags().get(0).getId() : "NO";
+        	String titlePart2 =  post.getTags().get(0).getName() != null ? 
+        			post.getTags().get(0).getName() : "TITLE";
+        	post.setTitle(String.format("%s %s", titlePart1, titlePart2));
+        }
+        if(currentUser == null){
 			HttpSession session = request.getSession();
 			session.setAttribute("rib", post);
 			return "redirect:/sec_submitRib";
@@ -104,6 +114,11 @@ public class PostController {
 		Post rib =  session.getAttribute("rib") != null ? 
 				(Post) session.getAttribute("rib") : new Post();
 		IpLoc loca = new IpLoc();
+		if(rib.getLocation()!= null){
+			double[] latlon = rib.getLocation();
+			loca.setLatitude(latlon[0]);
+			loca.setLongitude(latlon[1]);
+		}
 		model.addAttribute("rib", rib);
 		model.addAttribute("loc", loca);
 		return "client/confirmSubmitRib";
@@ -118,12 +133,14 @@ public class PostController {
 		Post rib = session.getAttribute("rib") != null 
 				? (Post) session.getAttribute("rib") 
 				: new Post();
-		//TODO: setContentType dynamic		
-		response.setContentType("image/jpeg");
-		byte[] buffer = rib.getImgFiles().get(postNailId);
-
-		InputStream in1 = new ByteArrayInputStream(buffer);
-		IOUtils.copy(in1, response.getOutputStream());        
+		if(rib.getImgFiles() != null && rib.getImgFiles().get(postNailId) != null){
+			//TODO: setContentType dynamic		
+			response.setContentType("image/jpeg");
+			byte[] buffer = rib.getImgFiles().get(postNailId);
+	
+			InputStream in1 = new ByteArrayInputStream(buffer);
+			IOUtils.copy(in1, response.getOutputStream());   
+		}
 	}	
 
 	private void setPostImages(Post post, MultipartFile fileInput1, 

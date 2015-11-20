@@ -129,4 +129,9 @@ public class PostServiceImpl implements PostService{
 		Page<Post> postPage = postRepository.findByTitle(title, pageable);
 		return postPage;	
 	}
+	@Override
+	public Page<Post> findByTitleLike(String title, Pageable pageable) {
+		Page<Post> postPage = postRepository.findByTitleLike(title, pageable);
+		return postPage;	
+	}
 }

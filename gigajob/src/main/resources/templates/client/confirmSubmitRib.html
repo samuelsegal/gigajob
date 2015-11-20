@@ -28,29 +28,8 @@
 	    }		
     </style>
 	
-	<script type="text/javascript">
-
-		var todo_global_js_ok_or_no;
-		function onFileSelected(event) {
-			
-			var selectedFile = event.srcElement.files[0];
-			var reader = new FileReader();
-			var imgtag = document.getElementById(todo_global_js_ok_or_no);
-			imgtag.title = selectedFile.name;
-			imgtag.src = selectedFile.name;
-			reader.onload = function(event) {
-			  imgtag.src = event.target.result;
-			};
-			reader.readAsDataURL(selectedFile);					
-		}
+	<script src="js/gigafile.js"></script>
 	
-		function chooseFile(imgNum) {
-			
-			todo_global_js_ok_or_no = 'postNail' + imgNum;
-			$("#fileInput" +imgNum).click();
-		}
-	
-	</script>
 </head>
 <body>
 <main layout:fragment="content" class="mdl-layout__content mdl-color--grey-100">		
@@ -96,9 +75,14 @@
 					<div class="col-sm-12">
 						<div class="col-sm-12">
 							<a href="#" onclick="getLocation()"><i class="material-icons">room</i>Current Location</a>
-							<div id="displayLocation"></div>
+							<div id="displayLocation">
+								<div th:if="${rib.formattedAddress}">
+									<span th:text="${rib.formattedAddress}"></span>
+								</div>
+							</div>
 							<input type="hidden" th:field="${loc.latitude}" id="loclat"/>
 							<input type="hidden" th:field="${loc.longitude}" id="loclon"/>	
+							<input type="hidden" th:field="${rib.formattedAddress}" id="formattedAddress"/>
 						</div>				
 					</div>
 				</div>

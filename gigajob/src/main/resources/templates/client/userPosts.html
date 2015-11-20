@@ -15,40 +15,38 @@
 		
 </head>
 <body>
+<main layout:fragment="content" class="mdl-layout__content mdl-color--grey-100">
+<div id="container">
+	<div class="row">	
+	<div class="col-md-2"></div>
+		<div class="col-md-8">
 
-
-	<main layout:fragment="content" class="mdl-layout__content mdl-color--grey-100">
-	<div id="container">
-		<div class="row">	
+		<div class="span12">
+			<table id="myTableId" dt:table="true" dt:theme="bootstrap3" dt:displayLength="5"
+				dt:export="pdf,csv" class="table table-condensed">
+				<thead>
+					<tr>
+						<th th:text="#{giga.Title}">Title</th>
+						<th th:text="#{giga.Description}">Desc</th>
+						<th th:text="#{giga.Poster}">! A Poster</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr th:each="post : ${posts}">							
+						<td><a th:href="@{/viewPost(postid=${post?.id})}" th:text="${post?.title}"></a></td>						
+						<td th:text="(${post?.description} != null) ? ${post?.description} : null"></td>
+						<td th:text="(${post?.clientName} != null) ? ${post?.clientName} : null"></td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+		</div>
 		<div class="col-md-2"></div>
-			<div class="col-md-8">
-
-			<div class="span12">
-				<table id="myTableId" dt:table="true" dt:theme="bootstrap3" dt:displayLength="5"
-					dt:export="pdf,csv" class="table table-striped table-bordered table-condensed">
-					<thead>
-						<tr>
-							<th th:text="#{giga.Title}">Title</th>
-							<th th:text="#{giga.Description}">Desc</th>
-							<th th:text="#{giga.Poster}">! A Poster</th>
-						</tr>
-					</thead>
-					<tbody>
-						<tr th:each="post : ${posts}">							
-							<td><a th:href="@{/viewPost(postid=${post?.id})}" th:text="${post?.title}"></a></td>						
-							<td th:text="(${post?.description} != null) ? ${post?.description} : null"></td>
-							<td th:text="(${post?.clientName} != null) ? ${post?.clientName} : null"></td>
-						</tr>
-					</tbody>
-				</table>
-			</div>
-			</div>
-			<div class="col-md-2"></div>
-		</div>
-		</div>
-	</main>
-	<!-- Latest compiled and minified JavaScript -->
-	<script
-		src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+	</div>
+	</div>
+</main>
+<!-- Latest compiled and minified JavaScript -->
+<script
+	src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
 </body>
 </html>

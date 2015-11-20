@@ -44,7 +44,6 @@ public class ProfileController {
 	public String editProfile(Principal currentUser, Model model) {
 		
 		util.setModel(request, currentUser, model);
-		HttpSession session = request.getSession();
 		return "profile/editProfile";		
 	}
 	
