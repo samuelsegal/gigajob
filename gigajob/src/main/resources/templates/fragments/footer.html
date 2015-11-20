@@ -1,20 +1,26 @@
 
-
  <!-- FOOTER
     ================================================== -->
-    <footer th:fragment="footer" class="mdl-mega-footer">
-
-
-       <div class="mdl-mega-footer__bottom-section">
-		<div class="mdl-mega-footer__right-section">
-		        <p class="footer-links">
-		          <a th:href="@{/login}">LOGIN</a>
-		          <a th:href="@{/login}">ABOUT</a>
-		          <a th:href="@{/login}">FAQ</a>
-		          <a th:href="@{/login}">CONTACT</a>
-		          </p>
-		
-		</div>
-      </div>
-     </footer>
+<footer th:fragment="footer" class="footer">
+   <div class="container">
+   		<div class="row">
+   			<div class="col-sm-6"></div>
+   			<div class="col-sm-6">
+				<form method="POST" name="signoutform" id="signoutform" th:action="@{/signout}">
+					<ul class="list-inline right-section">			
+					    <li th:switch="${gigauser} != null">
+					    	<a th:case="${false}" th:href="@{/login}">LOGIN</a>
+							<input type="hidden" name="_csrf" th:value="${_csrf.token}" />				
+							<a th:case="${true}" href="#" 
+								onclick="document.forms['signoutform'].submit();return false;">LOGOUT</a>			    				    	
+					    </li>
+					    <li><a th:href="@{/login}">ABOUT</a></li>
+					    <li><a th:href="@{/login}">FAQ</a></li>
+					    <li><a th:href="@{/login}">CONTACT</a></li>
+					</ul>
+				</form>	
+			</div>
+        </div>
+  </div>
+</footer>
      

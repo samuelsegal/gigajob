@@ -6,7 +6,9 @@ import org.hibernate.validator.constraints.NotEmpty;
 import org.springframework.social.connect.UserProfile;
 
 public class SignupForm {
-
+	
+	private String name;
+	
 	@NotEmpty
 	private String username;
 
@@ -21,6 +23,15 @@ public class SignupForm {
 	
 	@NotEmpty
 	private String email;	
+
+		
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
 
 	public String getUsername() {
 		return username;
@@ -64,6 +75,7 @@ public class SignupForm {
 
 	public static SignupForm fromProviderUser(UserProfile providerUser) {
 		SignupForm form = new SignupForm();
+		form.setName(providerUser.getName());
 		form.setFirstName(providerUser.getFirstName());
 		form.setLastName(providerUser.getLastName());
 		form.setUsername(providerUser.getUsername());

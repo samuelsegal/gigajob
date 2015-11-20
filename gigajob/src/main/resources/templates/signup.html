@@ -34,15 +34,18 @@
 				</div>
 				
 				<fieldset>
-					<label for="firstName">First Name <span th:if="${#fields.hasErrors('firstName')}" class="error" th:text="${#fields.errors('firstName')[0]}">Error</span></label>
+					<label for="name" th:text="#{giga.Name}"><span th:if="${#fields.hasErrors('name')}" class="error" th:text="${#fields.errors('name')[0]}">Error</span></label>
+					<input type="text" th:field="*{name}" />
+				
+					<label for="firstName" th:text="#{giga.FirstName}">First Name <span th:if="${#fields.hasErrors('firstName')}" class="error" th:text="${#fields.errors('firstName')[0]}">Error</span></label>
 					<input type="text" th:field="*{firstName}" />
-					<label for="lastName">Last Name <span th:if="${#fields.hasErrors('lastName')}" class="error" th:text="${#fields.errors('lastName')[0]}">Error</span></label>
+					<label for="lastName" th:text="#{giga.LastName}">Last Name <span th:if="${#fields.hasErrors('lastName')}" class="error" th:text="${#fields.errors('lastName')[0]}">Error</span></label>
 					<input type="text" th:field="*{lastName}" />
-					<label for="username">Username <span th:if="${#fields.hasErrors('username')}" class="error" th:text="${#fields.errors('username')[0]}">Error</span></label>
+					<label for="username" th:text="#{giga.UserName}">Username <span th:if="${#fields.hasErrors('username')}" class="error" th:text="${#fields.errors('username')[0]}">Error</span></label>
 					<input type="text" th:field="*{username}" />
-					<label for="email">Email <span th:if="${#fields.hasErrors('email')}" class="error" th:text="${#fields.errors('email')[0]}">Error</span></label>
+					<label for="email" th:text="#{giga.Email}">Email <span th:if="${#fields.hasErrors('email')}" class="error" th:text="${#fields.errors('email')[0]}">Error</span></label>
 					<input type="email" th:field="*{email}" />
-					<label for="password">Password (at least 6 characters) <span th:if="${#fields.hasErrors('password')}" class="error" th:text="${#fields.errors('password')[0]}">Error</span></label>
+					<label for="password" th:text="#{giga.PasswordAtLeast}">Password (at least 6 characters) <span th:if="${#fields.hasErrors('password')}" class="error" th:text="${#fields.errors('password')[0]}">Error</span></label>
 					<input type="password" th:field="*{password}" />
 				</fieldset>
 				<p><button type="submit">Sign Up</button></p>

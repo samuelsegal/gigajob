@@ -1,7 +1,5 @@
 package com.spazomatic.jobyjob.controllers;
 
-import java.security.Principal;
-
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
@@ -9,7 +7,7 @@ import javax.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.social.connect.Connection;
 import org.springframework.social.connect.ConnectionFactoryLocator;
 import org.springframework.social.connect.UsersConnectionRepository;
@@ -19,7 +17,6 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.context.request.WebRequest;
-import org.springframework.web.servlet.ModelAndView;
 
 import com.spazomatic.jobyjob.db.dao.AuthoritiesDao;
 import com.spazomatic.jobyjob.db.dao.UsersDao;
@@ -80,7 +77,7 @@ public class SignupController {
 			profile.setEmail(form.getEmail());
 			profile.setFirstName(form.getFirstName());
 			profile.setLastName(form.getLastName());
-			profile.setName(form.getUsername());
+			profile.setName(form.getName() != null ? form.getName() : "");
 			profile.setUsername(form.getUsername());
 			usersDao.createUser(user.getUsername(), profile, user);
 			//Principal principal = (Principal) SecurityContextHolder
@@ -93,16 +90,16 @@ public class SignupController {
 	}
 
 	private User createUser(SignupForm form, BindingResult formBinding) {
-		//try {
+		try {
 			User user = new User();
 			user.setUsername(form.getUsername());
 			user.setPassword(form.getPassword());
 			
 			return user;
-		//} catch (UsernameAlreadyInUseException e) {
-			//formBinding.rejectValue("username", "user.duplicateUsername", "already in use");
-			//return null;
-		//}
+		} catch (UsernameNotFoundException e) {
+			formBinding.rejectValue("username", "user.duplicateUsername", "already in use");
+			return null;
+		}
 	}
 
 }
