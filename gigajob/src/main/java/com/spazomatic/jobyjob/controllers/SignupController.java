@@ -21,19 +21,20 @@ import com.spazomatic.jobyjob.db.dao.AuthoritiesDao;
 import com.spazomatic.jobyjob.db.dao.UsersDao;
 import com.spazomatic.jobyjob.db.model.User;
 import com.spazomatic.jobyjob.db.model.UserProfile;
+import com.spazomatic.jobyjob.exceptions.EmailExistsException;
 import com.spazomatic.jobyjob.exceptions.UsernameAlreadyInUseException;
 import com.spazomatic.jobyjob.forms.SignupForm;
 import com.spazomatic.jobyjob.util.SignInUtils;
 import com.spazomatic.jobyjob.util.SocialControllerUtil;
+import com.spazomatic.jobyjob.util.Util;
 
 @Controller
 public class SignupController {
-	private static final Logger log = LoggerFactory.getLogger(SignupController.class);
+	private static final Logger LOG = LoggerFactory.getLogger(
+			String.format("%s :: %s", Util.LOG_TAG,SignupController.class));
 	private final UsersDao usersDao;
 	private final ProviderSignInUtils providerSignInUtils;
-	@Autowired private SocialControllerUtil util;
-	@Autowired private AuthoritiesDao roleService;
-	@Autowired private HttpServletRequest httpRequest;
+
 	
 	@Inject
 	public SignupController(UsersDao usersDao, 
@@ -84,7 +85,7 @@ public class SignupController {
 	private User createUser(SignupForm form, BindingResult formBinding) {
 		try {
 			User user = new User();
-			user.setUsername(form.getUsername());
+			user.setUsername(form.getEmail());
 			user.setPassword(form.getPassword());
 			UserProfile profile = new UserProfile();
 			profile.setUserId(user.getUsername());
@@ -95,7 +96,8 @@ public class SignupController {
 			profile.setUsername(form.getUsername());
 			usersDao.createUser(user.getUsername(), profile, user);			
 			return user;
-		} catch (UsernameAlreadyInUseException e) {
+		} catch (UsernameAlreadyInUseException | EmailExistsException ex) {
+			LOG.error(String.format("ERROR Creating USER :: %s", ex.getMessage()));
 			formBinding.rejectValue("username", "user.duplicateUsername", "already in use");
 			return null;
 		}

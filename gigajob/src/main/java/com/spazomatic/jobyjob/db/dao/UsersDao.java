@@ -3,7 +3,9 @@ package com.spazomatic.jobyjob.db.dao;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 import javax.sql.DataSource;
@@ -157,6 +159,33 @@ public class UsersDao {
                 }
             }, userId);
     }
+    public Map<String,UserConnection> getUserConnections(final String userId) {
+        LOG.debug("SQL SELECT ON UserConnection: {}", userId);
+        return jdbcTemplate.query("select * from UserConnection where userId = ?", 
+        		new ResultSetExtractor<Map<String, UserConnection>>(){
+		            @Override
+		            public Map<String,UserConnection> extractData(ResultSet rs) throws SQLException,DataAccessException {
+		                HashMap<String,UserConnection> mapRet= new HashMap<String,UserConnection>();
+		                while(rs.next()){
+		                	UserConnection userConnection = new UserConnection(
+		                            userId,
+		                            rs.getString("providerId"),
+		                            rs.getString("providerUserId"),
+		                            rs.getInt("rank"),
+		                            rs.getString("displayName"),
+		                            rs.getString("profileUrl"),
+		                            rs.getString("imageUrl"),
+		                            rs.getString("accessToken"),
+		                            rs.getString("secret"),
+		                            rs.getString("refreshToken"),
+		                            rs.getLong("expireTime"));                	
+		                	String providerId = rs.getString("providerId");
+		                    mapRet.put(providerId,userConnection);
+		                }
+		                return mapRet;
+		            }
+		        },userId);
+    }
     public void addRole(String userId, String roleName) {
         if (LOG.isDebugEnabled()) {
             LOG.debug(String.format("SQL INSERT ON users, authorities: %s with role: %s",userId,roleName));
@@ -164,7 +193,7 @@ public class UsersDao {
 
         jdbcTemplate.update("INSERT into authorities(username,authority) values(?,?)",userId,roleName);
     }
-    public void createUser(String userId, UserProfile profile) {
+    public void createUser(String userId, UserProfile profile) throws EmailExistsException{
         if (LOG.isDebugEnabled()) {
             LOG.debug("SQL INSERT ON users, authorities and UserProfile: " + userId + " with profile: " +
                 profile.getEmail() + ", " +
@@ -173,17 +202,22 @@ public class UsersDao {
                 profile.getName() + ", " +
                 profile.getUsername());
         }
-        jdbcTemplate.update("INSERT into users(username,password,enabled) values(?,?,true)",userId,RandomStringUtils.randomAlphanumeric(8));       
-        jdbcTemplate.update("INSERT into authorities(username,authority) values(?,?)",userId,"USER");
-        jdbcTemplate.update("INSERT into UserProfile(userId, email, firstName, lastName, name, username) values(?,?,?,?,?,?)",
-            userId,
-            profile.getEmail(),
-            profile.getFirstName(),
-            profile.getLastName(),
-            profile.getName(),
-            profile.getUsername());
+        try{
+	        jdbcTemplate.update("INSERT into users(username,password,enabled) values(?,?,true)",userId,RandomStringUtils.randomAlphanumeric(8));       
+	        jdbcTemplate.update("INSERT into authorities(username,authority) values(?,?)",userId,"USER");
+	        jdbcTemplate.update("INSERT into UserProfile(userId, email, firstName, lastName, name, username) values(?,?,?,?,?,?)",
+	            userId,
+	            profile.getEmail(),
+	            profile.getFirstName(),
+	            profile.getLastName(),
+	            profile.getName(),
+	            profile.getUsername());
+        }catch(Exception ex){
+        	LOG.error(String.format("ERROR creating user, email %s already exists. ERROR Message %s", userId, ex.getMessage()));
+        	throw new EmailExistsException(String.format("ERROR creating user, email %s already exists", userId));
+        }
     }
-    public void createUser(String userId, UserProfile profile, User user) throws UsernameAlreadyInUseException{
+    public void createUser(String userId, UserProfile profile, User user) throws EmailExistsException, UsernameAlreadyInUseException{
         if (LOG.isDebugEnabled()) {
             LOG.debug("SQL INSERT ON users, authorities and UserProfile: " + userId + " with profile: " +
                 profile.getEmail() + ", " +
@@ -193,15 +227,20 @@ public class UsersDao {
                 profile.getUsername());
         }
         String pw = user.getPassword();
-        jdbcTemplate.update("INSERT into users(username,password,enabled) values(?,?,true)",userId,pw);
-        jdbcTemplate.update("INSERT into authorities(username,authority) values(?,?)",userId,"USER");
-        jdbcTemplate.update("INSERT into UserProfile(userId, email, firstName, lastName, name, username) values(?,?,?,?,?,?)",
-            userId,
-            profile.getEmail(),
-            profile.getFirstName(),
-            profile.getLastName(),
-            profile.getName(),
-            profile.getUsername());
+        try{
+	        jdbcTemplate.update("INSERT into users(username,password,enabled) values(?,?,true)",userId,pw);
+	        jdbcTemplate.update("INSERT into authorities(username,authority) values(?,?)",userId,"USER");
+	        jdbcTemplate.update("INSERT into UserProfile(userId, email, firstName, lastName, name, username) values(?,?,?,?,?,?)",
+	            userId,
+	            profile.getEmail(),
+	            profile.getFirstName(),
+	            profile.getLastName(),
+	            profile.getName(),
+	            profile.getUsername());
+        }catch(Exception ex){
+        	LOG.error(String.format("ERROR creating user, email %s already exists. ERROR Message %s", userId, ex.getMessage()));
+        	throw new EmailExistsException(String.format("ERROR creating user, email %s already exists", userId));
+        }
     }
     public void updateUser(UserProfile up, String userId) throws DataAccessException{
 

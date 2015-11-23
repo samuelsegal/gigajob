@@ -205,15 +205,22 @@ public class SocialControllerUtil {
      * @return
      */
     public UserConnection getUserConnection(HttpSession session, String userId) {
-        UserConnection connection;
+        UserConnection connection = null;
         connection = (UserConnection) session.getAttribute(USER_CONNECTION);
 
         // Reload from persistence storage if not set or invalid (i.e. no valid userId)
         if (connection == null || !userId.equals(connection.getUserId())) {
             try{
-            	connection = usersDao.getUserConnection(userId);
+            	Map<String,UserConnection> userConnections = usersDao.getUserConnections(userId);
+            	List<UserConnection> conns = new ArrayList<>();
+            	userConnections.forEach( (k,v) -> {
+            		LOG.debug(String.format("UserConnection Provider %s", v.getProviderId()));
+            		conns.add(v); 
+            	});
+            	//TODO: Have a default preferred with ability to select preferrred connection to define profile.
+            	connection = !conns.isEmpty() ? conns.get(0) : new UserConnection();
             }catch(EmptyResultDataAccessException ex){
-            	connection = new UserConnection();
+            	//connection = new UserConnection();
             }
             session.setAttribute(USER_CONNECTION, connection);
         }

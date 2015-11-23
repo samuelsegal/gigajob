@@ -24,7 +24,6 @@
 			<form  class="form-signin" id="signin" th:action="@{/signin/authenticate}" method="post">
 
 				<input type="hidden" name="_csrf" th:value="${_csrf.token}"></input>
-
 				<h2 class="form-signin-heading">Please sign in</h2>
 				<div class="formInfo">
 			  		<div class="error" th:if="${param.error eq 'bad_credentials'}">
@@ -49,8 +48,9 @@
             <p>Sign in with:</p>
             <table style="border-collapse: separate; border-spacing: 2px">
                 <tr>
+                	
                     <td><a th:href="@{/auth/linkedin}" class="ml btn btn-block btn-social btn-lg btn-linkedin"><i class="fa fa-linkedin"></i>LinkedIn</a></td>
-                    <td><a th:href="@{/auth/facebook}" class="ml btn btn-block btn-social btn-lg btn-facebook"><i class="fa fa-facebook"></i>Facebook</a></td>
+                    <td><a th:href="@{/auth/facebook?scope=email}" class="ml btn btn-block btn-social btn-lg btn-facebook"><i class="fa fa-facebook"></i>Facebook</a></td>
                 </tr>
                 <tr>
                     <td><a th:href="@{/auth/github}" class="ml btn btn-block btn-social btn-lg btn-github"><i class="fa fa-github"></i>Github</a></td>

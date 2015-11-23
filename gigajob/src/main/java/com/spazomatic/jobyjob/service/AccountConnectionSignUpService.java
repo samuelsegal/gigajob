@@ -1,6 +1,5 @@
 package com.spazomatic.jobyjob.service;
 
-import java.util.Locale;
 import java.util.UUID;
 
 import org.json.simple.JSONObject;
@@ -8,16 +7,13 @@ import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.i18n.LocaleContextHolder;
-import org.springframework.context.support.AbstractApplicationContext;
-import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.social.connect.Connection;
 import org.springframework.social.connect.ConnectionSignUp;
 import org.springframework.social.facebook.api.Facebook;
 
 import com.spazomatic.jobyjob.db.dao.UsersDao;
 import com.spazomatic.jobyjob.db.model.UserProfile;
+import com.spazomatic.jobyjob.exceptions.EmailExistsException;
 import com.spazomatic.jobyjob.util.Util;
 
 public class AccountConnectionSignUpService implements ConnectionSignUp {
@@ -46,14 +42,12 @@ public class AccountConnectionSignUpService implements ConnectionSignUp {
 			String name  = fbAPI.fetchObject("me", String.class, "name");
 			String firstName  = fbAPI.fetchObject("me", String.class, "first_name");
 			String lastName  = fbAPI.fetchObject("me", String.class, "last_name");
-			//TOD Why is Facebook not providing email? because app needs review and request 
-			//      submitted for this priveledge?
+			String email  = fbAPI.fetchObject("me", String.class, "email");
 			
-			
-			Locale locale = LocaleContextHolder.getLocale();
-			ApplicationContext context = new ClassPathXmlApplicationContext("locale.xml");							
-			String email  = context.getMessage("giga.email.notverified", null, locale);	
-			((AbstractApplicationContext)context).close();
+			//Locale locale = LocaleContextHolder.getLocale();
+			//ApplicationContext context = new ClassPathXmlApplicationContext("locale.xml");							
+			//String email  = context.getMessage("giga.email.notverified", null, locale);	
+			//((AbstractApplicationContext)context).close();
 			
 			try {
 				JSONParser parser  = new JSONParser();
@@ -63,17 +57,23 @@ public class AccountConnectionSignUpService implements ConnectionSignUp {
 				firstName = (String) jo.get("first_name");
 				jo = (JSONObject)parser.parse(lastName);
 				lastName = (String) jo.get("last_name");
+				jo = (JSONObject)parser.parse(email);
+				email = (String) jo.get("email");				
 			} catch (ParseException e) {
 				LOG.error(String.format("ERROR PARSING JSON %s : ", e.getMessage()));
 			}
 			
-			userId = name;
+			userId = email;
 			LOG.debug(String.format("Creating FACEBOOK PROFile :: %s", userId));
 			UserProfile u = new UserProfile(
 					userId,name,firstName,lastName,name,email);			
-			usersDao.createUser(userId, new UserProfile(userId, 
-					u.getName(), u.getFirstName(), u.getLastName(), 
-					u.getUsername(), u.getEmail()));
+			try {
+				usersDao.createUser(userId, new UserProfile(userId, 
+						u.getName(), u.getFirstName(), u.getLastName(), 
+						u.getUsername(), u.getEmail()));
+			} catch (EmailExistsException e) {
+				LOG.error(String.format("Duplicate Email Error :: %s",e.getMessage()));
+			}
 
 			LOG.debug(String.format("FACEBOOK USER: %s", 
 					u.toString()));  		 
@@ -86,7 +86,11 @@ public class AccountConnectionSignUpService implements ConnectionSignUp {
 			userId = profile.getEmail() != null ? profile.getEmail() : 
 				profile.getUsername() != null ? profile.getUsername() : 
 					UUID.randomUUID().toString();
-	        usersDao.createUser(userId, new UserProfile(userId, profile));
+	        try {
+				usersDao.createUser(userId, new UserProfile(userId, profile));
+			} catch (EmailExistsException e) {
+				LOG.error(String.format("Duplicate Email Error :: %s",e.getMessage()));
+			}
 	        
 		}
 
