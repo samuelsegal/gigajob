@@ -7,7 +7,6 @@ import javax.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.social.connect.Connection;
 import org.springframework.social.connect.ConnectionFactoryLocator;
 import org.springframework.social.connect.UsersConnectionRepository;
@@ -22,6 +21,7 @@ import com.spazomatic.jobyjob.db.dao.AuthoritiesDao;
 import com.spazomatic.jobyjob.db.dao.UsersDao;
 import com.spazomatic.jobyjob.db.model.User;
 import com.spazomatic.jobyjob.db.model.UserProfile;
+import com.spazomatic.jobyjob.exceptions.UsernameAlreadyInUseException;
 import com.spazomatic.jobyjob.forms.SignupForm;
 import com.spazomatic.jobyjob.util.SignInUtils;
 import com.spazomatic.jobyjob.util.SocialControllerUtil;
@@ -52,7 +52,6 @@ public class SignupController {
 	//						StringUtils.capitalize(connection.getKey().getProviderId()) + 
 	//						" account is not associated with a JobyJob account. If you're new, please sign up."), 
 	//				WebRequest.SCOPE_REQUEST);
-			log.debug(String.format("FACEBOOK CONNECTION: %s", connection.getDisplayName()));
 			return new SignupForm();
 			//TODO: fetch_userPropfile not permitted - get facebook permission right. May only need to remove address
 			//return SignupForm.fromProviderUser(connection.fetchUserProfile());
@@ -72,14 +71,7 @@ public class SignupController {
 			SignInUtils.signin(user);
 			
 			providerSignInUtils.doPostSignUp(user.getUsername(), request);
-			UserProfile profile = new UserProfile();
-			profile.setUserId(user.getUsername());
-			profile.setEmail(form.getEmail());
-			profile.setFirstName(form.getFirstName());
-			profile.setLastName(form.getLastName());
-			profile.setName(form.getName() != null ? form.getName() : "");
-			profile.setUsername(form.getUsername());
-			usersDao.createUser(user.getUsername(), profile, user);
+
 			//Principal principal = (Principal) SecurityContextHolder
 			//		.getContext().getAuthentication().getPrincipal();
 			//ModelAndView mav = new ModelAndView();
@@ -94,9 +86,16 @@ public class SignupController {
 			User user = new User();
 			user.setUsername(form.getUsername());
 			user.setPassword(form.getPassword());
-			
+			UserProfile profile = new UserProfile();
+			profile.setUserId(user.getUsername());
+			profile.setEmail(form.getEmail());
+			profile.setFirstName(form.getFirstName());
+			profile.setLastName(form.getLastName());
+			profile.setName(form.getName() != null ? form.getName() : "");
+			profile.setUsername(form.getUsername());
+			usersDao.createUser(user.getUsername(), profile, user);			
 			return user;
-		} catch (UsernameNotFoundException e) {
+		} catch (UsernameAlreadyInUseException e) {
 			formBinding.rejectValue("username", "user.duplicateUsername", "already in use");
 			return null;
 		}

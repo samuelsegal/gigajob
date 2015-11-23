@@ -68,6 +68,8 @@ dependencies {
     compile("org.springframework.social:spring-social-github:1.0.0.M4")
     compile("org.springframework.social:spring-social-google:1.0.0.RELEASE")
     //compile("org.springframework.social:spring-social-amazon:1.0.0-RELEASE")
+    compile('javax.mail:mail:1.4.4')
+    compile('org.springframework:spring-context-support')	
     compile("org.apache.commons:commons-lang3:3.3.2")
     compile("com.maxmind.geoip2:geoip2:2.3.1")
     compile("com.maxmind.db:maxmind-db")

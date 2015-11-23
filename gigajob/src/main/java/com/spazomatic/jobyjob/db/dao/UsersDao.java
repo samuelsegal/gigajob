@@ -4,8 +4,10 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 import javax.sql.DataSource;
+import javax.transaction.Transactional;
 
 import org.apache.commons.lang3.RandomStringUtils;
 import org.slf4j.Logger;
@@ -18,16 +20,24 @@ import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
 
 import com.spazomatic.jobyjob.db.model.Authority;
+import com.spazomatic.jobyjob.db.model.PasswordResetToken;
 import com.spazomatic.jobyjob.db.model.User;
 import com.spazomatic.jobyjob.db.model.UserConnection;
 import com.spazomatic.jobyjob.db.model.UserProfile;
+import com.spazomatic.jobyjob.db.model.VerificationToken;
+import com.spazomatic.jobyjob.exceptions.EmailExistsException;
+import com.spazomatic.jobyjob.exceptions.UsernameAlreadyInUseException;
 import com.spazomatic.jobyjob.util.Util;
 
 @Repository
+@Transactional
 public class UsersDao {
 
-    private static final Logger LOG = LoggerFactory.getLogger(Util.LOG_TAG);
-
+    private static final Logger LOG = LoggerFactory.getLogger(
+    		String.format("%s :: %s",Util.LOG_TAG, UsersDao.class));
+    @Autowired private PasswordResetTokenRepository passwordTokenRepository;
+    @Autowired private VerificationTokenRepository tokenRepository;
+      
     private JdbcTemplate jdbcTemplate;
 
     @Autowired
@@ -36,6 +46,20 @@ public class UsersDao {
         this.jdbcTemplate = new JdbcTemplate(dataSource);
     }
 
+    public VerificationToken getVerificationToken(final String VerificationToken) {
+        return tokenRepository.findByToken(VerificationToken);
+    }    
+    
+    public UserProfile registerNewUserAccount(final UserProfile userProfile) throws EmailExistsException {
+        
+    	if (emailExist(userProfile.getEmail())) {
+            throw new EmailExistsException("There is an account with that email adress: " + userProfile.getEmail());
+        }
+    	
+        createUser(userProfile.getUserId(), userProfile);
+        return userProfile;
+       
+    }
     public UserProfile getUserProfile(final String userId) {
     	String query = "select * from UserProfile where userId = ?";
         LOG.debug(String.format("SQL SELECT ON UserProfile: %s : %s",userId,query));
@@ -80,6 +104,38 @@ public class UsersDao {
         },name);
 
     }
+    public PasswordResetToken getPasswordResetToken(final String token) {
+        return passwordTokenRepository.findByToken(token);
+    }
+    public UserProfile findUserByEmail(String email){
+    	String query = "select * from  UserProfile where email = ?";
+        LOG.debug(String.format("SQL SELECT ON UserProfile: %s : %s",email,query));
+        return jdbcTemplate.queryForObject(query,
+                new RowMapper<UserProfile>() {
+                    public UserProfile mapRow(ResultSet rs, int rowNum) throws SQLException {
+                    return new UserProfile(
+                        rs.getString("userId"),
+                        rs.getString("name"),
+                        rs.getString("firstName"),
+                        rs.getString("lastName"),
+                        rs.getString("email"),
+                        rs.getString("username"));
+                    }
+                }, email);
+
+    }
+
+    public void createPasswordResetTokenForUser(final User user, final String token) {
+        final PasswordResetToken myToken = new PasswordResetToken(token, user);
+        passwordTokenRepository.save(myToken);
+    }
+    public void changeUserPassword(final User user, final String password) {
+        //user.setPassword(passwordEncoder.encode(password));
+    	//TODO:encode pw, pass User insterad of userprofile
+
+    	user.setPassword(password);
+        updateUserPassword(user);
+    }    
     public UserConnection getUserConnection(final String userId) {
         LOG.debug("SQL SELECT ON UserConnection: {}", userId);
 
@@ -127,7 +183,7 @@ public class UsersDao {
             profile.getName(),
             profile.getUsername());
     }
-    public void createUser(String userId, UserProfile profile, User user) {
+    public void createUser(String userId, UserProfile profile, User user) throws UsernameAlreadyInUseException{
         if (LOG.isDebugEnabled()) {
             LOG.debug("SQL INSERT ON users, authorities and UserProfile: " + userId + " with profile: " +
                 profile.getEmail() + ", " +
@@ -158,5 +214,49 @@ public class UsersDao {
     	if (LOG.isDebugEnabled()) {
             LOG.debug(String.format("SQL :: %s FOR USerProfile %s",jdbcTemplate.toString(), up));
         }        
+    }
+    public void updateUserPassword(User user) throws DataAccessException{
+
+        jdbcTemplate.update("UPDATE users SET password = ? WHERE username = ?",
+        		user.getPassword(), 
+        		user.getUsername());
+    	if (LOG.isDebugEnabled()) {
+            LOG.debug(String.format("SQL :: %s FOR user %s",jdbcTemplate.toString(), user));
+        }        
+    }
+    
+    private boolean emailExist(final String email) {
+        final UserProfile user = findUserByEmail(email);
+        if (user != null) {
+            return true;
+        }
+        return false;
+    }
+
+	public User saveRegisteredUser(User user) throws EmailExistsException{
+		user.setEnabled(new Byte(""));
+        jdbcTemplate.update("UPDATE users SET enabled = true WHERE username = ?",
+        		user.getUsername());
+    	if (LOG.isDebugEnabled()) {
+            LOG.debug(String.format("SQL :: %s FOR user %s",jdbcTemplate.toString(), user));
+        }        	
+    	return user;
+	}
+
+    public void createVerificationTokenForUser(final User user, final String token) {
+        final VerificationToken myToken = new VerificationToken(token, user);
+        tokenRepository.save(myToken);
+    }
+
+
+    public VerificationToken generateNewVerificationToken(final String existingVerificationToken) {
+        VerificationToken vToken = tokenRepository.findByToken(existingVerificationToken);
+        vToken.updateToken(UUID.randomUUID().toString());
+        vToken = tokenRepository.save(vToken);
+        return vToken;
+    }
+    public User getUser(final String verificationToken) {
+        final User user = tokenRepository.findByToken(verificationToken).getUser();
+        return user;
     }
 }

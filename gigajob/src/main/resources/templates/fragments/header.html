@@ -2,7 +2,7 @@
 
       <header th:fragment="header" class="demo-header mdl-layout__header mdl-color--white mdl-color--grey-100 mdl-color-text--grey-600">
         <div class="mdl-layout__header-row">
-          <a th:href="@{/home}"><span class="mdl-layout-title">gigety</span></a>
+          <a th:href="@{/}"><span class="mdl-layout-title">gigety</span></a>
 			
           <a th:if="(${gigauser} and ${gigauser.roles.contains('ROLE_CLIENT')} == true)" th:href="@{/postJob}"><i class="material-icons">note_add</i>Post a Post</a>
           <a th:if="(${gigauser} and ${gigauser.roles.contains('USER')} == true)" th:href="@{/profile}"><i class="material-icons">account_circle</i>Profile</a>

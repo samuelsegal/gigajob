@@ -34,7 +34,8 @@ public class AccountConnectionSignUpService implements ConnectionSignUp {
 
     public String execute(Connection<?> connection) {
     	
-    	String userId = UUID.randomUUID().toString();
+    	//String userId = UUID.randomUUID().toString();
+    	String userId;
     	Object socialConn = connection.getApi();
     		
     	if (socialConn instanceof Facebook) {
@@ -45,6 +46,8 @@ public class AccountConnectionSignUpService implements ConnectionSignUp {
 			String name  = fbAPI.fetchObject("me", String.class, "name");
 			String firstName  = fbAPI.fetchObject("me", String.class, "first_name");
 			String lastName  = fbAPI.fetchObject("me", String.class, "last_name");
+			//TOD Why is Facebook not providing email? because app needs review and request 
+			//      submitted for this priveledge?
 			
 			
 			Locale locale = LocaleContextHolder.getLocale();
@@ -64,6 +67,8 @@ public class AccountConnectionSignUpService implements ConnectionSignUp {
 				LOG.error(String.format("ERROR PARSING JSON %s : ", e.getMessage()));
 			}
 			
+			userId = name;
+			LOG.debug(String.format("Creating FACEBOOK PROFile :: %s", userId));
 			UserProfile u = new UserProfile(
 					userId,name,firstName,lastName,name,email);			
 			usersDao.createUser(userId, new UserProfile(userId, 
@@ -75,6 +80,12 @@ public class AccountConnectionSignUpService implements ConnectionSignUp {
 		}else{
     	
 			org.springframework.social.connect.UserProfile profile = connection.fetchUserProfile();
+			//TODO: All Social Connections should have email available here 
+			//but currently do not, wtf? fixit...
+			//Also when duplicate email happens, should user be provided option to add as a connection?
+			userId = profile.getEmail() != null ? profile.getEmail() : 
+				profile.getUsername() != null ? profile.getUsername() : 
+					UUID.randomUUID().toString();
 	        usersDao.createUser(userId, new UserProfile(userId, profile));
 	        
 		}

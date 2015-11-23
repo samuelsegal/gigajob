@@ -19,9 +19,6 @@
     </head>
 
     <body>
- 
-
-
         <div class="container">
 
 			<form  class="form-signin" id="signin" th:action="@{/signin/authenticate}" method="post">
@@ -48,7 +45,7 @@
 				<button class="btn btn-lg btn-primary btn-block" type="submit" th:text="#{giga.signin}"></button>
 				
 				<p>Or you can <a th:href="@{/signup}">signup</a> with a new account.</p>
-
+				<p><a th:href="@{/forgotPassword}">Forgot</a> your password?</p>
             <p>Sign in with:</p>
             <table style="border-collapse: separate; border-spacing: 2px">
                 <tr>
@@ -62,10 +59,9 @@
             </table>
 			</form>
             <div th:include="fragments/exception :: errorInfo"/>
-
-        </div><!-- /.container -->
+		</div>
        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js" />
-        <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js" />
+       <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js" />
 
     </body>
 </html>

@@ -1,9 +1,5 @@
 package com.spazomatic.jobyjob.service.impl;
 
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
-import java.nio.file.Files;
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -21,10 +17,7 @@ import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.gridfs.GridFsTemplate;
 import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
 
-import com.mongodb.BasicDBObject;
-import com.mongodb.DBObject;
 import com.mongodb.gridfs.GridFSDBFile;
 import com.spazomatic.jobyjob.nosql.entities.Post;
 import com.spazomatic.jobyjob.nosql.repo.PostRepository;

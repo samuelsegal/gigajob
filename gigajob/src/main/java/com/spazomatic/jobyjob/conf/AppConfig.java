@@ -4,6 +4,8 @@
 package com.spazomatic.jobyjob.conf;
 
 
+import java.util.Properties;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.CacheManager;
 import org.springframework.cache.annotation.EnableCaching;
@@ -15,6 +17,7 @@ import org.springframework.context.annotation.EnableAspectJAutoProxy;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
 import org.springframework.core.env.Environment;
+import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.scheduling.annotation.EnableScheduling;
 
 @Configuration
@@ -39,7 +42,7 @@ public class AppConfig {
 	{
 		return new ConcurrentMapCacheManager();
 	}
-/*	
+	
 	@Bean
 	public JavaMailSenderImpl javaMailSenderImpl() {
 		JavaMailSenderImpl mailSenderImpl = new JavaMailSenderImpl();
@@ -57,5 +60,5 @@ public class AppConfig {
 
 		return mailSenderImpl;
 	}
-	*/
+
 }

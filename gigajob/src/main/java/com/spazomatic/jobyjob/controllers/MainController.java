@@ -5,23 +5,27 @@ import java.security.Principal;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.spazomatic.jobyjob.util.SocialControllerUtil;
+import com.spazomatic.jobyjob.util.Util;
 
 @Controller
 public class MainController {
 
-    @Autowired private SocialControllerUtil util;
+	private static Logger LOG = LoggerFactory.getLogger(Util.LOG_TAG);
+    @Autowired private SocialControllerUtil util;   
     
     @RequestMapping("/")
     public String usr() {
         return "usr/index";
     }    
-    
+   
     @RequestMapping("/home")
     public String home(HttpServletRequest request, Principal currentUser, Model model) {
         HttpSession session = request.getSession();
@@ -46,5 +50,10 @@ public class MainController {
     public String login(){
     	return "login";
     }
-
+    
+    @RequestMapping("/forgotPassword")
+    public String forgotPassword(){
+    	return "forgotPassword";
+    }
+        
 }
