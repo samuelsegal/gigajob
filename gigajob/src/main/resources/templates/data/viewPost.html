@@ -41,7 +41,22 @@
 					  	<td><label for="clientName" th:text="#{giga.Poster}"></label></td>
 					  	<td id="clientName"><a th:href="@{/viewClientProfile(userid=${post?.userId})}" th:text="${post.clientName}" ></a></td>								
 					</tr>
+
+						
 				</table>
+				<div>
+					<div class="col-sm-2">
+						<img th:if="${post.imgFiles['fileInput1']}" id="postNail1" th:src="@{getImgFile/fileInput1}" style="height:50px;width:50px"></img>
+					</div><div class="col-sm-2">
+						<img th:if="${post.imgFiles['fileInput2']}" id="postNail2" th:src="@{getImgFile/fileInput2}" style="height:50px;width:50px"></img>	
+					</div><div class="col-sm-2">
+						<img th:if="${post.imgFiles['fileInput3']}" id="postNail3" th:src="@{getImgFile/fileInput3}" style="height:50px;width:50px"></img>	
+					</div><div class="col-sm-2">
+						<img th:if="${post.imgFiles['fileInput4']}" id="postNail4" th:src="@{getImgFile/fileInput4}" style="height:50px;width:50px"></img>	
+					</div><div class="col-sm-2">
+						<img th:if="${post.imgFiles['fileInput5']}" id="postNail5" th:src="@{getImgFile/fileInput5}" style="height:50px;width:50px"></img>
+					</div>
+				</div>
 			</div>
 		</div>
 	</div>

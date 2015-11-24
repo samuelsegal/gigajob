@@ -53,6 +53,8 @@ public class PostController {
 		util.setModel(request, currentUser, model);
 		post = postService.findOne(postid);
 		model.addAttribute(post);
+		HttpSession session = request.getSession();
+		session.setAttribute("rib", post);
 		return "data/viewPost";
 	}
 

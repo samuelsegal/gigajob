@@ -8,4 +8,5 @@ public interface Util {
 	public static final String ROLE_PROVIDER        = "ROLE_PROVIDER";
 	public static final String GIGA_USER            = "gigauser";
 	public static final String GIGA_USER_CONNECTION = "gigauserconnection";
+	public static final String GIGA_USER_CONNECTIONS = "gigauserconnections";
 }

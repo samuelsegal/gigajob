@@ -35,9 +35,9 @@ import com.spazomatic.jobyjob.db.model.UserProfile;
 public class SocialControllerUtil {
 
     private static final Logger LOG = LoggerFactory.getLogger(Util.LOG_TAG);
-
-    private static final String USER_CONNECTION = "MY_USER_CONNECTION";
-    public static final String USER_PROFILE = "MY_USER_PROFILE";
+    public static final String USER_CONNECTIONS = "GIGA_USER_CONNECTIONS";
+    public static final String USER_CONNECTION = "GIGA_USER_CONNECTION";
+    public static final String USER_PROFILE = "GIGA_USER_PROFILE";
 
     @Autowired
     private JdbcTemplate jdbcTemplate;
@@ -92,6 +92,7 @@ public class SocialControllerUtil {
         HttpSession session = request.getSession();
 
         UserConnection connection = null;
+        Map<String, UserConnection> userConnections = null;
         UserProfile profile = null;
         String displayName = null;
         String data = null;
@@ -101,7 +102,10 @@ public class SocialControllerUtil {
 
             // Get the current UserConnection from the http session
             connection = getUserConnection(session, userId);
-
+            
+            //SLoppy but USERCONNECTIONS is set to session in getUserConnection
+            userConnections = (Map<String, UserConnection>) session.getAttribute(USER_CONNECTIONS);
+            
             // Get the current UserProfile from the http session
             profile = getUserProfile(session, userId);
 
@@ -121,6 +125,7 @@ public class SocialControllerUtil {
         model.addAttribute("currentUserId",           userId);
         model.addAttribute(Util.GIGA_USER,            profile);
         model.addAttribute(Util.GIGA_USER_CONNECTION, connection != null ? connection : null);
+        model.addAttribute(Util.GIGA_USER_CONNECTIONS, userConnections);
         model.addAttribute("currentUserDisplayName",  displayName);
         model.addAttribute("currentData",             data);
 
@@ -210,19 +215,18 @@ public class SocialControllerUtil {
 
         // Reload from persistence storage if not set or invalid (i.e. no valid userId)
         if (connection == null || !userId.equals(connection.getUserId())) {
-            try{
-            	Map<String,UserConnection> userConnections = usersDao.getUserConnections(userId);
-            	List<UserConnection> conns = new ArrayList<>();
-            	userConnections.forEach( (k,v) -> {
-            		LOG.debug(String.format("UserConnection Provider %s", v.getProviderId()));
-            		conns.add(v); 
-            	});
-            	//TODO: Have a default preferred with ability to select preferrred connection to define profile.
-            	connection = !conns.isEmpty() ? conns.get(0) : new UserConnection();
-            }catch(EmptyResultDataAccessException ex){
-            	//connection = new UserConnection();
-            }
-            session.setAttribute(USER_CONNECTION, connection);
+
+        	Map<String,UserConnection> userConnections = usersDao.getUserConnections(userId);
+        	List<UserConnection> conns = new ArrayList<>();
+        	userConnections.forEach( (k,v) -> {
+        		LOG.debug(String.format("UserConnection Provider %s", v.getProviderId()));
+        		conns.add(v); 
+        	});
+        	//TODO: Have a default preferred with ability to select preferred connection to define profile.
+
+        	connection = !conns.isEmpty() ? conns.get(0) : new UserConnection();
+        	session.setAttribute(USER_CONNECTION, connection);
+        	session.setAttribute(USER_CONNECTIONS, userConnections);
         }
         return connection;
     }

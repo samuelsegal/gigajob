@@ -20,10 +20,7 @@
 		<div class="row">	
 		<div class="col-md-2"></div>
 			<div class="col-md-8">
-			<form th:action="@{/table}">
-				<label for="distance">Distance from current location: </label> 
-				<input type="text" id="distance" name="distance" />
-			</form>
+
 			<div class="span12">
 				<table id="myTableId" dt:table="true" dt:theme="bootstrap3" dt:displayLength="5"
 					dt:export="pdf,csv" class="table">
@@ -46,12 +43,7 @@
 			</div>
 			<div class="col-md-2"></div>
 		</div>
-		<div class="row">
-			<div class="col-md-2"></div>
-			<div class="col-md-8" id="gigamap" style="height: 180px">			
-			</div>
-			<div class="col-md-2"></div>
-		</div>
+
 		</div>
 	</main>
 	<!-- Latest compiled and minified JavaScript -->

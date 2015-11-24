@@ -2,6 +2,8 @@ package com.spazomatic.jobyjob.controllers;
 
 import java.io.IOException;
 import java.security.Principal;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
@@ -203,12 +205,16 @@ public class ClientController {
 	@RequestMapping(value = { "/confirmSubmitRib" }, method = RequestMethod.POST)
 	public String confirmSubmitRib(Principal currentUser, Model model,
 			@ModelAttribute Post post, @ModelAttribute IpLoc loc) {
+
+		
 		if(loc != null && loc.getLatitude() != null && loc.getLongitude() != null){
 			post.setLocation(new double[]{loc.getLatitude(), loc.getLongitude()});	
 		}
 		util.setModel(request, currentUser, model);		
 		post.setUserId(currentUser.getName());		
 		HttpSession session = request.getSession();
+		post = (Post) session.getAttribute("rib");
+		
 		UserProfile client  = (UserProfile) session.getAttribute(
 				SocialControllerUtil.USER_PROFILE);
 		post.setClientName(client.getName());	
@@ -254,5 +260,34 @@ public class ClientController {
 		}
 		return location;
 	}
-
+	private void setPostImages(Post post, MultipartFile fileInput1, 
+			MultipartFile fileInput2, MultipartFile fileInput3,
+			MultipartFile fileInput4, MultipartFile fileInput5) {
+		
+    	Map<String, byte[]> imgFiles = new HashMap<>();
+        try {
+	    	if (!fileInput1.isEmpty()) {          	
+	        	imgFiles.put("fileInput1", fileInput1.getBytes());    	        	
+	    	}
+	    	if (!fileInput2.isEmpty()) {          	
+	        	imgFiles.put("fileInput2", fileInput2.getBytes());    
+	    	}
+	    	if (!fileInput3.isEmpty()) {          	
+	        	imgFiles.put("fileInput3", fileInput3.getBytes());    
+	    	}
+	    	if (!fileInput4.isEmpty()) {          	
+	        	imgFiles.put("fileInput4", fileInput4.getBytes());    
+	    	}
+	    	if (!fileInput5.isEmpty()) {          	
+	        	imgFiles.put("fileInput5", fileInput5.getBytes());    	        	
+	    	}
+	    	
+	    	post.setImgFiles(imgFiles);
+	    	
+        } catch (Exception e) {
+        	LOG.error(String.format(
+        			"ERROR setting Post Image files :: %s", 
+        			e.getMessage()));
+        }     			
+	}
 }

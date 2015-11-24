@@ -1,6 +1,14 @@
 package com.spazomatic.jobyjob.service.impl;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+
+import javax.transaction.Transactional;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -18,6 +26,8 @@ import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.gridfs.GridFsTemplate;
 import org.springframework.stereotype.Service;
 
+import com.mongodb.BasicDBObject;
+import com.mongodb.DBObject;
 import com.mongodb.gridfs.GridFSDBFile;
 import com.spazomatic.jobyjob.nosql.entities.Post;
 import com.spazomatic.jobyjob.nosql.repo.PostRepository;
@@ -25,9 +35,11 @@ import com.spazomatic.jobyjob.service.PostService;
 import com.spazomatic.jobyjob.util.Util;
 
 @Service
+@Transactional
 public class PostServiceImpl implements PostService{
 	
-	private static final Logger LOG = LoggerFactory.getLogger(Util.LOG_TAG);
+	private static final Logger LOG = LoggerFactory.getLogger(
+			String.format("%s :: %s", Util.LOG_TAG, PostServiceImpl.class));
     @Autowired private PostRepository postRepository;
     @Autowired private MongoTemplate mongoTemplate;
 	@Autowired private GridFsTemplate gridfsTemplate;
@@ -35,20 +47,15 @@ public class PostServiceImpl implements PostService{
     @Override
     public Post save(Post post) {
         postRepository.save(post);
-       /* DBObject metaData = new BasicDBObject();
+        DBObject metaData = new BasicDBObject();
         metaData.put("postid", post.getId()) ;
         InputStream inputStream;
-		try {
-			MultipartFile img1 = post.getImgFiles().get(0);
-			inputStream = img1.getInputStream();
-	        String id = 
-	        		gridfsTemplate.store(inputStream, img1.getName(), 
-	        				"image/png", metaData).getId().toString();
-	        LOG.debug(String.format("Created file with id %s", id));
-		} catch (IOException e) {
-			LOG.error(e.getMessage());
-		} 
-		*/
+		Map<String, byte[]> imgFiles = post.getImgFiles();
+		
+		inputStream =new ByteArrayInputStream(post.getImgFiles().get("fileInput1"));
+		String id = gridfsTemplate.store(inputStream, "fileinput1", 
+						"image/png", metaData).getId().toString();
+		LOG.debug(String.format("Created file with id %s", id)); 		
         return post;
     }
 
@@ -66,10 +73,24 @@ public class PostServiceImpl implements PostService{
         if(files != null){
         	LOG.debug(String.format("%d images found for post %s with id %s",
         			files.size(), post.getTitle(), post.getId()));
+        	Map<String, byte[]> imgFiles = new HashMap<>();
         	for(GridFSDBFile gridFSDBFile : files){
-        		//File tmp = Files.createTempFile(dir, prefix, suffix, attrs)
-        		//gridFSDBFile.writeTo(tmp);
+
+        		try {
+            		ByteArrayOutputStream baos = new ByteArrayOutputStream();
+            		gridFSDBFile.writeTo(baos);
+            		byte[] byteArr = baos.toByteArray();
+					LOG.debug(String.format("Read %d bytes from imgFile %s ", 
+							gridFSDBFile.getLength(), 
+							gridFSDBFile.getFilename()));
+					imgFiles.put("fileInput1",  byteArr);
+				} catch (IOException e) {
+					LOG.error(e.getMessage());
+				}
+        		
+        		
         	}
+        	post.setImgFiles(imgFiles);
         }
 		
 	}
