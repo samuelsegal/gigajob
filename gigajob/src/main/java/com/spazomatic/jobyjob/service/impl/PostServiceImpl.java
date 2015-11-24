@@ -49,21 +49,22 @@ public class PostServiceImpl implements PostService{
         postRepository.save(post);
         DBObject metaData = new BasicDBObject();
         metaData.put("postid", post.getId()) ;
-        InputStream inputStream;
+        
 		Map<String, byte[]> imgFiles = post.getImgFiles();
-		
-		inputStream =new ByteArrayInputStream(post.getImgFiles().get("fileInput1"));
-		String id = gridfsTemplate.store(inputStream, "fileinput1", 
-						"image/png", metaData).getId().toString();
-		LOG.debug(String.format("Created file with id %s", id)); 		
-        return post;
+		imgFiles.forEach((k,v) ->{
+			InputStream inputStream = new ByteArrayInputStream(v);
+			String id = gridfsTemplate.store(inputStream, k, 
+					"image/png", metaData).getId().toString();	
+			LOG.debug(String.format(
+					"Stored image file to grifs with id %s", id)); 	
+		});
+		return post;
     }
 
     @Override
     public Post findOne(String id) {
         Post post = postRepository.findOne(id);
         syncPostImages(post);
-
         return post;
     }
 
@@ -75,7 +76,6 @@ public class PostServiceImpl implements PostService{
         			files.size(), post.getTitle(), post.getId()));
         	Map<String, byte[]> imgFiles = new HashMap<>();
         	for(GridFSDBFile gridFSDBFile : files){
-
         		try {
             		ByteArrayOutputStream baos = new ByteArrayOutputStream();
             		gridFSDBFile.writeTo(baos);
@@ -83,16 +83,13 @@ public class PostServiceImpl implements PostService{
 					LOG.debug(String.format("Read %d bytes from imgFile %s ", 
 							gridFSDBFile.getLength(), 
 							gridFSDBFile.getFilename()));
-					imgFiles.put("fileInput1",  byteArr);
+					imgFiles.put(gridFSDBFile.getFilename(),  byteArr);
 				} catch (IOException e) {
 					LOG.error(e.getMessage());
-				}
-        		
-        		
+				}        		        		
         	}
         	post.setImgFiles(imgFiles);
-        }
-		
+        }		
 	}
 
 	@Override
@@ -104,8 +101,7 @@ public class PostServiceImpl implements PostService{
     public Page<Post> findByTagsName(String tagName, PageRequest pageRequest) {
         return postRepository.findByTagsName(tagName, pageRequest);
     }
-    
-    
+       
 	@Override
 	public Page<Post> findBySpatialDistance( String distance, Point geoPoint, PageRequest pageRequest) {
 

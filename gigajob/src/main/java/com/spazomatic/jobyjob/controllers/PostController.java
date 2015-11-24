@@ -35,7 +35,8 @@ import com.spazomatic.jobyjob.util.Util;
 @Controller
 public class PostController {
 	
-	private static final Logger LOG = LoggerFactory.getLogger(Util.LOG_TAG);
+	private static final Logger LOG = LoggerFactory.getLogger(
+			String.format("%s :: %s",Util.LOG_TAG,PostController.class));
 	
 	@Autowired private PostService postService;	
 	@Autowired private HttpServletRequest request;	
@@ -58,7 +59,7 @@ public class PostController {
 		return "data/viewPost";
 	}
 
-	@RequestMapping( value = { "/postRibSubmit" }, method = RequestMethod.POST )
+	@RequestMapping( value = { "/postRibSubmit" }, method = RequestMethod.POST)
 	public String postRib(Principal currentUser, Model model,
 			@ModelAttribute Post post, @ModelAttribute IpLoc loc){
 				

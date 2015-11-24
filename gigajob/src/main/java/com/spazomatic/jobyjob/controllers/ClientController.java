@@ -40,21 +40,15 @@ import com.spazomatic.jobyjob.util.Util;
 @Controller
 public class ClientController {
 	
-	private static final Logger LOG = LoggerFactory.getLogger(Util.LOG_TAG);
+	private static final Logger LOG = LoggerFactory.getLogger(
+			String.format("%s :: %s", Util.LOG_TAG, ClientController.class));
 	
 	private final UsersDao usersDao;
 	
-	@Autowired
-	private PostService postService;
-	
-	@Autowired
-	private ServerLocationBo serverLocationBo;	
-	
-	@Autowired
-	private HttpServletRequest request;
-
-    @Autowired
-    private SocialControllerUtil util;
+	@Autowired private PostService postService;	
+	@Autowired private ServerLocationBo serverLocationBo;		
+	@Autowired private HttpServletRequest request;
+    @Autowired private SocialControllerUtil util;
     
 	@Inject
 	public ClientController(UsersDao usersDao) {
@@ -70,9 +64,9 @@ public class ClientController {
 		
 		util.setModel(request, currentUser, model);
 		clientProfile       = usersDao.getUserProfile(userid);
-		clientSocialConnect = usersDao.getUserConnection(userid); 
+		//clientSocialConnect = usersDao.getUserConnections(userid).; 
 		model.addAttribute("clientProfile",       clientProfile);
-		model.addAttribute("clientSocialConnect", clientSocialConnect);
+		//model.addAttribute("clientSocialConnect", clientSocialConnect);
 		return "client/viewClientProfile";
 		
 	}
@@ -90,62 +84,6 @@ public class ClientController {
 	}
 	
 
-	@RequestMapping(value = { "/submitJob" }, method = RequestMethod.POST)
-	public String submitJob(Principal currentUser, Model model,
-			@ModelAttribute Post post, @ModelAttribute IpLoc loc, 
-			@ModelAttribute MultipartFile fileInput1, 
-			@ModelAttribute MultipartFile fileInput2,
-			@ModelAttribute MultipartFile fileInput3,
-			@ModelAttribute MultipartFile fileInput4,
-			@ModelAttribute MultipartFile fileInput5) {
-		
-		util.setModel(request, currentUser, model);
-		post.setLocation(new double[]{loc.getLatitude(), loc.getLongitude()});
-		post.setUserId(currentUser.getName());
-		
-		HttpSession session = request.getSession();
-		UserProfile client  = (UserProfile) session.getAttribute(SocialControllerUtil.USER_PROFILE);
-		post.setClientName(client.getName());
-		
-		postService.save(post);	
-		
-		String ipAddress = request.getHeader("X-FORWARDED-FOR");
-		if (ipAddress == null) {
-			ipAddress = request.getRemoteAddr();		
-		}
-	
-		ServerLocation location;
-		try {
-			location = getLocation(ipAddress);
-
-			LOG.debug(String.format("Client IP Addy: %s", ipAddress));
-			LOG.debug(String.format("Client Loaked the Cloak: %s", location.toString()));
-			
-			IpLoc ipLoc = new IpLoc();
-			ipLoc.setLatitude(Double.valueOf(location.getLatitude()));
-			ipLoc.setLongitude(Double.valueOf(location.getLongitude()));
-			
-			Page<Post> posts = postService.findByLocationNear(
-					new Point(ipLoc.getLatitude(), ipLoc.getLongitude()),
-					"30", new PageRequest(0,100));
-			model.addAttribute("posts", posts.getContent());
-			
-			ObjectMapper mapper = new ObjectMapper();
-
-				String postsAsJSON = mapper.writeValueAsString(posts);
-				model.addAttribute("postsAsJSON",postsAsJSON);
-				LOG.debug("postsAsJSON: " + postsAsJSON);
-
-			model.addAttribute("posts", posts.getContent());		
-		} catch (Exception e) {
-			LOG.error(e.getMessage());
-			model.addAttribute("message",e.getMessage());
-			return "error";
-		}
-
-		return "client/userPosts";
-	}
-
 	@RequestMapping(value = { "/managePosts" }, method = RequestMethod.GET)
 	public String managePosts(Principal currentUser, Model model,
 			@RequestParam(value = "distance", 
@@ -155,23 +93,13 @@ public class ClientController {
 		
 		util.setModel(request, currentUser, model);
 		try {		
-			String ipAddress = request.getHeader("X-FORWARDED-FOR");
-			if (ipAddress == null) {
-				ipAddress = request.getRemoteAddr();		
-			}
 		
-			ServerLocation location = getLocation(ipAddress);
-			LOG.debug(String.format("Client IP Addy: %s", ipAddress));
-			LOG.debug(String.format("Client Loaked the Cloak: %s", location.toString()));
-			
-			IpLoc ipLoc = new IpLoc();
-			ipLoc.setLatitude(Double.valueOf(location.getLatitude()));
-			ipLoc.setLongitude(Double.valueOf(location.getLongitude()));
 			Page<Post> posts = postService.findByUserId(
 					currentUser.getName(), new PageRequest(0,100));
-			model.addAttribute("posts", posts.getContent());	
+				
 			ObjectMapper mapper = new ObjectMapper();
 			String postsAsJSON = mapper.writeValueAsString(posts);
+			model.addAttribute("posts", posts.getContent());
 			model.addAttribute("postsAsJSON",postsAsJSON);
 			LOG.debug("PostsAsJSON: " + postsAsJSON);
 			
@@ -205,33 +133,30 @@ public class ClientController {
 	@RequestMapping(value = { "/confirmSubmitRib" }, method = RequestMethod.POST)
 	public String confirmSubmitRib(Principal currentUser, Model model,
 			@ModelAttribute Post post, @ModelAttribute IpLoc loc) {
-
 		
-		if(loc != null && loc.getLatitude() != null && loc.getLongitude() != null){
-			post.setLocation(new double[]{loc.getLatitude(), loc.getLongitude()});	
-		}
+
 		util.setModel(request, currentUser, model);		
-		post.setUserId(currentUser.getName());		
-		HttpSession session = request.getSession();
+		//TODO: Revisit, currently getting orig post stored in session as it contains images
+		HttpSession session = request.getSession();	
 		post = (Post) session.getAttribute("rib");
 		
 		UserProfile client  = (UserProfile) session.getAttribute(
 				SocialControllerUtil.USER_PROFILE);
+		if(loc != null && loc.getLatitude() != null && loc.getLongitude() != null){
+			post.setLocation(new double[]{loc.getLatitude(), loc.getLongitude()});	
+		}		
+		post.setUserId(currentUser.getName());	
 		post.setClientName(client.getName());	
 		postService.save(post);
+		
 		try{
-			Page<Post> posts = postService.findByLocationNear(
-					new Point(loc.getLatitude(), loc.getLongitude()),
-					"30", new PageRequest(0,100));
-			model.addAttribute("posts", posts.getContent());
-			
+			Page<Post> posts = postService.findByUserId(
+					currentUser.getName(), new PageRequest(0,100));			
 			ObjectMapper mapper = new ObjectMapper();
-
 			String postsAsJSON = mapper.writeValueAsString(posts);
-			model.addAttribute("postsAsJSON",postsAsJSON);
+			model.addAttribute("postsAsJSON",postsAsJSON);			
+			model.addAttribute("posts", posts.getContent());
 			LOG.debug("postsAsJSON: " + postsAsJSON);
-
-			model.addAttribute("posts", posts.getContent());		
 		} catch (Exception e) {
 			LOG.error(e.getMessage());
 			model.addAttribute("message",e.getMessage());
@@ -260,34 +185,5 @@ public class ClientController {
 		}
 		return location;
 	}
-	private void setPostImages(Post post, MultipartFile fileInput1, 
-			MultipartFile fileInput2, MultipartFile fileInput3,
-			MultipartFile fileInput4, MultipartFile fileInput5) {
-		
-    	Map<String, byte[]> imgFiles = new HashMap<>();
-        try {
-	    	if (!fileInput1.isEmpty()) {          	
-	        	imgFiles.put("fileInput1", fileInput1.getBytes());    	        	
-	    	}
-	    	if (!fileInput2.isEmpty()) {          	
-	        	imgFiles.put("fileInput2", fileInput2.getBytes());    
-	    	}
-	    	if (!fileInput3.isEmpty()) {          	
-	        	imgFiles.put("fileInput3", fileInput3.getBytes());    
-	    	}
-	    	if (!fileInput4.isEmpty()) {          	
-	        	imgFiles.put("fileInput4", fileInput4.getBytes());    
-	    	}
-	    	if (!fileInput5.isEmpty()) {          	
-	        	imgFiles.put("fileInput5", fileInput5.getBytes());    	        	
-	    	}
-	    	
-	    	post.setImgFiles(imgFiles);
-	    	
-        } catch (Exception e) {
-        	LOG.error(String.format(
-        			"ERROR setting Post Image files :: %s", 
-        			e.getMessage()));
-        }     			
-	}
+
 }

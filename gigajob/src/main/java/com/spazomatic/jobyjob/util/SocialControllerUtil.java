@@ -219,7 +219,8 @@ public class SocialControllerUtil {
         	Map<String,UserConnection> userConnections = usersDao.getUserConnections(userId);
         	List<UserConnection> conns = new ArrayList<>();
         	userConnections.forEach( (k,v) -> {
-        		LOG.debug(String.format("UserConnection Provider %s", v.getProviderId()));
+        		LOG.debug(String.format("UserConnection Provider %s", 
+        				v.getProviderId()));
         		conns.add(v); 
         	});
         	//TODO: Have a default preferred with ability to select preferred connection to define profile.

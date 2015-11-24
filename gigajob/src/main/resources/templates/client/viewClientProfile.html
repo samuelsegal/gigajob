@@ -23,14 +23,7 @@
 <main layout:fragment="content" class="mdl-layout__content mdl-color--grey-100">
 	<div id="container" class="card">
 		<table class="table">
-			<thead>
-				<tr>
-					<td><img th:src="${gigauserconnection} ? ${gigauserconnection.imageUrl} : @{images/user.jpg}" class="demo-avatar"/>
-					</td>
-					<td><h5><span th:text="${gigauserconnection.displayName}" class="mdl-color-text--blue-grey-400">user name</span>
-					</h5></td>					
-				</tr>
-			</thead>
+
 			<tr> 
 				<td><label for="name" th:text="#{giga.Name}"></label></td>
 			  	<td th:text="${clientProfile.name}" id="name" ></td>
