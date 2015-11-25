@@ -53,7 +53,9 @@ public class GigaProviderServiceImpl implements GigaProviderService{
 	@Override
     public GigaProvider findOne(String id) {
         GigaProvider gp = gigaProviderRepository.findOne(id);
-        syncProviderImages(gp);
+        if(gp != null && gp.getId() != null){
+        	syncProviderImages(gp);
+        }
         return gp;
     }
 
@@ -106,7 +108,9 @@ public class GigaProviderServiceImpl implements GigaProviderService{
 	public GigaProvider findByUserId(String userId) {
 		
 		GigaProvider gigaProvider = gigaProviderRepository.findByUserId(userId);
-		syncProviderImages(gigaProvider);
+		if(gigaProvider != null && gigaProvider.getId() != null){
+			syncProviderImages(gigaProvider);
+		}
 		return gigaProvider;
 	}
 

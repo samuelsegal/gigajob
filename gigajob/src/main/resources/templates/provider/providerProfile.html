@@ -19,7 +19,7 @@
 			height: 600px;
 		}
     </style>
-
+<script src="js/gigascript.js"></script>
 </head>
 <body>
 <main layout:fragment="content" class="mdl-layout__content mdl-color--grey-100">
@@ -57,7 +57,7 @@
 					  	<td><label for="tags" th:text="#{giga.AdditionalBangTags}"></label></td>
 					  	<td th:text="${gigaProvider.tags}" id="tags"> </td>								
 					</tr>
-					<tr>
+					<tr th:if="${gigaProvider.imgFiles}">
 
 						<td class="col-sm-2">
 							<img th:if="${gigaProvider.imgFiles['fileInput1']}" id="postNail1" th:src="@{getProviderImgFile/fileInput1}" style="height:50px;width:50px"></img>
@@ -82,30 +82,13 @@
 							</form>
 						</td>
 						<td>
-						    <script th:inline="javascript">
-						    $(function () {
-						    	  var token = $("meta[name='_csrf']").attr("content");
-						    	  var header = $("meta[name='_csrf_header']").attr("content");
-						    	  $(document).ajaxSend(function(e, xhr, options) {
-						    	    xhr.setRequestHeader(header, token);
-						    	  });
-						    	});
-							function toggleAvail(){
-
-								
-								$.ajax({
-								    type: 'POST',
-								    url: '/toggleProviderAvail',
-								});
-							}
-							</script>
-							<form method="POST" th:action="@{/toggleProviderAvail}" th:object="${gigaProvider}">
+							<form method="POST" th:action="@{/toggleProviderAvail}">
 								<div>			
-							
-									<input type="checkbox" onclick="toggleAvail()" th:field="*{active}" id="active" name="active" class="switch" />
-									<label for="active">Availability</label>
+									<input type="hidden" name="_csrf" th:value="${_csrf.token}" /> 
+									<input type="checkbox" onclick="toggleAvail()" th:field="${gigaProvider.active}" id="wtf" name="wtf" class="switch" />
+									<label for="wtf">Availability</label>
 								</div>														
-							</form>		
+							</form>
 						</td>
 					</tr>
 			</table>

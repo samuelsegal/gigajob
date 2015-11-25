@@ -28,3 +28,24 @@ function showPosition(position) {
 		document.getElementById("formattedAddress").value = formattedAddress;
 	}); 	
 }
+
+	   
+function toggleAvail(){
+    console.log('wtf');
+
+ var token = $("input[name='_csrf']").val();
+ var header = "X-CSRF-TOKEN";
+ $(document).ajaxSend(function(e, xhr, options) {
+     xhr.setRequestHeader(header, token);
+ });
+
+console.log('trickle');
+$.ajax({
+ url: "/toggleProviderAvail?available=false",
+ type: "POST",
+ success:function(response) {
+     //alert(response);
+ }
+});
+}
+	    

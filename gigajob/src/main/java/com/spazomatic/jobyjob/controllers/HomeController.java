@@ -141,7 +141,8 @@ public class HomeController {
 							String distance) {
 		
 		util.setModel(request, currentUser, model);
-		try {		
+		try {	
+			/*
 			String ipAddress = request.getHeader("X-FORWARDED-FOR");
 			if (ipAddress == null) {
 				ipAddress = request.getRemoteAddr();		
@@ -154,10 +155,12 @@ public class HomeController {
 			IpLoc ipLoc = new IpLoc();
 			ipLoc.setLatitude(Double.valueOf(location.getLatitude()));
 			ipLoc.setLongitude(Double.valueOf(location.getLongitude()));
-			Page<GigaProvider> gigaProviders = gigaProviderService.findByLocationNear(
-					new Point(ipLoc.getLatitude(), ipLoc.getLongitude()),
-					"90000", new PageRequest(0,200));
-			//Iterable<GigaProvider> gigaProviders = gigaProviderService.findAll();
+			*/
+			//Page<GigaProvider> gigaProviders = gigaProviderService.findByLocationNear(
+			//		new Point(ipLoc.getLatitude(), ipLoc.getLongitude()),
+			//		"90000", new PageRequest(0,200));
+
+			Page<GigaProvider> gigaProviders = gigaProviderService.findByActiveIsTrue(new PageRequest(0,200));
 			model.addAttribute("gigaProviders", gigaProviders);
 			ObjectMapper mapper = new ObjectMapper();
 			String postsAsJSON = mapper.writeValueAsString(gigaProviders);

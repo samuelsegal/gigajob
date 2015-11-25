@@ -62,7 +62,7 @@ public class ProviderController {
 	
 	@RequestMapping(value = { "/viewProviderProfile" }, method = RequestMethod.GET)
 	public String viewProviderProfile(Principal currentUser, Model model,
-			@RequestParam( value = "userid", required = true) String userid) {
+			@RequestParam( value = "userid", required = true ) String userid) {
 		
 		util.setModel(request, currentUser, model);
 
@@ -76,13 +76,16 @@ public class ProviderController {
 	}	
 	@RequestMapping(value = { "/toggleProviderAvail" }, method = RequestMethod.POST)
 	public String updateProviderProfile(Principal currentUser, Model model,
-			@ModelAttribute GigaProvider gigaProvider){
+			@RequestParam( value = "available" ) Boolean available){
 		util.setModel(request, currentUser, model);
-		Boolean availableSwitch = gigaProvider.getActive();
+
 		HttpSession session = request.getSession();
-		//gigaProvider = (GigaProvider) session.getAttribute(Util.GIGA_PROVIDER);
+		GigaProvider gigaProvider = (GigaProvider) session.getAttribute(Util.GIGA_PROVIDER);
+		gigaProvider.setActive(gigaProvider.getActive() != null ? !gigaProvider.getActive() : true);
 		session.setAttribute(Util.GIGA_PROVIDER, gigaProvider);
-		model.addAttribute("available", availableSwitch);
+		model.addAttribute("available", available);
+		model.addAttribute("gigaProvider",gigaProvider);
+		gigaProviderService.save(gigaProvider);
 		LOG.debug(String.format("Provider %s is available : %b", gigaProvider, gigaProvider.getActive()));
 		return "provider/providerProfile";
 	}
