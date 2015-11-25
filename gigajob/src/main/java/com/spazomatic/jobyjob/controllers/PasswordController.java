@@ -28,7 +28,7 @@ import com.spazomatic.jobyjob.db.model.PasswordResetToken;
 import com.spazomatic.jobyjob.db.model.User;
 import com.spazomatic.jobyjob.db.model.UserProfile;
 import com.spazomatic.jobyjob.exceptions.UserNotFoundException;
-import com.spazomatic.jobyjob.service.SimpleSocialUsersDetailService;
+import com.spazomatic.jobyjob.security.SimpleSocialUsersDetailService;
 import com.spazomatic.jobyjob.util.GenericResponse;
 import com.spazomatic.jobyjob.util.SocialControllerUtil;
 

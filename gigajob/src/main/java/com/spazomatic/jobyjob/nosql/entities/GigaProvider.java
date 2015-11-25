@@ -1,16 +1,20 @@
 package com.spazomatic.jobyjob.nosql.entities;
 
 import java.util.List;
+import java.util.Map;
 
+import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.annotation.Transient;
 import org.springframework.data.mongodb.core.index.GeoSpatialIndexType;
 import org.springframework.data.mongodb.core.index.GeoSpatialIndexed;
 
+import com.google.api.client.util.DateTime;
+
 public class GigaProvider {
-    @Id
-    private String id;
     
-    
+	@Id private String id;
+      
     private String userId;
     private String title;
     private String description;
@@ -19,7 +23,11 @@ public class GigaProvider {
     
 	@GeoSpatialIndexed(type = GeoSpatialIndexType.GEO_2DSPHERE)
     private double[] location;	
+	private String formattedAddress;
     private List<Tag> tags;
+    
+    @Transient Map<String, byte[]> imgFiles;   
+    @CreatedDate private DateTime createdDate;
     
 	public GigaProvider() {
 	}
@@ -95,12 +103,38 @@ public class GigaProvider {
 		this.location = location;
 	}
 
+	
+	
+	public String getFormattedAddress() {
+		return formattedAddress;
+	}
+
+	public void setFormattedAddress(String formattedAddress) {
+		this.formattedAddress = formattedAddress;
+	}
+
 	public List<Tag> getTags() {
 		return tags;
 	}
 
 	public void setTags(List<Tag> tags) {
 		this.tags = tags;
+	}
+
+	public Map<String, byte[]> getImgFiles() {
+		return imgFiles;
+	}
+
+	public void setImgFiles(Map<String, byte[]> imgFiles) {
+		this.imgFiles = imgFiles;
+	}
+
+	public DateTime getCreatedDate() {
+		return createdDate;
+	}
+
+	public void setCreatedDate(DateTime createdDate) {
+		this.createdDate = createdDate;
 	}
  
     

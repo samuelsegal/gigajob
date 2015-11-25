@@ -5,6 +5,8 @@
 	layout:decorator="layout/layout">
 
 <head>
+  <meta name="_csrf" th:content="${_csrf.token}"/>
+  <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
 	<link href='css/form.css' rel='stylesheet' />
 	<link href='css/gigadiv.css' rel='stylesheet' />
     <style type="text/css">
@@ -17,6 +19,7 @@
 			height: 600px;
 		}
     </style>
+
 </head>
 <body>
 <main layout:fragment="content" class="mdl-layout__content mdl-color--grey-100">
@@ -31,37 +34,85 @@
 				<img th:src="${gigauserconnection.imageUrl}" class="demo-avatar" />
 				
 				<span th:text="${gigauser.name}" class="mdl-color-text--blue-grey-400">name</span>
+
 				<table class="table">
 					<thead>
 						<tr>
-							<td><h3><span th:text="#{giga.Poster}"></span></h3></td>
+							<td><h3><span th:text="${gigaProvider.providerName}"></span></h3></td>
 						</tr>
 					</thead>
-					<tr> 
-						<td><label for="name" th:text="#{giga.Name}"></label></td>
-					  	<td th:text="${gigaProvider.providerName}" id="name" ></td>
-					</tr><tr>
-					  	<td><label for="firstName" th:text="#{giga.FirstName}"></label></td>
-					  	<td th:text="${gigaProvider.title}" id="firstName"></td>
-					</tr><tr>
-					  	<td><label for="lastName" th:text="#{giga.LastName}"></label></td>
-					  	<td th:text="${gigaProvider.description}" id="lastName"> </td>								
+					<tr th:if="${gigaProvider.title}"> 
+						<td><label for="title" th:text="#{giga.Title}"></label></td>
+					  	<td th:text="${gigaProvider.title}" id="title" ></td>
+					</tr><tr th:if="${gigaProvider.description}">
+					  	<td><label for="description" th:text="#{giga.Description}"></label></td>
+					  	<td th:text="${gigaProvider.description}" id="description"></td>
+					</tr><tr th:if="${gigaProvider.active}">
+					  	<td><label for="active" th:text="#{giga.Active}"></label></td>
+					  	<td th:text="${gigaProvider.active}" id="active"> </td>								
+					</tr><tr th:if="${gigaProvider.formattedAddress}">
+					  	<td><label for="location" th:text="#{giga.Location}"></label></td>
+					  	<td th:text="${gigaProvider.formattedAddress}" id="location"> </td>								
+					</tr><tr th:if="${gigaProvider.tags}">
+					  	<td><label for="tags" th:text="#{giga.AdditionalBangTags}"></label></td>
+					  	<td th:text="${gigaProvider.tags}" id="tags"> </td>								
 					</tr>
-				</table>
-				
-				<br />
-				<hr />				
-				
-				<form method="GET" th:action="@{/editProviderProfile}">
-					<input type="hidden" name="_csrf" th:value="${_csrf.token}" />
-					<button type="submit" th:text="#{giga.profile.edit}" class="btn btn-sm btn-primary badge"></button>
-				</form>
-				<form method="POST" th:action="@{/signout}">
-					<input type="hidden" name="_csrf" th:value="${_csrf.token}" />
-					<button th:text="#{giga.signout}" class="btn btn-sm btn-primary badge">Sign Out</button>
-				</form>
+					<tr>
+
+						<td class="col-sm-2">
+							<img th:if="${gigaProvider.imgFiles['fileInput1']}" id="postNail1" th:src="@{getProviderImgFile/fileInput1}" style="height:50px;width:50px"></img>
+						</td><td class="col-sm-2">
+							<img th:if="${gigaProvider.imgFiles['fileInput2']}" id="postNail2" th:src="@{getProviderImgFile/fileInput2}" style="height:50px;width:50px"></img>	
+						</td><td class="col-sm-2">
+							<img th:if="${gigaProvider.imgFiles['fileInput3']}" id="postNail3" th:src="@{getProviderImgFile/fileInput3}" style="height:50px;width:50px"></img>	
+						</td><td class="col-sm-2">
+							<img th:if="${gigaProvider.imgFiles['fileInput4']}" id="postNail4" th:src="@{getProviderImgFile/fileInput4}" style="height:50px;width:50px"></img>	
+						</td><td class="col-sm-2">
+							<img th:if="${gigaProvider.imgFiles['fileInput5']}" id="postNail5" th:src="@{getProviderImgFile/fileInput5}" style="height:50px;width:50px"></img>
+						</td>
+					
+					</tr>
+					<tr>
+						<td>
+							<form method="GET" th:action="@{/editProviderProfile}">
+								<input type="hidden" name="_csrf" th:value="${_csrf.token}" />
+								<button type="submit" th:text="#{giga.provider.editProfile}" 
+									class="btn btn-sm btn-primary badge">
+								</button>
+							</form>
+						</td>
+						<td>
+						    <script th:inline="javascript">
+						    $(function () {
+						    	  var token = $("meta[name='_csrf']").attr("content");
+						    	  var header = $("meta[name='_csrf_header']").attr("content");
+						    	  $(document).ajaxSend(function(e, xhr, options) {
+						    	    xhr.setRequestHeader(header, token);
+						    	  });
+						    	});
+							function toggleAvail(){
+
+								
+								$.ajax({
+								    type: 'POST',
+								    url: '/toggleProviderAvail',
+								});
+							}
+							</script>
+							<form method="POST" th:action="@{/toggleProviderAvail}" th:object="${gigaProvider}">
+								<div>			
+							
+									<input type="checkbox" onclick="toggleAvail()" th:field="*{active}" id="active" name="active" class="switch" />
+									<label for="active">Availability</label>
+								</div>														
+							</form>		
+						</td>
+					</tr>
+			</table>
 			</div>
-			<div class="col-md-4"></div>
+			<div class="col-md-4">
+			
+			</div>
 		</div>
 	</div>
 </main>

@@ -41,7 +41,6 @@ public class PostController {
 	@Autowired private PostService postService;	
 	@Autowired private HttpServletRequest request;	
     @Autowired private SocialControllerUtil util;
-    @Autowired private Environment env;
     
 	public PostController() {
 	}
@@ -131,13 +130,15 @@ public class PostController {
 	public void getUserImage(HttpServletResponse response, 
 			Principal currentUser, Model model, 
 			@PathVariable("id") String postNailId) throws IOException{
+		
 		HttpSession session = request.getSession();
 		Post rib = session.getAttribute("rib") != null 
 				? (Post) session.getAttribute("rib") 
 				: new Post();
-		if(rib.getImgFiles() != null && rib.getImgFiles().get(postNailId) != null){
+		if(rib.getImgFiles() != null && 
+				rib.getImgFiles().get(postNailId) != null){
 			//TODO: setContentType dynamic		
-			response.setContentType("image/jpeg");
+			response.setContentType("image/png");
 			byte[] buffer = rib.getImgFiles().get(postNailId);
 	
 			InputStream in1 = new ByteArrayInputStream(buffer);

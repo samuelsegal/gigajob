@@ -15,7 +15,7 @@ import org.springframework.social.security.SocialUserDetailsService;
 import org.springframework.social.security.SpringSocialConfigurer;
 
 import com.spazomatic.jobyjob.security.MyCustomLoginSuccessHandler;
-import com.spazomatic.jobyjob.service.SimpleSocialUsersDetailService;
+import com.spazomatic.jobyjob.security.SimpleSocialUsersDetailService;
 
 @Configuration
 @EnableWebSecurity

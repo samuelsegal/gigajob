@@ -47,6 +47,8 @@ public class PostServiceImpl implements PostService{
     @Override
     public Post save(Post post) {
         postRepository.save(post);
+        
+        //Save Images
         DBObject metaData = new BasicDBObject();
         metaData.put("postid", post.getId()) ;
         

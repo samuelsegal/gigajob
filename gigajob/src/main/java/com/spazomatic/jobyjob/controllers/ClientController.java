@@ -134,7 +134,6 @@ public class ClientController {
 	public String confirmSubmitRib(Principal currentUser, Model model,
 			@ModelAttribute Post post, @ModelAttribute IpLoc loc) {
 		
-
 		util.setModel(request, currentUser, model);		
 		//TODO: Revisit, currently getting orig post stored in session as it contains images
 		HttpSession session = request.getSession();	
@@ -165,6 +164,7 @@ public class ClientController {
 
 		return "client/userPosts";
 	}
+	/*
 	private ServerLocation getLocation(String ipAddress) throws Exception{
 		ServerLocation location = null;
 		try {
@@ -185,5 +185,6 @@ public class ClientController {
 		}
 		return location;
 	}
+	*/
 
 }

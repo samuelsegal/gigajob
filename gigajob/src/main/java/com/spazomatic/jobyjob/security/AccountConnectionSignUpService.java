@@ -1,4 +1,4 @@
-package com.spazomatic.jobyjob.service;
+package com.spazomatic.jobyjob.security;
 
 import java.util.UUID;
 

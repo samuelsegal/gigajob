@@ -34,7 +34,9 @@ import com.spazomatic.jobyjob.db.model.UserProfile;
 @Component
 public class SocialControllerUtil {
 
-    private static final Logger LOG = LoggerFactory.getLogger(Util.LOG_TAG);
+    private static final Logger LOG = LoggerFactory.getLogger(
+    		String.format("%s :: %s", Util.LOG_TAG, 
+    				SocialControllerUtil.class));
     public static final String USER_CONNECTIONS = "GIGA_USER_CONNECTIONS";
     public static final String USER_CONNECTION = "GIGA_USER_CONNECTION";
     public static final String USER_PROFILE = "GIGA_USER_PROFILE";

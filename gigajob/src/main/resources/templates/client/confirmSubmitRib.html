@@ -159,7 +159,7 @@
 				</div>
 
 				
-				<div class="form-group">
+				<div th:if="${rib.imgFiles}" class="form-group">
 					<div class="col-sm-2">
 						<img th:if="${rib.imgFiles['fileInput1']}" th:field="*{imgFiles['fileInput1']}" id="postNail1" th:src="@{getImgFile/fileInput1}" style="height:50px;width:50px"></img>
 					</div><div class="col-sm-2">

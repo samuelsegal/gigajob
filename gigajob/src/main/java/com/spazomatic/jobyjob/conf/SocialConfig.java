@@ -20,7 +20,7 @@ import org.springframework.social.linkedin.connect.LinkedInConnectionFactory;
 import org.springframework.social.security.AuthenticationNameUserIdSource;
 
 import com.spazomatic.jobyjob.db.dao.UsersDao;
-import com.spazomatic.jobyjob.service.AccountConnectionSignUpService;
+import com.spazomatic.jobyjob.security.AccountConnectionSignUpService;
 
 @Configuration
 @EnableSocial

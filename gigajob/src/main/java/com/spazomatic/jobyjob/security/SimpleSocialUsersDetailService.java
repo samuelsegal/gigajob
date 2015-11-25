@@ -1,4 +1,4 @@
-package com.spazomatic.jobyjob.service;
+package com.spazomatic.jobyjob.security;
 
 import org.springframework.dao.DataAccessException;
 import org.springframework.security.core.userdetails.UserDetails;

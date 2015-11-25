@@ -14,8 +14,9 @@ import com.google.api.client.util.DateTime;
 @Document
 //@Document(indexName = "jobyjob", type = "geo-class-point-type", shards = 1, replicas = 0)
 public class Post {
-    @Id
-    private String id;
+	
+    @Id private String id;
+    
     private String title;
     private String description;
     
@@ -30,9 +31,7 @@ public class Post {
 	private List<String> imageURLs;
     private List<Tag> tags;
     
-    @Transient
-    Map<String, byte[]> imgFiles;
-    
+    @Transient Map<String, byte[]> imgFiles;   
     @CreatedDate private DateTime createdDate;
     
     private DateTime expirationTime;
