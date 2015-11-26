@@ -22,7 +22,11 @@ public class MainController {
     @Autowired private SocialControllerUtil util;   
     
     @RequestMapping("/")
-    public String usr() {
+    public String usr(HttpServletRequest request, Principal currentUser, Model model) {
+    	if(currentUser != null){
+    		util.setModel(request, currentUser, model);
+    		return "home";
+    	}
         return "usr/index";
     }    
    

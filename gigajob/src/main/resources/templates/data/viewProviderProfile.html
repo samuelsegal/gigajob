@@ -5,6 +5,8 @@
 	layout:decorator="layout/layout">
 
 <head>
+  <meta name="_csrf" th:content="${_csrf.token}"/>
+  <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
 	<link href='css/form.css' rel='stylesheet' />
 	<link href='css/gigadiv.css' rel='stylesheet' />
     <style type="text/css">
@@ -17,6 +19,7 @@
 			height: 600px;
 		}
     </style>
+<script src="js/gigascript.js"></script>
 </head>
 <body>
 <main layout:fragment="content" class="mdl-layout__content mdl-color--grey-100">
@@ -25,24 +28,52 @@
 			<div class="col-md-12"><br /></div>
 		</div>
 		<div class="row">
-			<div class="col-md-8">
+			<div class="col-md-2"></div>
+			<div class="col-md-6">
+				
+				<img th:src="${gigauserconnection.imageUrl}" class="demo-avatar" />
+				
+				<span th:text="${gigauser.name}" class="mdl-color-text--blue-grey-400">name</span>
+
 				<table class="table">
 					<thead>
 						<tr>
-							<td><h5><span th:text="${gigaProvider?.title}"></span></h5></td>
+							<td><h3><span th:text="${gigaProvider.providerName}"></span></h3></td>
 						</tr>
 					</thead>
-					<tr> 
-						<td><label for="name" th:text="#{giga.Name}"></label></td>
-					  	<td th:text="${gigaProvider?.providerName}" id="name" ></td>
-					</tr><tr>
+					<tr th:if="${gigaProvider.title}"> 
+						<td><label for="title" th:text="#{giga.Title}"></label></td>
+					  	<td th:text="${gigaProvider.title}" id="title" ></td>
+					</tr><tr th:if="${gigaProvider.description}">
 					  	<td><label for="description" th:text="#{giga.Description}"></label></td>
-					  	<td th:text="${gigaProvider?.description}" id="description"></td>
+					  	<td th:text="${gigaProvider.description}" id="description"></td>
+					</tr><tr th:if="${gigaProvider.formattedAddress}">
+					  	<td><label for="location" th:text="#{giga.Location}"></label></td>
+					  	<td th:text="${gigaProvider.formattedAddress}" id="location"> </td>								
+					</tr><tr th:if="${gigaProvider.tags}">
+					  	<td><label for="tags" th:text="#{giga.AdditionalBangTags}"></label></td>
+					  	<td th:text="${gigaProvider.tags}" id="tags"> </td>								
 					</tr>
-				</table>			
+					<tr th:if="${gigaProvider.imgFiles}">
 
+						<td class="col-sm-2">
+							<img th:if="${gigaProvider.imgFiles['fileInput1']}" id="postNail1" th:src="@{getProviderImgFile/fileInput1}" style="height:50px;width:50px"></img>
+						</td><td class="col-sm-2">
+							<img th:if="${gigaProvider.imgFiles['fileInput2']}" id="postNail2" th:src="@{getProviderImgFile/fileInput2}" style="height:50px;width:50px"></img>	
+						</td><td class="col-sm-2">
+							<img th:if="${gigaProvider.imgFiles['fileInput3']}" id="postNail3" th:src="@{getProviderImgFile/fileInput3}" style="height:50px;width:50px"></img>	
+						</td><td class="col-sm-2">
+							<img th:if="${gigaProvider.imgFiles['fileInput4']}" id="postNail4" th:src="@{getProviderImgFile/fileInput4}" style="height:50px;width:50px"></img>	
+						</td><td class="col-sm-2">
+							<img th:if="${gigaProvider.imgFiles['fileInput5']}" id="postNail5" th:src="@{getProviderImgFile/fileInput5}" style="height:50px;width:50px"></img>
+						</td>
+					
+					</tr>
+			</table>
 			</div>
-			<div class="col-md-4"></div>
+			<div class="col-md-4">
+			
+			</div>
 		</div>
 	</div>
 </main>

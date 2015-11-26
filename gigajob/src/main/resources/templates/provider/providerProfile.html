@@ -47,9 +47,6 @@
 					</tr><tr th:if="${gigaProvider.description}">
 					  	<td><label for="description" th:text="#{giga.Description}"></label></td>
 					  	<td th:text="${gigaProvider.description}" id="description"></td>
-					</tr><tr th:if="${gigaProvider.active}">
-					  	<td><label for="active" th:text="#{giga.Active}"></label></td>
-					  	<td th:text="${gigaProvider.active}" id="active"> </td>								
 					</tr><tr th:if="${gigaProvider.formattedAddress}">
 					  	<td><label for="location" th:text="#{giga.Location}"></label></td>
 					  	<td th:text="${gigaProvider.formattedAddress}" id="location"> </td>								
