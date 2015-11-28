@@ -6,7 +6,7 @@
 <head>
 	<link href='css/form.css' rel='stylesheet' />
 	<link href='css/gigadiv.css' rel='stylesheet' />
-
+	
     <style type="text/css">
 	    .custom {
 	    	width: 278px !important;
@@ -26,26 +26,38 @@
 		<div class="col-md-12"><br /></div>
 	</div>
 	<div class="row">
-		<div class="col-md-12">
-			<form th:method="POST" th:action="@{/updateProfile}" th:object="${gigauser}" >				
-
-<label th:text="#{giga.UserName}"></label>
-<input th:field="*{username}" />
-<label th:text="#{giga.CompanyName}"></label>
-<input th:field="*{name}" />
-<label th:text="#{giga.FirstName}"></label>
-<input th:field="*{firstName}" />
-<label th:text="#{giga.LastName}"></label>
-<input th:value="*{lastName}" th:field="*{lastName}"/>
-<label th:text="#{giga.Email}"></label>
-<input th:field="*{email}"/> 							
-
+		<div class="col-md-2"></div>
+		<div class="col-md-8">	
+			<form th:method="POST" th:action="@{/updateProfile}" 
+				th:object="${gigauser}" class="form-horizontal">				
+				<div class="form-group">
+					<label th:text="#{giga.UserName}"></label>
+					<input th:field="*{username}" class="form-control"/>
+				</div>
+				<div class="form-group">
+					<label th:text="#{giga.CompanyName}"></label>
+					<input th:field="*{name}" class="form-control"/>
+				</div>
+				<div class="form-group">
+					<label th:text="#{giga.FirstName}"></label>
+					<input th:field="*{firstName}" class="form-control"/>
+				</div>
+				<div class="form-group">
+					<label th:text="#{giga.LastName}"></label>
+					<input th:field="*{lastName}" class="form-control"/>
+				</div>
+				<div class="form-group">
+					<label th:text="#{giga.Email}"></label>
+					<input th:field="*{email}" class="form-control"/>
+				</div> 							
 				<input type="hidden" name="_csrf" th:value="${_csrf.token}" />
 				<button type="submit" th:text="#{giga.Update}" class="btn btn-sm btn-primary badge"></button>
 			</form>
 		</div>
+		<div class="col-md-2"></div>
 	</div>
 </div>
 </main>
+
 </body>
 </html>

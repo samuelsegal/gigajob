@@ -31,7 +31,6 @@
 				<h3 th:text="#{giga.provider.profile}"></h3>
 				<hr />		
 											
-
 				<form id="file-form" role="form" method="POST" 
 					enctype="multipart/form-data" th:object="${gigaProvider}"
 					th:action="@{/updateProviderProfile}" class="form-horizontal">
@@ -57,61 +56,59 @@
 						</div>				
 					</div>
 					
-				<div class="form-group">
-					<div class="col-sm-2">
-						<div style="height:0px;width:0px;overflow:hidden;float: left;">
-						   <input type="file" onchange="onFileSelected(event)" id="fileInput1" name="fileInput1" />
+					<div class="form-group">
+						<div class="col-sm-2">
+							<div style="height:0px;width:0px;overflow:hidden;float: left;">
+							   <input type="file" onchange="onFileSelected(event)" id="fileInput1" name="fileInput1" />
+							</div>
+							<a href="#" onclick="chooseFile(1)"><i class="material-icons" style="font-size:48px;color:black;">camera_alt</i></a>
+						</div><div class="col-sm-2">
+							<div style="height:0px;width:0px;overflow:hidden">
+							   <input type="file" onchange="onFileSelected(event)" id="fileInput2" name="fileInput2" />
+							</div>
+							<a href="#" onclick="chooseFile(2)"><i class="material-icons" style="font-size:48px;color:black;">camera_alt</i></a>																				
+						</div><div class="col-sm-2">
+							<div style="height:0px;width:0px;overflow:hidden">
+							   <input type="file" onchange="onFileSelected(event)" id="fileInput3" name="fileInput3" />
+							</div>							
+							<a href="#" onclick="chooseFile(3)"><i class="material-icons" style="font-size:48px;color:black;">camera_alt</i></a>																					
+						</div><div class="col-sm-2">
+							<div style="height:0px;width:0px;overflow:hidden">
+							   <input type="file" onchange="onFileSelected(event)" id="fileInput4" name="fileInput4" />
+							</div>									
+							<a href="#" onclick="chooseFile(4)"><i class="material-icons" style="font-size:48px;color:black;">camera_alt</i></a>																					
+						</div><div class="col-sm-2">
+							<div style="height:0px;width:0px;overflow:hidden">
+							   <input type="file" onchange="onFileSelected(event)" id="fileInput5" name="fileInput5" />
+							</div>									
+							<a href="#" onclick="chooseFile(5)"><i class="material-icons" style="font-size:48px;color:black;">camera_alt</i></a>																				
 						</div>
-						<a href="#" onclick="chooseFile(1)"><i class="material-icons" style="font-size:48px;color:black;">camera_alt</i></a>
-					</div><div class="col-sm-2">
-						<div style="height:0px;width:0px;overflow:hidden">
-						   <input type="file" onchange="onFileSelected(event)" id="fileInput2" name="fileInput2" />
+					</div>
+	
+					
+					<div class="form-group">
+						<div class="col-sm-2">
+							<img th:field="*{imgFiles['fileInput1']}" id="postNail1" th:src="@{getProviderImgFile/fileInput1}" style="height:50px;width:50px"></img>
+						</div><div class="col-sm-2">
+							<img th:field="*{imgFiles['fileInput2']}" id="postNail2" th:src="@{getProviderImgFile/fileInput2}" style="height:50px;width:50px"></img>	
+						</div><div class="col-sm-2">
+							<img th:field="*{imgFiles['fileInput3']}" id="postNail3" th:src="@{getProviderImgFile/fileInput3}" style="height:50px;width:50px"></img>	
+						</div><div class="col-sm-2">
+							<img th:field="*{imgFiles['fileInput4']}" id="postNail4" th:src="@{getProviderImgFile/fileInput4}" style="height:50px;width:50px"></img>	
+						</div><div class="col-sm-2">
+							<img th:field="*{imgFiles['fileInput5']}" id="postNail5" th:src="@{getProviderImgFile/fileInput5}" style="height:50px;width:50px"></img>
 						</div>
-						<a href="#" onclick="chooseFile(2)"><i class="material-icons" style="font-size:48px;color:black;">camera_alt</i></a>																				
-					</div><div class="col-sm-2">
-						<div style="height:0px;width:0px;overflow:hidden">
-						   <input type="file" onchange="onFileSelected(event)" id="fileInput3" name="fileInput3" />
-						</div>							
-						<a href="#" onclick="chooseFile(3)"><i class="material-icons" style="font-size:48px;color:black;">camera_alt</i></a>																					
-					</div><div class="col-sm-2">
-						<div style="height:0px;width:0px;overflow:hidden">
-						   <input type="file" onchange="onFileSelected(event)" id="fileInput4" name="fileInput4" />
-						</div>									
-						<a href="#" onclick="chooseFile(4)"><i class="material-icons" style="font-size:48px;color:black;">camera_alt</i></a>																					
-					</div><div class="col-sm-2">
-						<div style="height:0px;width:0px;overflow:hidden">
-						   <input type="file" onchange="onFileSelected(event)" id="fileInput5" name="fileInput5" />
-						</div>									
-						<a href="#" onclick="chooseFile(5)"><i class="material-icons" style="font-size:48px;color:black;">camera_alt</i></a>																				
 					</div>
-				</div>
-
-				
-				<div class="form-group">
-					<div class="col-sm-2">
-						<img th:field="*{imgFiles['fileInput1']}" id="postNail1" th:src="@{getProviderImgFile/fileInput1}" style="height:50px;width:50px"></img>
-					</div><div class="col-sm-2">
-						<img th:field="*{imgFiles['fileInput2']}" id="postNail2" th:src="@{getProviderImgFile/fileInput2}" style="height:50px;width:50px"></img>	
-					</div><div class="col-sm-2">
-						<img th:field="*{imgFiles['fileInput3']}" id="postNail3" th:src="@{getProviderImgFile/fileInput3}" style="height:50px;width:50px"></img>	
-					</div><div class="col-sm-2">
-						<img th:field="*{imgFiles['fileInput4']}" id="postNail4" th:src="@{getProviderImgFile/fileInput4}" style="height:50px;width:50px"></img>	
-					</div><div class="col-sm-2">
-						<img th:field="*{imgFiles['fileInput5']}" id="postNail5" th:src="@{getProviderImgFile/fileInput5}" style="height:50px;width:50px"></img>
-					</div>
-				</div>
-				
-				<div class="form-group">	
-					<div class="col-sm-6">																			
-				        <button type="submit" th:text="#{giga.Update}" 
-				        	class="form-control btn btn-sm btn-primary badge">
-				        	Update
-				        </button>
-			        </div>	
-			    </div>	
-			</form>
-			
-			
+					
+					<div class="form-group">	
+						<div class="col-sm-6">																			
+					        <button type="submit" th:text="#{giga.Update}" 
+					        	class="form-control btn btn-sm btn-primary badge">
+					        	Update
+					        </button>
+				        </div>	
+				    </div>	
+				</form>			
 			</div>
 			<div class="col-md-2"></div>
 		</div>

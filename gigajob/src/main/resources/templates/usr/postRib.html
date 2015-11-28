@@ -4,9 +4,11 @@
 	  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
 	  layout:decorator="layout/layout">
 <head>
-	
+	<link type="text/css" rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500" />
+
 	<link th:href="@{css/gigadiv.css}" rel='stylesheet' />
 	<link th:href="@{css/form.css}" rel='stylesheet' />
+	<link th:href="@{css/address-auto-complete.css}" rel='stylesheet' />
     <style type="text/css">
 	    .custom {
 	    	width: 278px !important;
@@ -15,7 +17,7 @@
 			margin:  10px;
 			padding: 10px;
 			height:  900px;
-			width:   500px;
+			width:   600px;
 		}
     </style>
 	<script src="js/gigafile.js"></script>
@@ -53,6 +55,40 @@
 							class="form-control" id="title" name="title" />
 					</div>
 				</div>
+				<div>				
+				    <div id="locationField">
+				      <input id="autocomplete" placeholder="Enter your address"
+				             onFocus="geolocate()" type="text"></input>
+				    </div>
+				
+				    <table id="address">
+				      <tr>
+				        <td class="label">Street address</td>
+				        <td class="slimField"><input class="field" id="street_number"
+				              disabled="true"></input></td>
+				        <td class="wideField" colspan="2"><input class="field" id="route"
+				              disabled="true"></input></td>
+				      </tr>
+				      <tr>
+				        <td class="label">City</td>
+				        <td class="wideField" colspan="3"><input class="field" id="locality"
+				              disabled="true"></input></td>
+				      </tr>
+				      <tr>
+				        <td class="label">State</td>
+				        <td class="slimField"><input class="field"
+				              id="administrative_area_level_1" disabled="true"></input></td>
+				        <td class="label">Zip code</td>
+				        <td class="wideField"><input class="field" id="postal_code"
+				              disabled="true"></input></td>
+				      </tr>
+				      <tr>
+				        <td class="label">Country</td>
+				        <td class="wideField" colspan="3"><input class="field"
+				              id="country" disabled="true"></input></td>
+				      </tr>
+				    </table>				
+				</div>				
 				<div class="form-group">	
 					<div class="col-sm-12">
 						<a href="#" onclick="getLocation()"><i class="material-icons">room</i>Current Location</a>
@@ -162,7 +198,9 @@
 
 <script src="//code.jquery.com/jquery-1.11.3.min.js"></script>
 <script src="//code.jquery.com/jquery-migrate-1.2.1.min.js"></script>
-<!--<script th:src="@{js/fileUpload.js}" type="text/javascript"></script>-->
+<script src="js/address-auto-complete.js"></script>	
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCC8gwbO-U2QwEIM-8cs0DFiGBuj_c4QwY&#38;signed_in=true&#38;libraries=places&#38;callback=initAutocomplete"></script>
+
 </main>
 
 </body>
