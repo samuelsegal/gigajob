@@ -8,7 +8,10 @@ public class IpLoc {
 	private String dma_code;
 	private String ip;
 	private String asn;
+	private String streetNum;
+	private String streetName;
 	private String city;
+	private String state;
 	private Double latitude;
 	private String country_code;
 	private String offset;
@@ -39,11 +42,30 @@ public class IpLoc {
 	public void setAsn(String asn) {
 		this.asn = asn;
 	}
+	
+	public String getStreetNum() {
+		return streetNum;
+	}
+	public void setStreetNum(String streetNum) {
+		this.streetNum = streetNum;
+	}
+	public String getStreetName() {
+		return streetName;
+	}
+	public void setStreetName(String streetName) {
+		this.streetName = streetName;
+	}
 	public String getCity() {
 		return city;
 	}
 	public void setCity(String city) {
 		this.city = city;
+	}	
+	public String getState() {
+		return state;
+	}
+	public void setState(String state) {
+		this.state = state;
 	}
 	public Double getLatitude() {
 		return latitude;

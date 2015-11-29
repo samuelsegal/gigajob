@@ -38,6 +38,9 @@
 					  	<td><label for="description" th:text="#{giga.Description}"></label></td>
 					  	<td th:text="${post.description}" id="description"></td>
 					</tr><tr>
+					  	<td><label for="formattedAddress" th:text="#{giga.Location}"></label></td>
+					  	<td th:text="${post.formattedAddress}" id="formattedAddress"></td>
+					</tr><tr>
 					  	<td><label for="clientName" th:text="#{giga.Poster}"></label></td>
 					  	<td id="clientName"><a th:href="@{/viewClientProfile(userid=${post?.userId})}" th:text="${post.clientName}" ></a></td>								
 					</tr>

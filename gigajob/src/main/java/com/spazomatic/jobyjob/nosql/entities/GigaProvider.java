@@ -24,6 +24,7 @@ public class GigaProvider {
 	@GeoSpatialIndexed(type = GeoSpatialIndexType.GEO_2DSPHERE)
     private double[] location;	
 	private String formattedAddress;
+	private IpLoc ipLoc;
     private List<Tag> tags;
     
     @Transient Map<String, byte[]> imgFiles;   
@@ -43,8 +44,6 @@ public class GigaProvider {
 		this.location = location;
 		this.tags = tags;
 	}
-
-
 
 	public String getId() {
 		return id;
@@ -86,7 +85,6 @@ public class GigaProvider {
 		this.active = active;
 	}
 
-	
 	public String getProviderName() {
 		return providerName;
 	}
@@ -103,14 +101,20 @@ public class GigaProvider {
 		this.location = location;
 	}
 
-	
-	
 	public String getFormattedAddress() {
 		return formattedAddress;
 	}
 
 	public void setFormattedAddress(String formattedAddress) {
 		this.formattedAddress = formattedAddress;
+	}
+	
+	public IpLoc getIpLoc() {
+		return ipLoc;
+	}
+
+	public void setIpLoc(IpLoc ipLoc) {
+		this.ipLoc = ipLoc;
 	}
 
 	public List<Tag> getTags() {
@@ -136,6 +140,5 @@ public class GigaProvider {
 	public void setCreatedDate(DateTime createdDate) {
 		this.createdDate = createdDate;
 	}
- 
     
 }

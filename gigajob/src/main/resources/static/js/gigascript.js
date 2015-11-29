@@ -2,7 +2,7 @@
 var locationDiv; 
 function getLocation() {
 	
-	locationDiv = document.getElementById("displayLocation");
+	locationDiv = document.getElementById("autocomplete");
     if (navigator.geolocation) {
         navigator.geolocation.getCurrentPosition(showPosition);      
         console.log("navigator.geoloaction: " + navigator.geolocation);       
@@ -24,7 +24,7 @@ function showPosition(position) {
 	    url: address
 	}).then(function(data) {
 		var formattedAddress = data.results[0].formatted_address;
-		locationDiv.innerHTML = formattedAddress;
+		locationDiv.value = formattedAddress;
 		document.getElementById("formattedAddress").value = formattedAddress;
 	}); 	
 }

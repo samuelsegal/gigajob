@@ -38,6 +38,7 @@ public class Post {
     
     private EstimatedTime estimatedTime;
     private BasePay basePay;
+    private IpLoc ipLoc;
     
     public Post(){
     }
@@ -170,6 +171,14 @@ public class Post {
 
 	public void setBasePay(BasePay basePay) {
 		this.basePay = basePay;
+	}
+
+	public IpLoc getIpLoc() {
+		return ipLoc;
+	}
+
+	public void setIpLoc(IpLoc ipLoc) {
+		this.ipLoc = ipLoc;
 	}    
-    
+   
 }

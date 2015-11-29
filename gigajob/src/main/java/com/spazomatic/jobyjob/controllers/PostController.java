@@ -80,7 +80,14 @@ public class PostController {
 
         if(loc != null && loc.getLatitude() != null && loc.getLongitude() != null){
         	post.setLocation(new double[]{loc.getLatitude(), loc.getLongitude()});
+        }else if(loc != null && loc.getStreetNum() != null){
+        	post.setIpLoc(loc);
+        	//String formattedAdd = String.format("%s %s %s, %s %s", 
+        	//		loc.getStreetNum(),loc.getStreetName(),
+        	//		loc.getCity(),loc.getState(),loc.getPostal_code());
+        	//post.setFormattedAddress(formattedAdd);
         }
+        
         if(post.getTags() != null && post.getTags().get(0) != null){
         	String titlePart1 = post.getTags().get(0).getId() != null ? 
         			post.getTags().get(0).getId() : "NO";

@@ -97,7 +97,9 @@ public class ProviderController {
 		GigaProvider gigaProvider = gigaProviderService.findByUserId(currentUser.getName()) != null 
 				? gigaProviderService.findByUserId(currentUser.getName()) 
 				: new GigaProvider();
-		IpLoc ipLoc = new IpLoc();
+		IpLoc ipLoc = gigaProvider.getIpLoc() != null ? gigaProvider.getIpLoc() : new IpLoc();
+		HttpSession session = request.getSession();
+		session.setAttribute(Util.GIGA_PROVIDER, gigaProvider);
 		model.addAttribute("gigaProvider",gigaProvider);
 		model.addAttribute("loc", ipLoc);
 		return "provider/editProviderProfile";	
@@ -111,11 +113,13 @@ public class ProviderController {
 			@ModelAttribute MultipartFile fileInput3,
 			@ModelAttribute MultipartFile fileInput4,
 			@ModelAttribute MultipartFile fileInput5) {
-
+		
+		HttpSession session = request.getSession();
+		gigaProvider = (GigaProvider) session.getAttribute(Util.GIGA_PROVIDER);
 		setProviderImages(gigaProvider, fileInput1, fileInput2, 
 				fileInput3, fileInput4, fileInput5);
 		util.setModel(request, currentUser, model);
-		HttpSession session = request.getSession();
+		
 		UserProfile client = (UserProfile) session.getAttribute(
 				SocialControllerUtil.USER_PROFILE);
 		if(loc != null && loc.getLatitude() != null && loc.getLongitude() != null){
@@ -127,7 +131,7 @@ public class ProviderController {
 		gigaProviderService.update(gigaProvider);
 		session.setAttribute(Util.GIGA_PROVIDER, gigaProvider);
 		//IpLoc ipLoc = new IpLoc();
-		model.addAttribute("gigaProvider",gigaProvider);
+		model.addAttribute("gigaProvider", gigaProvider);
 		//model.addAttribute("loc", ipLoc);
 		return "provider/providerProfile";
 	}
@@ -160,6 +164,7 @@ public class ProviderController {
 		GigaProvider gigaProvider = session.getAttribute(Util.GIGA_PROVIDER) != null 
 				? (GigaProvider) session.getAttribute(Util.GIGA_PROVIDER) 
 				: new GigaProvider();
+
 		if(gigaProvider.getImgFiles() != null && 
 				gigaProvider.getImgFiles().get(postNailId) != null){
 			//TODO: setContentType dynamic		
@@ -192,7 +197,8 @@ public class ProviderController {
 			MultipartFile fileInput2, MultipartFile fileInput3,
 			MultipartFile fileInput4, MultipartFile fileInput5) {
 		
-    	Map<String, byte[]> imgFiles = new HashMap<>();
+    	Map<String, byte[]> imgFiles = gigaProvider.getImgFiles() != null ? 
+    			gigaProvider.getImgFiles() : new HashMap<>();
         try {
 	    	if (!fileInput1.isEmpty()) {          	
 	        	imgFiles.put("fileInput1", fileInput1.getBytes());    	        	
