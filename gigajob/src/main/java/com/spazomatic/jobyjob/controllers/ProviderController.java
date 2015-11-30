@@ -22,16 +22,11 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.client.RestTemplate;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.maxmind.geoip2.exception.GeoIp2Exception;
 import com.spazomatic.jobyjob.db.model.UserProfile;
-import com.spazomatic.jobyjob.location.ServerLocation;
-import com.spazomatic.jobyjob.location.ServerLocationBo;
 import com.spazomatic.jobyjob.nosql.entities.GigaProvider;
 import com.spazomatic.jobyjob.nosql.entities.IpLoc;
-import com.spazomatic.jobyjob.nosql.entities.Post;
 import com.spazomatic.jobyjob.service.GigaProviderService;
 import com.spazomatic.jobyjob.util.SocialControllerUtil;
 import com.spazomatic.jobyjob.util.Util;
@@ -39,10 +34,11 @@ import com.spazomatic.jobyjob.util.Util;
 @Controller
 public class ProviderController {
 	
-	private static final Logger LOG = LoggerFactory.getLogger(Util.LOG_TAG);
+	private static final Logger LOG = LoggerFactory.getLogger(
+			String.format("%s.%s",Util.LOG_TAG,
+					ProviderController.class.getSimpleName()));
 	
-	@Autowired private GigaProviderService gigaProviderService;	
-	@Autowired private ServerLocationBo serverLocationBo;		
+	@Autowired private GigaProviderService gigaProviderService;		
 	@Autowired private HttpServletRequest request;
     @Autowired private SocialControllerUtil util;
 	
@@ -115,7 +111,9 @@ public class ProviderController {
 			@ModelAttribute MultipartFile fileInput5) {
 		
 		HttpSession session = request.getSession();
-		gigaProvider = (GigaProvider) session.getAttribute(Util.GIGA_PROVIDER);
+		GigaProvider gp = (GigaProvider) session.getAttribute(Util.GIGA_PROVIDER);
+		gp.setFormattedAddress(gigaProvider.getFormattedAddress());
+		gigaProvider = gp;
 		setProviderImages(gigaProvider, fileInput1, fileInput2, 
 				fileInput3, fileInput4, fileInput5);
 		util.setModel(request, currentUser, model);
@@ -123,11 +121,12 @@ public class ProviderController {
 		UserProfile client = (UserProfile) session.getAttribute(
 				SocialControllerUtil.USER_PROFILE);
 		if(loc != null && loc.getLatitude() != null && loc.getLongitude() != null){
-			gigaProvider.setLocation(new double[]{loc.getLatitude(), loc.getLongitude()});
+			gigaProvider.setLocation(new double[]{
+					loc.getLatitude(), loc.getLongitude()});
 		}
 		gigaProvider.setUserId(currentUser.getName());
 		gigaProvider.setProviderName(client.getName());
-		
+		LOG.debug(String.format("gigaProvider :: %s", gigaProvider.toString()));
 		gigaProviderService.update(gigaProvider);
 		session.setAttribute(Util.GIGA_PROVIDER, gigaProvider);
 		//IpLoc ipLoc = new IpLoc();

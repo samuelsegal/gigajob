@@ -18,6 +18,8 @@
 			width:   400px;
 		}
     </style>
+	<link href='css/jquery.lighter.css' rel='stylesheet' type='text/css' />
+	<script src='js/jquery.lighter.js' type='text/javascript'></script>    
  </head>
     	
 <body>
@@ -49,15 +51,25 @@
 				</table>
 				<div>
 					<div class="col-sm-2">
-						<img th:if="${post.imgFiles['fileInput1']}" id="postNail1" th:src="@{getImgFile/fileInput1}" style="height:50px;width:50px"></img>
+						<a th:href="@{getImgFile/fileInput1}" data-lighter="">
+							<img th:if="${post.imgFiles['fileInput1']}" id="postNail1" th:src="@{getImgFile/fileInput1}" style="height:50px;width:50px"></img>
+						</a>
 					</div><div class="col-sm-2">
-						<img th:if="${post.imgFiles['fileInput2']}" id="postNail2" th:src="@{getImgFile/fileInput2}" style="height:50px;width:50px"></img>	
+						<a th:href="@{getImgFile/fileInput2}" data-lighter="">
+							<img th:if="${post.imgFiles['fileInput2']}" id="postNail2" th:src="@{getImgFile/fileInput2}" style="height:50px;width:50px"></img>	
+						</a>
 					</div><div class="col-sm-2">
-						<img th:if="${post.imgFiles['fileInput3']}" id="postNail3" th:src="@{getImgFile/fileInput3}" style="height:50px;width:50px"></img>	
+						<a th:href="@{getImgFile/fileInput3}" data-lighter="">
+							<img th:if="${post.imgFiles['fileInput3']}" id="postNail3" th:src="@{getImgFile/fileInput3}" style="height:50px;width:50px"></img>	
+						</a>
 					</div><div class="col-sm-2">
-						<img th:if="${post.imgFiles['fileInput4']}" id="postNail4" th:src="@{getImgFile/fileInput4}" style="height:50px;width:50px"></img>	
+						<a th:href="@{getImgFile/fileInput4}" data-lighter="">
+							<img th:if="${post.imgFiles['fileInput4']}" id="postNail4" th:src="@{getImgFile/fileInput4}" style="height:50px;width:50px"></img>	
+						</a>
 					</div><div class="col-sm-2">
-						<img th:if="${post.imgFiles['fileInput5']}" id="postNail5" th:src="@{getImgFile/fileInput5}" style="height:50px;width:50px"></img>
+						<a th:href="@{getImgFile/fileInput5}" data-lighter="">
+							<img th:if="${post.imgFiles['fileInput5']}" id="postNail5" th:src="@{getImgFile/fileInput5}" style="height:50px;width:50px"></img>
+						</a>
 					</div>
 				</div>
 			</div>

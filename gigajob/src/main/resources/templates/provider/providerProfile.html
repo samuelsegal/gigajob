@@ -5,8 +5,8 @@
 	layout:decorator="layout/layout">
 
 <head>
-  <meta name="_csrf" th:content="${_csrf.token}"/>
-  <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
+	<meta name="_csrf" th:content="${_csrf.token}"/>
+	<meta name="_csrf_header" th:content="${_csrf.headerName}"/>
 	<link href='css/form.css' rel='stylesheet' />
 	<link href='css/gigadiv.css' rel='stylesheet' />
     <style type="text/css">
@@ -19,7 +19,9 @@
 			height: 600px;
 		}
     </style>
-<script src="js/gigascript.js"></script>
+	<script src="js/gigascript.js"></script>
+	<link href='css/jquery.lighter.css' rel='stylesheet' type='text/css' />
+	<script src='js/jquery.lighter.js' type='text/javascript'></script>
 </head>
 <body>
 <main layout:fragment="content" class="mdl-layout__content mdl-color--grey-100">
@@ -58,17 +60,32 @@
 					<tr th:if="${gigaProvider.imgFiles}">
 					
 						<td colspan="2">
-					
+
+
 						<div class="col-sm-2">
-							<img th:if="${gigaProvider.imgFiles['fileInput1']}" id="postNail1" th:src="@{getProviderImgFile/fileInput1}" class="img-rounded" style="height:50px;width:50px"></img>
-						</div><div class="col-sm-2">
-							<img th:if="${gigaProvider.imgFiles['fileInput2']}" id="postNail2" th:src="@{getProviderImgFile/fileInput2}" class="img-rounded" style="height:50px;width:50px"></img>	
-						</div><div class="col-sm-2">
-							<img th:if="${gigaProvider.imgFiles['fileInput3']}" id="postNail3" th:src="@{getProviderImgFile/fileInput3}" class="img-rounded" style="height:50px;width:50px"></img>	
-						</div><div class="col-sm-2">
-							<img th:if="${gigaProvider.imgFiles['fileInput4']}" id="postNail4" th:src="@{getProviderImgFile/fileInput4}" class="img-rounded" style="height:50px;width:50px"></img>	
-						</div><div class="col-sm-2">
-							<img th:if="${gigaProvider.imgFiles['fileInput5']}" id="postNail5" th:src="@{getProviderImgFile/fileInput5}" class="img-rounded" style="height:50px;width:50px"></img>
+							<a th:href="@{getProviderImgFile/fileInput1}" data-lighter="">
+								<img th:if="${gigaProvider.imgFiles['fileInput1']}" id="postNail1" th:src="@{getProviderImgFile/fileInput1}" class="img-rounded" style="height:50px;width:50px"></img>
+							</a>
+						</div>
+						<div class="col-sm-2">
+							<a th:href="@{getProviderImgFile/fileInput2}" data-lighter="">
+								<img th:if="${gigaProvider.imgFiles['fileInput2']}" id="postNail2" th:src="@{getProviderImgFile/fileInput2}" class="img-rounded" style="height:50px;width:50px"></img>	
+							</a>
+						</div>
+						<div class="col-sm-2">
+							<a th:href="@{getProviderImgFile/fileInput3}" data-lighter="">
+								<img th:if="${gigaProvider.imgFiles['fileInput3']}" id="postNail3" th:src="@{getProviderImgFile/fileInput3}" class="img-rounded" style="height:50px;width:50px"></img>	
+							</a>
+						</div>
+						<div class="col-sm-2">
+							<a th:href="@{getProviderImgFile/fileInput4}" data-lighter="">
+								<img th:if="${gigaProvider.imgFiles['fileInput4']}" id="postNail4" th:src="@{getProviderImgFile/fileInput4}" class="img-rounded" style="height:50px;width:50px"></img>	
+							</a>
+						</div>
+						<div class="col-sm-2">
+							<a th:href="@{getProviderImgFile/fileInput5}" data-lighter="">
+								<img th:if="${gigaProvider.imgFiles['fileInput5']}" id="postNail5" th:src="@{getProviderImgFile/fileInput5}" class="img-rounded" style="height:50px;width:50px"></img>
+							</a>
 						</div>
 					
 					</td>

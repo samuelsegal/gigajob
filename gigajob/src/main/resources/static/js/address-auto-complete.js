@@ -21,16 +21,22 @@ function initAutocomplete() {
   // When the user selects an address from the dropdown, populate the address
   // fields in the form.
   autocomplete.addListener('place_changed', fillInAddress);
+
 }
 
 function fillInAddress() {
   // Get the place details from the autocomplete object.
   var place = autocomplete.getPlace();
-
-  for (var component in componentForm) {
-    document.getElementById(component).value = '';
-    document.getElementById(component).disabled = false;
-  }
+  var latitude = place.geometry.location.lat();
+  var longitude = place.geometry.location.lng();
+  
+	document.getElementById("loclat").value = latitude;
+	document.getElementById("loclon").value = longitude;
+	console.log('lat: ' + latitude + 'lon: ' + longitude);
+	for (var component in componentForm) {
+		document.getElementById(component).value = '';
+		document.getElementById(component).disabled = false;
+	}
 
   // Get each component of the address from the place details
   // and fill the corresponding field on the form.

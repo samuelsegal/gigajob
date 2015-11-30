@@ -122,10 +122,11 @@ public class GigaProviderServiceImpl implements GigaProviderService{
 				.is(gigaProvider.getUserId()));
 		
 		Update update = new Update()
-				.set("providerName", gigaProvider.getProviderName())
-				.set("title",        gigaProvider.getTitle())
-				.set("description",  gigaProvider.getDescription())
-				.set("location",     gigaProvider.getLocation());
+				.set("providerName",     gigaProvider.getProviderName())
+				.set("title",            gigaProvider.getTitle())
+				.set("description",      gigaProvider.getDescription())
+				.set("location",         gigaProvider.getLocation())
+				.set("formattedAddress", gigaProvider.getFormattedAddress());
 		
 		//TODO:only save images if images are new
 		Map<String,byte[]> imgFiles = gigaProvider.getImgFiles();
