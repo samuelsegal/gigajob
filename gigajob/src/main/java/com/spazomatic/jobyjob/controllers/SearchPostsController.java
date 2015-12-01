@@ -24,7 +24,9 @@ import com.spazomatic.jobyjob.util.Util;
 @Controller
 public class SearchPostsController {
 	
-	private static final Logger LOG = LoggerFactory.getLogger(Util.LOG_TAG);
+	private static final Logger LOG = LoggerFactory.getLogger(
+			String.format("%s.%s", Util.LOG_TAG, 
+					SearchPostsController.class.getSimpleName()));
 	
 	@Autowired private PostService postService;	
 	@Autowired private HttpServletRequest request;	
